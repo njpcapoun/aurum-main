@@ -1,4 +1,4 @@
-# CAE-main
+# aurum-main
 IS&amp;T Classroom Assignment Enhancement - Main Repo
 
 This repository will eventually hold the central contents for our group's capstone project. We are currently in early stages of development so the exact purpose of this repo is unknown at this time.
