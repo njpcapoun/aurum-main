@@ -15,5 +15,3 @@ This is more for when we have an actual codebase, but is a good strategy to usin
 To add changes, first create a branch off of the master branch. This will be your working branch until ready to commit and push the changes. It allows the master branch to act as a good backup in case we ever need to use a previous version. When ready to push changes to the master branch, create a pull-request which will then check the changed files with existing one's on the master branch and look for problems. If all is good, the pull request can be put through and combine the working branch with the master branch. 
 
 Some of this stuff we will likley have to use Sourcetree, so we'll get that set up eventually.
-
-Testing Sourcetree branching
