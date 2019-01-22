@@ -1,0 +1,25 @@
+﻿<Page x:Class="ClassroomAssignment.UI.Edit.CourseEditPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ClassroomAssignment.UI.Edit"
+      xmlns:views="clr-namespace:ClassroomAssignment.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CourseEditPage">
+
+    <ScrollViewer>
+        <StackPanel>
+            <views:CourseDetailControl x:Name="CourseDetail" IsEnabled="True" DataContext="{Binding}"/>
+
+            <TextBlock x:Name="MeetingPatternWarningTextBlock" Text="You have a malformed meeting pattern. Fix to save course." Visibility="Hidden" HorizontalAlignment="Center" Foreground="Red" />
+            <TextBlock x:Name="RoomCapWarningTextBlock" Text="The Room Cap Request field invalid. Fix to save course." Visibility="Hidden" HorizontalAlignment="Center" Foreground="Red"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, 40">
+                <Button x:Name="SaveButton" Content="Save" Click="SaveButton_Click" Margin="20,0" Width="50"/>
+                <Button x:Name="CancelButton" Content="Cancel" Click="CancelButton_Click"  Width="50"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

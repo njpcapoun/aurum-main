@@ -1,0 +1,82 @@
+﻿<Page x:Class="ClassroomAssignment.UI.Changes.ChangesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ClassroomAssignment.UI.Changes"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ChangesPage"
+      ShowsNavigationUI="True">
+
+    <Page.Resources>
+        <local:CourseDifferenceToBorderBrushConverter x:Key="converter"/>
+    </Page.Resources>
+    <Grid>
+        <DataGrid x:Name="DiffDataGrid" ItemsSource="{Binding}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Difference" Binding="{Binding DifferenceType}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Room Assignment" Binding="{Binding Path=NewestCourse.RoomAssignment}" IsReadOnly="False"/>
+
+                <DataGridTextColumn Header="Class ID" Binding="{Binding Path=NewestCourse.ClassID}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="SIS ID" Binding="{Binding Path=NewestCourse.SIS_ID}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Term" Binding="{Binding Path=NewestCourse.Term}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Term Code" Binding="{Binding Path=NewestCourse.TermCode}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Department Code" Binding="{Binding Path=NewestCourse.DepartmentCode}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Subject Code" Binding="{Binding Path=NewestCourse.SubjectCode}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Catalog Number" Binding="{Binding Path=NewestCourse.CatalogNumber}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="CourseName" Binding="{Binding Path=NewestCourse.CourseName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Section Number" Binding="{Binding Path=NewestCourse.SectionNumber}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Course Title" Binding="{Binding Path=NewestCourse.CourseTitle}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Section Type" Binding="{Binding Path=NewestCourse.SectionType}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Topic" Binding="{Binding Path=NewestCourse.Topic}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Meeting Pattern" Binding="{Binding Path=NewestCourse.MeetingPattern}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Instructor" Binding="{Binding Path=NewestCourse.Instructor}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Room" Binding="{Binding Path=NewestCourse.Room}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Path=NewestCourse.Status}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Session" Binding="{Binding Path=NewestCourse.SectionNumber}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Campus" Binding="{Binding Path=NewestCourse.Campus}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Instruction Method" Binding="{Binding Path=NewestCourse.InstructionMethod}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Integer Partner" Binding="{Binding Path=NewestCourse.IntegerPartner}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Schedule" Binding="{Binding Path=NewestCourse.Schedule}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Consent" Binding="{Binding Path=NewestCourse.Consent}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Comments" Binding="{Binding Path=NewestCourse.Comments}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Credit Hrs Min" Binding="{Binding Path=NewestCourse.CreditHrsMin}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Credit Hrs" Binding="{Binding Path=NewestCourse.CreditHrs}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Grade Mode" Binding="{Binding Path=NewestCourse.GradeMode}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Attributes" Binding="{Binding Path=NewestCourse.Attributes}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Room Attributes" Binding="{Binding Path=NewestCourse.RoomAttributes}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Enrollment" Binding="{Binding Path=NewestCourse.Enrollment}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Maximum Enrollment" Binding="{Binding Path=NewestCourse.MaximumEnrollment}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Prior Enrollment" Binding="{Binding Path=NewestCourse.PriorEnrollment}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Projected Enrollment" Binding="{Binding Path=NewestCourse.ProjectedEnrollment}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Wait Cap" Binding="{Binding Path=NewestCourse.WaitCap}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Room Cap Request" Binding="{Binding Path=NewestCourse.RoomCapRequest}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="CrossListing" Binding="{Binding Path=NewestCourse.CrossListings}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Link To" Binding="{Binding Path=NewestCourse.LinkTo}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Comments" Binding="{Binding Path=NewestCourse.LinkTo}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Notes" Binding="{Binding Path=NewestCourse.LinkTo}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Attributes" Binding="{Binding Path=NewestCourse.Attributes}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Notes" Binding="{Binding Path=NewestCourse.Notes}" IsReadOnly="True"/>
+
+
+            </DataGrid.Columns>
+
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource converter}">
+                                <Binding ElementName="DiffDataGrid"/>
+                                <Binding RelativeSource="{RelativeSource Self}"/>
+                                <Binding/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="1,1,1,1" />
+                </Style>
+            </DataGrid.CellStyle>
+        </DataGrid>
+
+    </Grid>
+</Page>
