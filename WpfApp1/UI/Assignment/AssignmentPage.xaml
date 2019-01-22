@@ -1,0 +1,117 @@
+﻿<Page x:Class="ClassroomAssignment.UI.Assignment.AssignmentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ClassroomAssignment.UI.Assignment"
+      mc:Ignorable="d" 
+      xmlns:scheduleView="clr-namespace:ClassroomAssignment.Views.RoomSchedule"
+      xmlns:views ="clr-namespace:ClassroomAssignment.Views"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AssignmentPage"
+      ShowsNavigationUI="True" >
+
+
+
+<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+      
+
+        <Grid  Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <ListView x:Name="AssignCoursesListView" ItemsSource="{Binding CoursesBeingAssigned}"  Grid.Row="1" SelectedValue="{Binding CurrentCourse}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse
+                            Width="10"
+                            Height="10">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding State}" Value="0">
+                                                <Setter Property="Fill" Value="Red" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="2">
+                                                <Setter Property="Fill" Value="Yellow" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="3">
+                                                <Setter Property="Fill" Value="Green" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <Label Content="{Binding CourseName}" FontSize="12" Margin="0,0,5,0"/>
+                            <Label Content="Section: " FontSize="12"/>
+                            <Label Content="{Binding SectionNumber}" FontSize="12" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </Grid>
+
+        <ScrollViewer Grid.Column="1">
+            <StackPanel Orientation="Vertical">
+                <views:CourseDetailControl x:Name="CourseDetailControl" IsEnabled="False" DataContext="{Binding CurrentCourse, Mode=TwoWay}"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="Available Rooms" HorizontalAlignment="Center" Grid.Row="0"/>
+                        <ListView x:Name="AvailableRoomsListView" Height="100" Width="Auto" BorderThickness="1" BorderBrush="Black" Grid.Row="1" SelectedItem="{Binding CurrentRoom, Mode=OneWayToSource}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{Binding RoomName}" MinWidth="10" FontWeight="DemiBold"/>
+                                        <Label Content="Capacity: " />
+                                        <Label Content="{Binding Capacity}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Orientation="Horizontal">
+                        <TextBlock Text="Room Assignment: " Margin="0,0,5,0" LineHeight="10" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="RoomOptionsComboBox" ItemsSource="{Binding AllRooms}" Text="Rooms" IsReadOnly="True" IsEditable="True" Height="20" SelectedValue="{Binding CurrentCourse.RoomAssignment, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding RoomName}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Capacity: "/>
+                                        <TextBlock Text="{Binding Capacity}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+        <Expander IsExpanded="True" ExpandDirection="Right" Grid.Column="2" Expanded="Expander_Expanded">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                <scheduleView:RoomScheduleControl x:Name="RoomSchedule" RoomScheduled="{Binding CurrentRoom, Mode=OneWay}"  CoursesForRoom="{Binding CoursesForSelectedRoom, Mode=OneWay}" AvailableSlots="{Binding AvailableSlots, Mode=OneWay}" MinWidth="800"/>
+            </ScrollViewer>
+        </Expander>
+    </Grid>
+    
+</Page>
