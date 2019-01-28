@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectOutput Name="ClassroomAssignment_1" ProjectDirVar="$(var.ClassroomAssignment.ProjectDir)" TargetDirVar="$(var.ClassroomAssignment.TargetDir)" SharedFileId="_8B05AC1D_0CF1_456A_97C9_412BB18E0609" Tag="_1">
+  <Binaries>
+    <DiskId>1</DiskId>
+    <Compressed />
+    <Hidden>no</Hidden>
+    <KeyPath>yes</KeyPath>
+    <ReadOnly>no</ReadOnly>
+    <System>no</System>
+    <Vital>yes</Vital>
+    <Permanent>no</Permanent>
+    <SharedDllRefCount>no</SharedDllRefCount>
+    <Transitive>no</Transitive>
+  </Binaries>
+</ProjectOutput>
