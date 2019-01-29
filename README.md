@@ -1,7 +1,11 @@
 # aurum-main
-IS&amp;T Classroom Assignment Enhancement - Main Repo
+IS&amp;T Classroom Assignment Enhancement - Old Repo
 
-This repository will eventually hold the central contents for our group's capstone project. We are currently in early stages of development so the exact purpose of this repo is unknown at this time.
+This is all the files and the applicaiton executable in the state before we begin editing and adding our functions. We should not merge this into the master branch, keep it as a backup and if we ever need to show what the old app did versus what our updated version will do. Calling this "Version 1.0", and then maybe when we do a release we need to show off we can start at 2.0 and increment from there.
+
+Also, we should rename what files we can because I don't know what Wpf means.
+
+To get the executable, it's `Wpfapp1/bin/Debug/app.publish/ClassroomAssignmentWpf.rar`
 
 ## Group Members
 Noah Capoun
