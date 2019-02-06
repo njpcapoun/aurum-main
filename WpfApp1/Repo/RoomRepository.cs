@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace ClassroomAssignment.Model.Repo
 {
@@ -15,20 +17,22 @@ namespace ClassroomAssignment.Model.Repo
 
         public static Room NoRoom = new Room() { RoomName = "None", Capacity = 0 };
 
-        private List<Room> _rooms;
         //Get Rooms
         public List<Room> Rooms { get; private set; }
+
         /// <summary>
         /// Add allRooms to Rooms list. 
         /// </summary>
         public RoomRepository()
         {
-
             Rooms = AllRooms(); //adding all rooms to room list.
         }
-        /// <summary>
-        /// Exception Handler for that room repo already initilized .
-        /// </summary>
+        /*  
+         *  <summary>
+         *   Exception Handler for that room repo already initilized .
+         *  </summary> 
+         */
+
         public static void InitInstance()
         {
             if (instance != null) throw new InvalidOperationException("Room Repo already initialized");
@@ -41,37 +45,31 @@ namespace ClassroomAssignment.Model.Repo
         public static RoomRepository GetInstance()
         {
             return instance ?? throw new InvalidOperationException("Room Repo not yet intialized");
-           
-        }    
+
+        }
         /// <summary>
-        /// Its add Rooms to room list with their number and capacity.
+        /// Its add Rooms to room list with their number, capacity, and details.
         /// And initilize these information into Rooms list.
         /// </summary>
         /// <returns>rooms</returns>
         public List<Room> AllRooms()
         {
+            Console.WriteLine("Now Loading Room file...");
             List<Room> rooms = new List<Room>();
-
-            rooms.Add(new Room() { RoomName = "PKI 153", Capacity = 40 });
-            rooms.Add(new Room() { RoomName = "PKI 155", Capacity = 45 });
-            rooms.Add(new Room() { RoomName = "PKI 157", Capacity = 24 });
-            rooms.Add(new Room() { RoomName = "PKI 160", Capacity = 44 });
-            rooms.Add(new Room() { RoomName = "PKI 161", Capacity = 30 });
-            rooms.Add(new Room() { RoomName = "PKI 164", Capacity = 56 });
-            rooms.Add(new Room() { RoomName = "PKI 252", Capacity = 58 });
-            rooms.Add(new Room() { RoomName = "PKI 256", Capacity = 40 });
-            rooms.Add(new Room() { RoomName = "PKI 259", Capacity = 20 });
-            rooms.Add(new Room() { RoomName = "PKI 260", Capacity = 40 });
-            rooms.Add(new Room() { RoomName = "PKI 261", Capacity = 24 });
-            rooms.Add(new Room() { RoomName = "PKI 263", Capacity = 48 });
-            rooms.Add(new Room() { RoomName = "PKI 269", Capacity = 30 });
-            rooms.Add(new Room() { RoomName = "PKI 270", Capacity = 16 });
-            rooms.Add(new Room() { RoomName = "PKI 274", Capacity = 30 });
-            rooms.Add(new Room() { RoomName = "PKI 276", Capacity = 35 });
-            rooms.Add(new Room() { RoomName = "PKI 278", Capacity = 35 });
-            rooms.Add(new Room() { RoomName = "PKI 279", Capacity = 30 });
-            rooms.Add(new Room() { RoomName = "PKI 361", Capacity = 35 });
-
+            var input = File.ReadAllText("RoomData.json");
+            try
+            {
+                var roomArr = JsonConvert.DeserializeObject<List<Room>>(input);
+                for (int x = 0; x < roomArr.Count; x++)
+                {
+                    rooms.Add(roomArr[x]);
+                    Console.WriteLine(roomArr[x].RoomName);
+                }
+            }
+            catch (JsonSerializationException e)
+            {
+                Console.WriteLine("ERROR: " + e);
+            }
 
             return rooms;
         }
@@ -97,5 +95,20 @@ namespace ClassroomAssignment.Model.Repo
             return roomName.Replace("Peter Kiewit Institute", "PKI");
         }
 
+        // Used to add a new room, triggered from "Add Room" button on "Edit Rooms" screen
+        public void AddNewRoom(string roomName, int capacity, string details)
+        {
+            Rooms.Add(new Room() { RoomName = roomName, Capacity = capacity, Details = details });
+        }
+    }
+
+    public class RoomList
+    {
+        public List<Room> Data { get; set; }
+
+        public List<Room> getData()
+        {
+            return this.Data;
+        }
     }
 }
