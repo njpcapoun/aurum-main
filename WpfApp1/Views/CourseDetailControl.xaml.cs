@@ -59,7 +59,7 @@ namespace ClassroomAssignment.Views
             var validTimes = new List<string>();
             TimeSpan lastTime = new TimeSpan(22, 0, 0);
             TimeSpan currentTime = new TimeSpan(7, 0, 0);
-            TimeSpan diff = new TimeSpan(0, 15, 0);
+            TimeSpan diff = new TimeSpan(0, 5, 0);
             while (currentTime <= lastTime)
             {
                 validTimes.Add((new DateTime()).Add(currentTime).ToString("hh:mmtt"));
