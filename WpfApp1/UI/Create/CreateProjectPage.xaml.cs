@@ -78,7 +78,35 @@ namespace ClassroomAssignment.UI.Create
 
         private string[] GetSheetPaths()
         {
+            // Path for the file that stores the default folder
+            var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "\\pathfile.txt");
+
+            // string to store the default path
+            string defaultPath = "none";
+
+            // If it exists read the default folder path
+            if (File.Exists(filePath))
+            {
+                defaultPath = File.ReadAllText(filePath);
+            }
+
+            // Otherwise create the file
+            else
+            {
+                System.IO.File.Create(filePath);
+            }
+
+
             FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+            folderBrowser.RootFolder = Environment.SpecialFolder.Desktop;
+
+            // Checks if defaultPath got set or not
+            if (string.Compare(defaultPath, "none", true) != 0)
+            {
+                folderBrowser.SelectedPath = defaultPath;
+            }
+
+            
             var result = folderBrowser.ShowDialog();
 
             string[] docLocations = null;
