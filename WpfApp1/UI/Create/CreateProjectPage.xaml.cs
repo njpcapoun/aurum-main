@@ -79,7 +79,10 @@ namespace ClassroomAssignment.UI.Create
         private string[] GetSheetPaths()
         {
             // Path for the file that stores the default folder
-            var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "\\pathfile.txt");
+            
+            string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "\\pathfile.txt");
+            
+
 
             // string to store the default path
             string defaultPath = "none";
