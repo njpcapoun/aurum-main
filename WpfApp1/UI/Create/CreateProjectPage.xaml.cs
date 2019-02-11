@@ -78,8 +78,37 @@ namespace ClassroomAssignment.UI.Create
 
         private string[] GetSheetPaths()
         {
+            // Path for the file that stores the default folder
+            
+            string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "\\pathfile.txt");
+            
+
+
+            // string to store the default path
+            string defaultPath = "none";
+
             FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
-            var result = folderBrowser.ShowDialog();
+            folderBrowser.RootFolder = Environment.SpecialFolder.Desktop;
+
+            // If it exists read the default folder path
+            if (File.Exists(filePath))
+            {
+                defaultPath = File.ReadAllText(filePath);
+
+                // Pretty sure this sets a default selected path
+                folderBrowser.SelectedPath = defaultPath;
+            }
+
+            // Visual studio recommended using the actual type instead of var for this
+            DialogResult result = folderBrowser.ShowDialog();
+
+            // This gets the path they select
+            defaultPath = folderBrowser.SelectedPath;
+
+
+            // WriteAllText creates the file if it doesn't exist, otherwise it overwrites it
+            File.WriteAllText(filePath, defaultPath);
+
 
             string[] docLocations = null;
             if (result == DialogResult.OK)
@@ -148,7 +177,24 @@ namespace ClassroomAssignment.UI.Create
 
         private string GetFilePath()
         {
+            // Path for the file that stores the default folder
+            var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "\\pathfile.txt");
+
+            // string to store the default path
+            string defaultPath = "none";
+
             OpenFileDialog dialog = new OpenFileDialog();
+
+            // If it exists read the default folder path
+            if (File.Exists(filePath))
+            {
+                defaultPath = File.ReadAllText(filePath);
+
+                // Sets the initial directory
+                dialog.InitialDirectory = defaultPath;
+            }
+
+            
             dialog.Filter = "Assignment File | *.agn";
             var result = dialog.ShowDialog();
 
