@@ -35,12 +35,12 @@ namespace ClassroomAssignment.Operations
                 StringBuilder builder = new StringBuilder();
                 foreach (var course in ConflictingCourses)
                 {
-                    builder.Append(course.ClassID);
+                    builder.Append(course.CourseName);
                     builder.Append(", ");
                 }
 
                 builder.Remove(builder.Length - 2, 2);
-                builder.Append(" Are In Conflict in ");
+                builder.Append(" are In conflict in ");
                 builder.Append(ConflictingCourses.First().RoomAssignment);
                 return builder.ToString();
             }
