@@ -42,6 +42,7 @@ namespace ClassroomAssignment.Model
             {
                 fileHasMoreRecords = true;
                 var coursesFromFile = parseFile(file);
+                Console.WriteLine(coursesFromFile);
                 courses.AddRange(coursesFromFile);//Add courses in course list
             }
 
@@ -56,22 +57,35 @@ namespace ClassroomAssignment.Model
         static List<Course> parseFile(string file)
         {
             var coursesForFile = new List<Course>();
+            var fileName = new DirectoryInfo(file).Name;
 
-            using (StreamReader fileStream = File.OpenText(file))
+            //if (file != null)
+            //{
+            //    Console.WriteLine("file " + fileName + " was not able to load");
+            //}
+
+            try
             {
-                // Use CsvHelper library to read the file.
-                var csvReader = new CsvHelper.CsvReader(fileStream);
-                
-                // configure csv reader
-                csvReader.Configuration.HasHeaderRecord = false;
-                csvReader.Configuration.RegisterClassMap<CourseClassMap>();
-
-                skipHeaders(csvReader);
-                csvReader.Read(); // read first header and skip it.
-                while(fileHasMoreRecords)
+                using (StreamReader fileStream = File.OpenText(file))
                 {
-                    coursesForFile.AddRange(parseRecordsForCourse(csvReader));
+
+                    // Use CsvHelper library to read the file.
+                    var csvReader = new CsvHelper.CsvReader(fileStream);
+
+                    // configure csv reader
+                    csvReader.Configuration.HasHeaderRecord = false;
+                    csvReader.Configuration.RegisterClassMap<CourseClassMap>();
+
+                    skipHeaders(csvReader);
+                    csvReader.Read(); // read first header and skip it.
+                    while (fileHasMoreRecords)
+                    {
+                        coursesForFile.AddRange(parseRecordsForCourse(csvReader));
+                    }
                 }
+            } catch (IOException e)
+            {
+                Console.WriteLine("file " + fileName + " was not able to load\n" + "Exception: " + e);
             }
 
             return coursesForFile;
@@ -79,22 +93,24 @@ namespace ClassroomAssignment.Model
 
         private static List<Course> parseRecordsForCourse(CsvHelper.CsvReader reader)
         {
-
             // make sure not at header or end of file
             List<Course> courseList = new List<Course>();
 
-            while((fileHasMoreRecords = reader.Read()) && courseHasMoreRecords(reader))
+            Console.WriteLine("Parse 1");
+            while ((fileHasMoreRecords = reader.Read()) && courseHasMoreRecords(reader))
             {
+                Console.WriteLine("Parse 2");
                 Course course = reader.GetRecord<Course>();
+                Console.WriteLine(course);
+                Console.WriteLine("Parse 3");
                 course.SetAllDerivedProperties();
+                Console.WriteLine("Parse 4");
                 courseList.Add(course); //add course to course list.
+                Console.WriteLine("Parse 5");
             }
 
             return courseList;
         }
-
-        
-
 
         static bool courseHasMoreRecords(CsvHelper.CsvReader reader)
         {
