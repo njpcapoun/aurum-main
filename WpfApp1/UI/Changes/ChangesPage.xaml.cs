@@ -53,14 +53,19 @@ namespace ClassroomAssignment.UI.Changes
                 {
                     if (originalCourses[i].ClassID_AsInt == newCourses[j].ClassID_AsInt)
                     {
+                        var difference = new CourseDifference();
+
+                        // Checks if the needsRoom variable has been changed from true to false
+                        bool v = (originalCourses[i].NeedsRoom == true && newCourses[j].NeedsRoom == false);
+                        if (v)
+                        {
+                            setDifferences(originalCourses[i], newCourses[j], "No Assignment Needed", differences, difference);
+                        }
+
+                        // Otherwise check if another change has been made
                         if (originalCourses[i] != newCourses[j])
                         {
-                            var difference = new CourseDifference();
-
-                            difference.DifferenceType = "Modified";
-                            difference.OriginalCourse = originalCourses[i];
-                            difference.NewestCourse = newCourses[j];
-                            differences.Add(difference);
+                            setDifferences(originalCourses[i], newCourses[j], "Modified", differences, difference);
                         }
                     }
 
@@ -69,6 +74,17 @@ namespace ClassroomAssignment.UI.Changes
             }
 
             return differences;
+        }
+
+        // Method to set the differences using the info from getDifferences
+        // Mainly to make future additions to the changes page easier
+        private List<CourseDifference> setDifferences(Course i, Course j, string type, List<CourseDifference> diff, CourseDifference difference)
+        {
+            difference.DifferenceType = type;
+            difference.OriginalCourse = i;
+            difference.NewestCourse = j;
+            diff.Add(difference);
+            return diff;
         }
 
         private bool CoursesAreSame(Course a, Course b)
