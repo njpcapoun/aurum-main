@@ -62,7 +62,7 @@
 
         <ScrollViewer Grid.Column="1">
             <StackPanel Orientation="Vertical">
-                <views:CourseDetailControl x:Name="CourseDetailControl" IsEnabled="False" DataContext="{Binding CurrentCourse, Mode=TwoWay}"/>
+                <views:CourseDetailControl x:Name="CourseDetailControl" IsEnabled="True" DataContext="{Binding CurrentCourse, Mode=TwoWay}"/>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
