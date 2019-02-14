@@ -40,7 +40,7 @@ namespace ClassroomAssignment.Operations
                 }
 
                 builder.Remove(builder.Length - 2, 2);
-                builder.Append(" are In conflict in ");
+                builder.Append(" are in conflict in ");
                 builder.Append(ConflictingCourses.First().RoomAssignment);
                 return builder.ToString();
             }
