@@ -50,7 +50,7 @@ namespace ClassroomAssignment.UI.Assignment
             window.SizeToContent = SizeToContent.Width;
         }
 
-        void onClickSave(object sender, RoutedEventArgs e)
+        void OnClickSave(object sender, RoutedEventArgs e)
         {
             save();
         }
