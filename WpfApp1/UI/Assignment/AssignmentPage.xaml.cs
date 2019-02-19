@@ -41,6 +41,7 @@ namespace ClassroomAssignment.UI.Assignment
             RoomSchedule.RoomScheduled = viewModel.CurrentRoom;
             RoomSchedule.CoursesForRoom = viewModel.CoursesForSelectedRoom;
             RoomSchedule.AvailableSlots = viewModel.AvailableSlots;
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)
@@ -52,10 +53,10 @@ namespace ClassroomAssignment.UI.Assignment
 
         void OnClickSave(object sender, RoutedEventArgs e)
         {
-            save();
+            SaveWork();
         }
 
-        void save()
+        void SaveWork()
         {
             SaveFileDialog saveFileDialog2 = new SaveFileDialog();
             saveFileDialog2.Filter = "Assignment File | *.agn";
@@ -82,6 +83,11 @@ namespace ClassroomAssignment.UI.Assignment
                 }
 
             }
+        }
+
+        private void OnProcessExit(object sender, EventArgs e)
+        {
+            SaveWork();
         }
 
         private List<Course> GetOriginalCourses()
