@@ -52,7 +52,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <DataGrid x:Name="CoursesDataGrid" ItemsSource="{Binding Source={StaticResource cvsCourses}}" AutoGenerateColumns="False" CanUserSortColumns="False" CanUserAddRows="False" >
+                        <DataGrid x:Name="CoursesDataGrid" ItemsSource="{Binding Source={StaticResource cvsCourses}}" AutoGenerateColumns="False" CanUserSortColumns="True" CanUserAddRows="False" >
                             <DataGrid.ContextMenu>
                                 <ContextMenu x:Name="CoursesContextMenu" Opened="CoursesContextMenu_Opened">
                                     <MenuItem x:Name="AssignMenuItem" Header="Assign" Click="AssignMenuItem_Click" />
@@ -193,7 +193,7 @@
             </TabControl>
         </Border>
 
-        <ListView x:Name="ConflictsListView" ItemsSource="{Binding Conflicts}" MouseDoubleClick="ConflictsListView_MouseDoubleClick"  MinHeight="90" Grid.Row="2">
+        <ListView x:Name="ConflictsListView" ItemsSource="{Binding Conflicts}" MouseDoubleClick="ConflictsListView_MouseDoubleClick"  MinHeight="60" MaxHeight="225" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True">
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
                     <Style.Triggers>
