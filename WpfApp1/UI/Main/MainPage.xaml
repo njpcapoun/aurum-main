@@ -32,17 +32,17 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-       <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
-                <Menu Padding="5">
-                    <MenuItem Header="_File">
-                        <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
-                        <MenuItem Header="Changes" Click="Menu_Changes" />
-                        <MenuItem Header="_Save" Click="Menu_Save"/>
-                    </MenuItem>
-                </Menu>
 
-            </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
+            <Menu Padding="5">
+                <MenuItem Header="_File">
+                    <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
+                    <MenuItem Header="Changes" Click="Menu_Changes" />
+                    <MenuItem Header="_Save" Click="Menu_Save"/>
+                </MenuItem>
+            </Menu>
+
+        </StackPanel>
 
         <Border Grid.Row="1">
             <TabControl>
@@ -60,6 +60,7 @@
                                     <MenuItem x:Name="NoAssignmentNeededMenuItem" Header="No Assignment Needed" Click="NoAssignmentNeededMenuItem_Click"/>
                                     <MenuItem x:Name="CrossListMenuItem" Header="CrossList" Click="CrossListMenuItem_Click"/>
                                     <MenuItem x:Name="AssignmentNeeded" Header="Assignment Needed" Click="AssignmentNeeded_Click"/>
+                                    <MenuItem x:Name="Unassign" Header="Unassign" Click="Unassign_Click"/>
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
                             <DataGrid.GroupStyle>
@@ -193,7 +194,7 @@
             </TabControl>
         </Border>
 
-        <ListView x:Name="ConflictsListView" ItemsSource="{Binding Conflicts}" MouseDoubleClick="ConflictsListView_MouseDoubleClick"  MinHeight="60" MaxHeight="225" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True">
+        <ListView x:Name="ConflictsListView" ItemsSource="{Binding Conflicts}" MouseDoubleClick="ConflictsListView_MouseDoubleClick"  MinHeight="60" MaxHeight="225" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
                     <Style.Triggers>
