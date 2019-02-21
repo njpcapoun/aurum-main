@@ -41,7 +41,6 @@ namespace ClassroomAssignment.UI.Assignment
             RoomSchedule.RoomScheduled = viewModel.CurrentRoom;
             RoomSchedule.CoursesForRoom = viewModel.CoursesForSelectedRoom;
             RoomSchedule.AvailableSlots = viewModel.AvailableSlots;
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)
@@ -60,10 +59,19 @@ namespace ClassroomAssignment.UI.Assignment
         {
             SaveFileDialog saveFileDialog2 = new SaveFileDialog();
             saveFileDialog2.Filter = "Assignment File | *.agn";
+            var fileName = "";
 
-            if (saveFileDialog2.ShowDialog() == DialogResult.OK)
+            if (Properties.Settings.Default["SavePath"] != null || (string)Properties.Settings.Default["SavePath"] != "default")
             {
-                var fileName = saveFileDialog2.FileName;
+                fileName = (string)Properties.Settings.Default["SavePath"];
+            }
+            else if (saveFileDialog2.ShowDialog() == DialogResult.OK)
+            {
+                fileName = saveFileDialog2.FileName;
+                Properties.Settings.Default["SavePath"] = fileName;
+                Properties.Settings.Default.Save();
+            }
+           
 
                 try
                 {
@@ -75,6 +83,7 @@ namespace ClassroomAssignment.UI.Assignment
 
                     formatter.Serialize(stream, appState);
                     stream.Close();
+                    System.Windows.Forms.MessageBox.Show("Saved!");
 
                 }
                 catch (SerializationException a)
@@ -82,17 +91,12 @@ namespace ClassroomAssignment.UI.Assignment
                     Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
                 }
 
-            }
-        }
-
-        private void OnProcessExit(object sender, EventArgs e)
-        {
-            SaveWork();
+            
         }
 
         private List<Course> GetOriginalCourses()
         {
-            return App.Current.Resources["originalCourses"] as List<Course>;
+            return System.Windows.Application.Current.Resources["originalCourses"] as List<Course>;
         }
 
         private List<Course> GetUpToDateCourses()
