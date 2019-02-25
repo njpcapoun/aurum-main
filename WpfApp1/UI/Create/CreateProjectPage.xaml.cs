@@ -78,11 +78,9 @@ namespace ClassroomAssignment.UI.Create
 
         private string[] GetSheetPaths()
         {
-            // Path for the file that stores the default folder
             
-            string filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "\\pathfile.txt");
             
-
+       
 
             // string to store the default path
             string defaultPath = "none";
@@ -91,9 +89,9 @@ namespace ClassroomAssignment.UI.Create
             folderBrowser.RootFolder = Environment.SpecialFolder.Desktop;
 
             // If it exists read the default folder path
-            if (File.Exists(filePath))
+            if (Properties.Settings.Default["FilePath"] != null || (string) Properties.Settings.Default["FilePath"] != "default")
             {
-                defaultPath = File.ReadAllText(filePath);
+                defaultPath = (string) Properties.Settings.Default["FilePath"];
 
                 // Pretty sure this sets a default selected path
                 folderBrowser.SelectedPath = defaultPath;
@@ -106,9 +104,9 @@ namespace ClassroomAssignment.UI.Create
             defaultPath = folderBrowser.SelectedPath;
 
 
-            // WriteAllText creates the file if it doesn't exist, otherwise it overwrites it
-            File.WriteAllText(filePath, defaultPath);
-
+            // Saves the selected path into properties
+            Properties.Settings.Default["FilePath"] = defaultPath;
+            Properties.Settings.Default.Save();
 
             string[] docLocations = null;
             if (result == DialogResult.OK)
@@ -177,8 +175,7 @@ namespace ClassroomAssignment.UI.Create
 
         private string GetFilePath()
         {
-            // Path for the file that stores the default folder
-            var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "\\pathfile.txt");
+            
 
             // string to store the default path
             string defaultPath = "none";
@@ -186,9 +183,9 @@ namespace ClassroomAssignment.UI.Create
             OpenFileDialog dialog = new OpenFileDialog();
 
             // If it exists read the default folder path
-            if (File.Exists(filePath))
+            if (Properties.Settings.Default["FilePath"] != null || (string)Properties.Settings.Default["FilePath"] != "default")
             {
-                defaultPath = File.ReadAllText(filePath);
+                defaultPath = (string) Properties.Settings.Default["FilePath"];
 
                 // Sets the initial directory
                 dialog.InitialDirectory = defaultPath;

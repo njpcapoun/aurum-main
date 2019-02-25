@@ -29,333 +29,410 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ClassroomAssignment.Model.Repo;
 
 namespace ClassroomAssignment.UI.Main
 {
-	/// <summary>
-	/// Interaction logic for MainPage.xaml
-	/// </summary>
-	public partial class MainPage : Page
-	{
-		public MainWindowViewModel ViewModel { get; set; }
+      /// <summary>
+      /// Interaction logic for MainPage.xaml
+      /// </summary>
+      public partial class MainPage : Page
+      {
+          public MainWindowViewModel ViewModel { get; set; }
 
-		private Dictionary<Course, Course> CrossListedToMain = new Dictionary<Course, Course>();
+          private Dictionary<Course, Course> CrossListedToMain = new Dictionary<Course, Course>();
 
-		Regex regex;
+          public Room SelectedRoom { get; set; }
 
-		public MainPage()
-		{
-			InitializeComponent();
-			ViewModel = new MainWindowViewModel(this);
-			DataContext = ViewModel;
-			this.Loaded += MainPage_Loaded;
-		}
+          public int index { get; set; }
 
+          private RoomRepository roomRepo;
 
+          Regex regex;
 
-		private void MainPage_Loaded(object sender, RoutedEventArgs e)
-		{
+          public MainPage()
+          {
+              InitializeComponent();
+              ViewModel = new MainWindowViewModel(this);
+              roomRepo = ViewModel.RoomRepo;
+              DataContext = ViewModel;
+              this.Loaded += MainPage_Loaded;
+          }
 
-			while (NavigationService.RemoveBackEntry() != null) ;
-		}
+          private void MainPage_Loaded(object sender, RoutedEventArgs e)
+          {
+              while (NavigationService.RemoveBackEntry() != null);
+          }
 
+          private void SaveAs(object sender, EventArgs e)
+          {
+              SaveFileDialog saveFileDialog2 = new SaveFileDialog();
+              saveFileDialog2.Filter = "Assignment File | *.agn";
 
-		private void Menu_Save(object sender, EventArgs e)
-		{
-			SaveFileDialog saveFileDialog2 = new SaveFileDialog();
-			saveFileDialog2.Filter = "Assignment File | *.agn";
+              if (saveFileDialog2.ShowDialog() == DialogResult.OK)
+              {
+                  var fileName = saveFileDialog2.FileName;
+                  Properties.Settings.Default["SavePath"] = fileName;
+                  Properties.Settings.Default.Save();
 
-			if (saveFileDialog2.ShowDialog() == DialogResult.OK)
-			{
-				var fileName = saveFileDialog2.FileName;
+                  try
+                  {
+                      List<Course> originalCourses = GetOriginalCourses();
+                      AppState appState = new AppState(originalCourses, ViewModel.Courses.ToList());
 
-				try
-				{
-					List<Course> originalCourses = GetOriginalCourses();
-					AppState appState = new AppState(originalCourses, ViewModel.Courses.ToList());
+                      IFormatter formatter = new BinaryFormatter();
+                      Stream stream = File.Open(fileName, FileMode.Create, FileAccess.Write);
 
-					IFormatter formatter = new BinaryFormatter();
-					Stream stream = File.Open(fileName, FileMode.Create, FileAccess.Write);
+                      formatter.Serialize(stream, appState);
+                      stream.Close();
 
-					formatter.Serialize(stream, appState);
-					stream.Close();
+                  }
+                  catch (SerializationException a)
+                  {
+                      Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
+                  }
+              }
+          }
 
-				}
-				catch (SerializationException a)
-				{
-					Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
-				}
+          private void Menu_Save(object sender, EventArgs e)
+          {
+              SaveFileDialog saveFileDialog2 = new SaveFileDialog();
+              saveFileDialog2.Filter = "Assignment File | *.agn";
+              var fileName = "";
 
-			}
-		}
+              if (Properties.Settings.Default["SavePath"] != null || (string)Properties.Settings.Default["SavePath"] != "default")
+              {
+                  fileName = (string)Properties.Settings.Default["SavePath"];
+              }
+              else if (saveFileDialog2.ShowDialog() == DialogResult.OK)
+              {
+                  fileName = saveFileDialog2.FileName;
+                  Properties.Settings.Default["SavePath"] = fileName;
+                  Properties.Settings.Default.Save();
+              }
+                  try
+                  {
+                      List<Course> originalCourses = GetOriginalCourses();
+                      AppState appState = new AppState(originalCourses, ViewModel.Courses.ToList());
 
-		private List<Course> GetOriginalCourses()
-		{
-			return App.Current.Resources["originalCourses"] as List<Course>;
-		}
+                      IFormatter formatter = new BinaryFormatter();
+                      Stream stream = File.Open(fileName, FileMode.Create, FileAccess.Write);
 
-		private void Menu_Changes(object sender, EventArgs e)
-		{
-			NavigationService.Navigate(new ChangesPage());
+                      formatter.Serialize(stream, appState);
+                      stream.Close();
 
-		}
-
-		private void ConflictsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-		{
-			//var conflict = ConflictsListView.SelectedItem as Conflict;
-			//if (conflict != null)
-			//{
-			//    var assignmentPage = new AssignmentPage(conflict.ConflictingCourses);
-			//    NavigationService.Navigate(assignmentPage);
-			//}
-		}
-
-		private void AssignMenuItem_Click(object sender, RoutedEventArgs e)
-		{
-			List<Course> courses = new List<Course>();
-
-			IList selectedItems = CoursesDataGrid.SelectedItems;
-			foreach (Course c in selectedItems)
-			{
-				courses.Add(c);
-			}
-
-			var assignmentPage = new AssignmentPage(courses);
-			NavigationService.Navigate(assignmentPage);
-		}
-
-		private void Export_Click(object sender, RoutedEventArgs e)
-		{
-			if (ViewModel.Conflicts.Count != 0)
-			{
-				string message = "Exporting to Excel while there are conflicts may result in incorrect output. Do you wish to continue with the export?";
-				string caption = "Export to Excel";
-				MessageBoxImage icon = MessageBoxImage.Warning;
-				MessageBoxButton button = MessageBoxButton.YesNo;
-				MessageBoxResult result = System.Windows.MessageBox.Show(message, caption, button, icon);
-
-				if (result == MessageBoxResult.No) return;
-			}
+                  }
+                  catch (SerializationException a)
+                  {
+                      Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
+                  }
 
 
-			Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
-			saveFileDialog.Filter = "Excel Worksheets|*.xls";
-			if (saveFileDialog.ShowDialog() == true)
-			{
-				var fileName = saveFileDialog.FileName;
-				var templateFile = System.IO.Path.Combine(Environment.CurrentDirectory, "ClassroomGridTemplate.xls");
-				using (var fileStream = File.OpenRead(templateFile))
-				{
-					IWorkbook workbook = new HSSFWorkbook(fileStream);
-					workbook.RemoveSheetAt(workbook.GetSheetIndex("Sheet1"));
+          }
 
-					workbook.MissingCellPolicy = MissingCellPolicy.CREATE_NULL_AS_BLANK;
-					ExcelSchedulePrinter printer = new ExcelSchedulePrinter(fileName, workbook);
-					ICourseRepository courseRepository = CourseRepository.GetInstance();
+          private List<Course> GetOriginalCourses()
+          {
+              return App.Current.Resources["originalCourses"] as List<Course>;
+          }
 
-					new ScheduleVisualization(courseRepository, null, printer).PrintSchedule();
-				}
-			}
-		}
+          /*
+           * Moves to the Changes page, file menu item
+           */
+          private void Menu_Changes(object sender, EventArgs e)
+          {
+              NavigationService.Navigate(new ChangesPage());
+          }
 
-		private void CoursesContextMenu_Opened(object sender, RoutedEventArgs e)
-		{
-			var course = CoursesDataGrid.SelectedItem as Course;
+          /*
+           * Unimplemented, possibly meant to have a view for just crosslisted classes?
+           */
+          private void ConflictsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+          {
+              //var conflict = ConflictsListView.SelectedItem as Conflict;
+              //if (conflict != null)
+              //{
+              //    var assignmentPage = new AssignmentPage(conflict.ConflictingCourses);
+              //    NavigationService.Navigate(assignmentPage);
+              //}
+          }
 
-			bool containNoRoomNeeded = false;
-			foreach (Course c in CoursesDataGrid.SelectedItems)
-			{
-				if (!c.NeedsRoom) containNoRoomNeeded = true;
-			}
+          /*
+           * Sends selected courses to AssignmentPage to be assigned, right click menu
+           */
+          private void AssignMenuItem_Click(object sender, RoutedEventArgs e)
+          {
+              List<Course> courses = new List<Course>();
 
-			if (course == null) CoursesContextMenu.IsEnabled = false;
-			else CoursesContextMenu.IsEnabled = true;
+              IList selectedItems = CoursesDataGrid.SelectedItems;
+              foreach (Course c in selectedItems)
+              {
+                  courses.Add(c);
+              }
 
-			if (containNoRoomNeeded) AssignMenuItem.IsEnabled = false;
-			else AssignMenuItem.IsEnabled = true;
+              var assignmentPage = new AssignmentPage(courses);
+              NavigationService.Navigate(assignmentPage);
+          }
 
-			if (containNoRoomNeeded) NoAssignmentNeededMenuItem.IsEnabled = false;
-			else NoAssignmentNeededMenuItem.IsEnabled = true;
+          /*
+           * Export the files to CSV format, file menu item
+           */
+          private void Export_Click(object sender, RoutedEventArgs e)
+          {
+              if (ViewModel.Conflicts.Count != 0)
+              {
+                  string message = "Exporting to Excel while there are conflicts may result in incorrect output. Do you wish to continue with the export?";
+                  string caption = "Export to Excel";
+                  MessageBoxImage icon = MessageBoxImage.Warning;
+                  MessageBoxButton button = MessageBoxButton.YesNo;
+                  MessageBoxResult result = System.Windows.MessageBox.Show(message, caption, button, icon);
 
-			if (CoursesDataGrid.SelectedItems.Count < 2) CrossListMenuItem.IsEnabled = false;
-			else CrossListMenuItem.IsEnabled = true;
+                  if (result == MessageBoxResult.No) return;
+              }
 
-			if (CoursesDataGrid.SelectedItems.Count > 1) CoursesMenuItem.IsEnabled = false;
-			else CoursesMenuItem.IsEnabled = true;
+              Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+              saveFileDialog.Filter = "Excel Worksheets|*.xls";
+              if (saveFileDialog.ShowDialog() == true)
+              {
+                  var fileName = saveFileDialog.FileName;
+                  var templateFile = System.IO.Path.Combine(Environment.CurrentDirectory, "ClassroomGridTemplate.xls");
+                  using (var fileStream = File.OpenRead(templateFile))
+                  {
+                      IWorkbook workbook = new HSSFWorkbook(fileStream);
+                      workbook.RemoveSheetAt(workbook.GetSheetIndex("Sheet1"));
 
-			int i;
-			if (course.NeedsRoom && course.QueryMeetingDays().Count != 0 && course.QueryStartTime() != null && course.QueryEndTime() != null && int.TryParse(course.RoomCapRequest, out i)) AssignmentNeeded.Visibility = Visibility.Visible;
-			else AssignmentNeeded.Visibility = Visibility.Collapsed;
+                      workbook.MissingCellPolicy = MissingCellPolicy.CREATE_NULL_AS_BLANK;
+                      ExcelSchedulePrinter printer = new ExcelSchedulePrinter(fileName, workbook);
+                      ICourseRepository courseRepository = CourseRepository.GetInstance();
 
-			// if (course.HasRoomAssignment) Unassign.Visibility = Visibility.Visible;
-			// else Unassign.Visibility = Visibility.Collapsed;
-		}
+                      new ScheduleVisualization(courseRepository, null, printer).PrintSchedule();
+                  }
+              }
+          }
 
-		private void CoursesMenuItem_Click(object sender, RoutedEventArgs e)
-		{
-			var course = CoursesDataGrid.SelectedItem as Course;
-			if (course == null) return;
+          /*
+           *  Sets which options are available for a course on right click
+           */
+          private void CoursesContextMenu_Opened(object sender, RoutedEventArgs e)
+          {
+              var course = CoursesDataGrid.SelectedItem as Course;
 
-			var editPage = new CourseEditPage(course);
-			NavigationService.Navigate(editPage);
-		}
+              bool containNoRoomNeeded = false;
+              foreach (Course c in CoursesDataGrid.SelectedItems)
+              {
+                  if (!c.NeedsRoom) containNoRoomNeeded = true;
+              }
 
-		private void GoToCourseMenuItem_Click(object sender, RoutedEventArgs e)
-		{
-			var contextMenu = (sender as System.Windows.Controls.MenuItem).Parent as System.Windows.Controls.ContextMenu;
-			var course = (contextMenu.PlacementTarget as System.Windows.Controls.ComboBox).SelectedItem as Course;
+              if (course == null) CoursesContextMenu.IsEnabled = false;
+              else CoursesContextMenu.IsEnabled = true;
 
-			if (course != null)
-			{
-				CoursesDataGrid.SelectedItem = course;
-				CoursesDataGrid.ScrollIntoView(course);
-				CoursesDataGrid.Focus();
-			}
-		}
+              if (containNoRoomNeeded) AssignMenuItem.IsEnabled = false;
+              else AssignMenuItem.IsEnabled = true;
 
-		private void NoAssignmentNeededMenuItem_Click(object sender, RoutedEventArgs e)
-		{
-			var courses = CoursesDataGrid.SelectedItems;
+              if (containNoRoomNeeded) NoAssignmentNeededMenuItem.IsEnabled = false;
+              else NoAssignmentNeededMenuItem.IsEnabled = true;
 
-			foreach (Course course in courses)
-			{
-				course.NeedsRoom = false;
-			}
-		}
+              if (CoursesDataGrid.SelectedItems.Count < 2) CrossListMenuItem.IsEnabled = false;
+              else CrossListMenuItem.IsEnabled = true;
 
-		private void CrossListMenuItem_Click(object sender, RoutedEventArgs e)
-		{
-			var courses = CoursesDataGrid.SelectedItems;
+              if (CoursesDataGrid.SelectedItems.Count > 1) CoursesMenuItem.IsEnabled = false;
+              else CoursesMenuItem.IsEnabled = true;
 
-			var mainCourse = courses[0] as Course;
-			foreach (Course course in courses)
-			{
-				if (course.NeedsRoom)
-				{
-					mainCourse = course;
-					break;
-				}
-			}
+              int i;
+              if (!course.NeedsRoom && course.QueryMeetingDays().Count != 0 && course.QueryStartTime() != null && course.QueryEndTime() != null && int.TryParse(course.RoomCapRequest, out i)) AssignmentNeeded.Visibility = Visibility.Visible;
+              else AssignmentNeeded.Visibility = Visibility.Collapsed;
 
-			foreach (Course course in courses)
-			{
-				if (course == mainCourse) continue;
+              // if (course.HasRoomAssignment) Unassign.Visibility = Visibility.Visible;
+              // else Unassign.Visibility = Visibility.Collapsed;
+          }
 
-				course.NeedsRoom = false;
-				mainCourse.AddCrossListedCourse(course);
-				CrossListedToMain[course] = mainCourse;
-			}
-		}
+          /*
+           * For the Edit Course option on right click
+           */
+          private void CoursesMenuItem_Click(object sender, RoutedEventArgs e)
+          {
+              var course = CoursesDataGrid.SelectedItem as Course;
+              if (course == null) return;
 
+              var editPage = new CourseEditPage(course);
+              NavigationService.Navigate(editPage);
+          }
 
+          private void GoToCourseMenuItem_Click(object sender, RoutedEventArgs e)
+          {
+              var contextMenu = (sender as System.Windows.Controls.MenuItem).Parent as System.Windows.Controls.ContextMenu;
+              var course = (contextMenu.PlacementTarget as System.Windows.Controls.ComboBox).SelectedItem as Course;
 
-		private void NewCourseMenuItem_Click(object sender, RoutedEventArgs e)
-		{
-			var dialog = new AddCourseDialogBox();
-			dialog.Show();
-		}
+              if (course != null)
+              {
+                  CoursesDataGrid.SelectedItem = course;
+                  CoursesDataGrid.ScrollIntoView(course);
+                  CoursesDataGrid.Focus();
+              }
+          }
 
-		// Does this even work???
-		private void AssignmentNeeded_Click(object sender, RoutedEventArgs e)
-		{
-			foreach (Course course in CoursesDataGrid.SelectedItems)
-			{
-				course.NeedsRoom = true;
-				if (CrossListedToMain.ContainsKey(course))
-				{
-					CrossListedToMain[course].RemoveCrossListedCourse(course);
-					CrossListedToMain.Remove(course);
-				}
-			}
-		}
+          /*
+           * Set Course as no assignment needed on click
+           */
+          private void NoAssignmentNeededMenuItem_Click(object sender, RoutedEventArgs e)
+          {
+              var courses = CoursesDataGrid.SelectedItems;
 
-		private void RemoveCrossListedCourseMenuItem_Click(object sender, RoutedEventArgs e)
-		{
-			var contextMenu = (sender as System.Windows.Controls.MenuItem).Parent as System.Windows.Controls.ContextMenu;
-			var crossListedCourse = (contextMenu.PlacementTarget as System.Windows.Controls.ComboBox).SelectedItem as Course;
-			var mainCourse = CoursesDataGrid.SelectedItem as Course;
+              foreach (Course course in courses)
+              {
+                  course.NeedsRoom = false;
+              }
+          }
 
-			if (mainCourse == null) return;
+          /*
+           * Crosslists selected courses on click
+           */
+          private void CrossListMenuItem_Click(object sender, RoutedEventArgs e)
+          {
+              var courses = CoursesDataGrid.SelectedItems;
 
-			mainCourse.RemoveCrossListedCourse(crossListedCourse);
-			crossListedCourse.NeedsRoom = crossListedCourse.QueryNeedsRoom();
-			CrossListedToMain[crossListedCourse].RemoveCrossListedCourse(crossListedCourse);
-			CrossListedToMain.Remove(crossListedCourse);
+              var mainCourse = courses[0] as Course;
+              foreach (Course course in courses)
+              {
+                  if (course.NeedsRoom)
+                  {
+                      mainCourse = course;
+                      break;
+                  }
+              }
 
-		}
+              foreach (Course course in courses)
+              {
+                  if (course == mainCourse) continue;
 
-		// Unassign an assigned course if "Unassign" is clicked in context menu. 
-		/*private void Unassign_Click(object sender, RoutedEventArgs e)
-		{
-			foreach (Course course in CoursesDataGrid.SelectedItems)
-			{
-				course.NeedsRoom = true; // should it be course.QueryNeedsRoom();???
-				course.RoomAssignment = null;
-			}
-		}*/
+                  course.NeedsRoom = false;
+                  mainCourse.AddCrossListedCourse(course);
+                  CrossListedToMain[course] = mainCourse;
+              }
+          }
 
+          private void NewCourseMenuItem_Click(object sender, RoutedEventArgs e)
+          {
+              var dialog = new AddCourseDialogBox();
+              dialog.Show();
+          }
 
-		// Find and highlight search results from search textbox
-		private void CourseSearch_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			FindItem(CoursesDataGrid);
-		}
+          /*
+           * Move course to assignment needed on click
+           */
+          private void AssignmentNeeded_Click(object sender, RoutedEventArgs e)
+          {
+              foreach (Course course in CoursesDataGrid.SelectedItems)
+              {
+                  course.NeedsRoom = true;
+                  if (CrossListedToMain.ContainsKey(course))
+                  {
+                      CrossListedToMain[course].RemoveCrossListedCourse(course);
+                      CrossListedToMain.Remove(course);
+                  }
+              }
+          }
 
-		public void FindItem(DependencyObject obj)
-		{
-			for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
-			{
-				System.Windows.Controls.DataGridCell dg = obj as System.Windows.Controls.DataGridCell;
-				if (dg != null)
-				{
-					HighlightText(dg);
-				}
-				FindItem(VisualTreeHelper.GetChild(obj as DependencyObject, i));
-			}
-		}
+          /*
+           * Removes crosslisted courses from no assignment needed section, and removes the crosslist
+           */
+          private void RemoveCrossListedCourseMenuItem_Click(object sender, RoutedEventArgs e)
+          {
+              var contextMenu = (sender as System.Windows.Controls.MenuItem).Parent as System.Windows.Controls.ContextMenu;
+              var crossListedCourse = (contextMenu.PlacementTarget as System.Windows.Controls.ComboBox).SelectedItem as Course;
+              var mainCourse = CoursesDataGrid.SelectedItem as Course;
 
-		private void HighlightText(Object itx)
-		{
-			if (itx != null)
-			{
-				if (itx is TextBlock)
-				{
-					regex = new Regex("(" + CourseSearch.Text + ")", RegexOptions.IgnoreCase);
-					TextBlock tb = itx as TextBlock;
-					if (CourseSearch.Text.Length == 0)
-					{
-						string str = tb.Text;
-						tb.Inlines.Clear();
-						tb.Inlines.Add(str);
-						return;
-					}
-					string[] substr = regex.Split(tb.Text);
-					tb.Inlines.Clear();
-					foreach (var item in substr)
-					{
-						if (regex.Match(item).Success)
-						{
-							Run runx = new Run(item);
-							runx.Background = Brushes.GreenYellow;
-							tb.Inlines.Add(runx);
-						}
-						else
-						{
-							tb.Inlines.Add(item);
-						}
-					}
-					return;
-				}
-				else
-				{
-					for (int i = 0; i < VisualTreeHelper.GetChildrenCount(itx as DependencyObject); i++)
-					{
-						HighlightText(VisualTreeHelper.GetChild(itx as DependencyObject, i));
-					}
-				}
+              if (mainCourse == null) return;
 
-			}
-		}
-	}
-}
+              mainCourse.RemoveCrossListedCourse(crossListedCourse);
+              crossListedCourse.NeedsRoom = crossListedCourse.QueryNeedsRoom();
+              CrossListedToMain[crossListedCourse].RemoveCrossListedCourse(crossListedCourse);
+              CrossListedToMain.Remove(crossListedCourse);
+          }
 
+          private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+          {
+
+          }
+
+          // Unassign an assigned course if "Unassign" is clicked in context menu.
+          /*private void Unassign_Click(object sender, RoutedEventArgs e)
+          {
+       			foreach (Course course in CoursesDataGrid.SelectedItems)
+               	{
+       				course.NeedsRoom = true; // should it be course.QueryNeedsRoom();???
+          			course.RoomAssignment = null;
+               	}
+           }*/
+
+          private void ListBox_Selected(object sender, RoutedEventArgs e)
+          {
+              ViewModel.EditableRoom = (Room)listBox.SelectedItem;
+          }
+
+          private void NewButton_Click(object sender, RoutedEventArgs e)
+          {
+              var dialog = new AddRoomDialogBox(roomRepo);
+              dialog.Show();
+          }
+
+          private void RemoveButton_Click(object sender, RoutedEventArgs e)
+          {
+              // confirmation pop-up
+          }
+
+          public void FindItem(DependencyObject obj)
+          {
+               	for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+               	{
+               		System.Windows.Controls.DataGridCell dg = obj as System.Windows.Controls.DataGridCell;
+               		if (dg != null)
+               		{
+               			HighlightText(dg);
+               		}
+               		FindItem(VisualTreeHelper.GetChild(obj as DependencyObject, i));
+               	}
+          }
+
+          private void HighlightText(Object itx)
+          {
+               	if (itx != null)
+               	{
+               		if (itx is TextBlock)
+               		{
+               			regex = new Regex("(" + CourseSearch.Text + ")", RegexOptions.IgnoreCase);
+               			TextBlock tb = itx as TextBlock;
+       					if (CourseSearch.Text.Length == 0)
+               			{
+               				string str = tb.Text;
+               				tb.Inlines.Clear();
+               				tb.Inlines.Add(str);
+               			    return;
+               			}
+               			string[] substr = regex.Split(tb.Text);
+               			tb.Inlines.Clear();
+               			foreach (var item in substr)
+               			{
+               				if (regex.Match(item).Success)
+               				{
+               					Run runx = new Run(item);
+               					runx.Background = Brushes.GreenYellow;
+               					tb.Inlines.Add(runx);
+               				}
+               				else
+               				{
+               					tb.Inlines.Add(item);
+               				}
+               			}
+               			return;
+               		}
+               		else
+               		{
+               			for (int i = 0; i < VisualTreeHelper.GetChildrenCount(itx as DependencyObject); i++)
+               			{
+               				HighlightText(VisualTreeHelper.GetChild(itx as DependencyObject, i));
+               			}
+               		}
+               	}
+           }
+      }
+  }

@@ -12,21 +12,20 @@
       ShowsNavigationUI="True" >
 
 
-
-<Grid>
+    <Grid>
+    
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-      
 
-        <Grid  Grid.Column="0">
-            <Grid.RowDefinitions>
+            <Grid  Grid.Column="0">
+                <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
+
             <ListView x:Name="AssignCoursesListView" ItemsSource="{Binding CoursesBeingAssigned}"  Grid.Row="1" SelectedValue="{Binding CurrentCourse}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -57,11 +56,11 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
         </Grid>
 
-        <ScrollViewer Grid.Column="1">
-            <StackPanel Orientation="Vertical">
+                <ScrollViewer Grid.Column="1">
+                    
+                    <StackPanel Orientation="Vertical">
                 <views:CourseDetailControl x:Name="CourseDetailControl" IsEnabled="False" DataContext="{Binding CurrentCourse, Mode=TwoWay}"/>
 
                 <Grid>
@@ -105,13 +104,17 @@
                         </ComboBox>
                     </StackPanel>
                 </Grid>
+                <Button Grid.ColumnSpan="2" Content="Save" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="OnClickSave" ClickMode="Press" ScrollViewer.CanContentScroll="True" Margin="0,-100,125,0"/>
+
             </StackPanel>
+
         </ScrollViewer>
         <Expander IsExpanded="True" ExpandDirection="Right" Grid.Column="2" Expanded="Expander_Expanded">
             <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <scheduleView:RoomScheduleControl x:Name="RoomSchedule" RoomScheduled="{Binding CurrentRoom, Mode=OneWay}"  CoursesForRoom="{Binding CoursesForSelectedRoom, Mode=OneWay}" AvailableSlots="{Binding AvailableSlots, Mode=OneWay}" MinWidth="800"/>
             </ScrollViewer>
         </Expander>
+        
     </Grid>
-    
+
 </Page>
