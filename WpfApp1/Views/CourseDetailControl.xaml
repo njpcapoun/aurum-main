@@ -40,7 +40,7 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        
+
         <Label Content="Section Information" FontSize="15" Grid.Row="0" BorderBrush="Black" BorderThickness="0,0,0,2" Margin="0,0,0,15"/>
 
 
@@ -49,7 +49,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            
+
             <StackPanel Grid.Column="0">
 
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
@@ -125,7 +125,7 @@
             </StackPanel>
 
             <GroupBox Header="Schedule" Grid.Column="2" Padding="5">
-            <StackPanel>
+                <StackPanel>
                     <StackPanel>
                         <StackPanel.Style>
                             <Style TargetType="{x:Type StackPanel}">
