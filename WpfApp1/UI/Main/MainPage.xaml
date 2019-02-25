@@ -20,6 +20,7 @@
             </CollectionViewSource.GroupDescriptions>
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="State" Direction="Ascending" />
+                <scm:SortDescription PropertyName="CourseName" />
                 <scm:SortDescription PropertyName="ClassID_AsInt" Direction="Ascending" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
@@ -32,17 +33,17 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        
+       <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
+                <Menu Padding="5">
+                    <MenuItem Header="_File">
+                        <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
+                        <MenuItem Header="Changes" Click="Menu_Changes" />
+                        <MenuItem Header="_Save" Click="Menu_Save"/>
+                    </MenuItem>
+                </Menu>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
-            <Menu Padding="5">
-                <MenuItem Header="_File">
-                    <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
-                    <MenuItem Header="Changes" Click="Menu_Changes" />
-                    <MenuItem Header="_Save" Click="Menu_Save"/>
-                </MenuItem>
-            </Menu>
-
-        </StackPanel>
+            </StackPanel>
 
         <Border Grid.Row="1">
             <TabControl>
@@ -60,7 +61,7 @@
                                     <MenuItem x:Name="NoAssignmentNeededMenuItem" Header="No Assignment Needed" Click="NoAssignmentNeededMenuItem_Click"/>
                                     <MenuItem x:Name="CrossListMenuItem" Header="CrossList" Click="CrossListMenuItem_Click"/>
                                     <MenuItem x:Name="AssignmentNeeded" Header="Assignment Needed" Click="AssignmentNeeded_Click"/>
-                                    <MenuItem x:Name="Unassign" Header="Unassign" Click="Unassign_Click"/>
+                                    <!-- <MenuItem x:Name="Unassign" Header="Unassign" Click="Unassign_Click"/> -->
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
                             <DataGrid.GroupStyle>
@@ -213,6 +214,10 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <StackPanel  x:Name="SearchHeader" Orientation="Horizontal"  Grid.Row="0" Margin="0,10,100,0" Grid.Column="0" HorizontalAlignment="Right">
+            <Label Content="Search: "/>
+            <TextBox Name="CourseSearch" HorizontalAlignment="Left" Height="23" Margin="0,0,50,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" MaxLength="50" TextChanged="CourseSearch_TextChanged"/>
+        </StackPanel>
     </Grid>
 
 

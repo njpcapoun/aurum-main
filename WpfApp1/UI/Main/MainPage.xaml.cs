@@ -17,6 +17,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,6 +40,8 @@ namespace ClassroomAssignment.UI.Main
 		public MainWindowViewModel ViewModel { get; set; }
 
 		private Dictionary<Course, Course> CrossListedToMain = new Dictionary<Course, Course>();
+
+		Regex regex;
 
 		public MainPage()
 		{
@@ -184,8 +187,8 @@ namespace ClassroomAssignment.UI.Main
 			if (course.NeedsRoom && course.QueryMeetingDays().Count != 0 && course.QueryStartTime() != null && course.QueryEndTime() != null && int.TryParse(course.RoomCapRequest, out i)) AssignmentNeeded.Visibility = Visibility.Visible;
 			else AssignmentNeeded.Visibility = Visibility.Collapsed;
 
-			if (course.HasRoomAssignment) Unassign.Visibility = Visibility.Visible;
-			else Unassign.Visibility = Visibility.Collapsed;
+			// if (course.HasRoomAssignment) Unassign.Visibility = Visibility.Visible;
+			// else Unassign.Visibility = Visibility.Collapsed;
 		}
 
 		private void CoursesMenuItem_Click(object sender, RoutedEventArgs e)
@@ -282,19 +285,75 @@ namespace ClassroomAssignment.UI.Main
 		}
 
 		// Unassign an assigned course if "Unassign" is clicked in context menu. 
-		private void Unassign_Click(object sender, RoutedEventArgs e)
+		/*private void Unassign_Click(object sender, RoutedEventArgs e)
 		{
 			foreach (Course course in CoursesDataGrid.SelectedItems)
 			{
 				course.NeedsRoom = true; // should it be course.QueryNeedsRoom();???
 				course.RoomAssignment = null;
-				if (CrossListedToMain.ContainsKey(course)) // should crosslisted course be removed from list it's in?
+			}
+		}*/
+
+
+		// Find and highlight search results from search textbox
+		private void CourseSearch_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			FindItem(CoursesDataGrid);
+		}
+
+		public void FindItem(DependencyObject obj)
+		{
+			for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+			{
+				System.Windows.Controls.DataGridCell dg = obj as System.Windows.Controls.DataGridCell;
+				if (dg != null)
 				{
-					//mainCourse.RemoveCrossListedCourse(crossListedCourse);
-					//course.NeedsRoom = course.QueryNeedsRoom();
-					//CrossListedToMain[course].RemoveCrossListedCourse(course);
-					//CrossListedToMain.Remove(course);
+					HighlightText(dg);
 				}
+				FindItem(VisualTreeHelper.GetChild(obj as DependencyObject, i));
+			}
+		}
+
+		private void HighlightText(Object itx)
+		{
+			if (itx != null)
+			{
+				if (itx is TextBlock)
+				{
+					regex = new Regex("(" + CourseSearch.Text + ")", RegexOptions.IgnoreCase);
+					TextBlock tb = itx as TextBlock;
+					if (CourseSearch.Text.Length == 0)
+					{
+						string str = tb.Text;
+						tb.Inlines.Clear();
+						tb.Inlines.Add(str);
+						return;
+					}
+					string[] substr = regex.Split(tb.Text);
+					tb.Inlines.Clear();
+					foreach (var item in substr)
+					{
+						if (regex.Match(item).Success)
+						{
+							Run runx = new Run(item);
+							runx.Background = Brushes.GreenYellow;
+							tb.Inlines.Add(runx);
+						}
+						else
+						{
+							tb.Inlines.Add(item);
+						}
+					}
+					return;
+				}
+				else
+				{
+					for (int i = 0; i < VisualTreeHelper.GetChildrenCount(itx as DependencyObject); i++)
+					{
+						HighlightText(VisualTreeHelper.GetChild(itx as DependencyObject, i));
+					}
+				}
+
 			}
 		}
 	}
