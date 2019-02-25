@@ -56,8 +56,7 @@ namespace ClassroomAssignment.UI.Main
             while (NavigationService.RemoveBackEntry() != null);
         }
 
-
-        private void Menu_Save(object sender, EventArgs e)
+        private void SaveAs(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog2 = new SaveFileDialog();
             saveFileDialog2.Filter = "Assignment File | *.agn";
@@ -65,6 +64,9 @@ namespace ClassroomAssignment.UI.Main
             if (saveFileDialog2.ShowDialog() == DialogResult.OK)
             {
                 var fileName = saveFileDialog2.FileName;
+                Properties.Settings.Default["SavePath"] = fileName;
+                Properties.Settings.Default.Save();
+
 
                 try
                 {
@@ -82,8 +84,44 @@ namespace ClassroomAssignment.UI.Main
                 {
                     Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
                 }
-
             }
+
+        }
+
+        private void Menu_Save(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog2 = new SaveFileDialog();
+            saveFileDialog2.Filter = "Assignment File | *.agn";
+            var fileName = "";
+
+            if (Properties.Settings.Default["SavePath"] != null || (string)Properties.Settings.Default["SavePath"] != "default")
+            {
+                fileName = (string)Properties.Settings.Default["SavePath"];
+            }
+            else if (saveFileDialog2.ShowDialog() == DialogResult.OK)
+            {
+                fileName = saveFileDialog2.FileName;
+                Properties.Settings.Default["SavePath"] = fileName;
+                Properties.Settings.Default.Save();
+            }
+                try
+                {
+                    List<Course> originalCourses = GetOriginalCourses();
+                    AppState appState = new AppState(originalCourses, ViewModel.Courses.ToList());
+
+                    IFormatter formatter = new BinaryFormatter();
+                    Stream stream = File.Open(fileName, FileMode.Create, FileAccess.Write);
+
+                    formatter.Serialize(stream, appState);
+                    stream.Close();
+
+                }
+                catch (SerializationException a)
+                {
+                    Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
+                }
+
+            
         }
 
         private List<Course> GetOriginalCourses()

@@ -39,7 +39,8 @@
                         <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
                         <MenuItem Header="Changes" Click="Menu_Changes" />
                         <MenuItem Header="_Save" Click="Menu_Save"/>
-                    </MenuItem>
+                        <MenuItem Header="Save As" Click="SaveAs"/>
+                </MenuItem>
                 </Menu>
 
             </StackPanel>
