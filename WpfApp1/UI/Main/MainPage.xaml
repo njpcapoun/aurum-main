@@ -48,7 +48,7 @@
                         <MenuItem Header="Save As" Click="SaveAs"/>
                 </MenuItem>
                 </Menu>
-
+          </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
             <Menu Padding="5">
