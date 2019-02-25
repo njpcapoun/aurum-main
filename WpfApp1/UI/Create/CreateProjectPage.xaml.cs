@@ -37,24 +37,62 @@ namespace ClassroomAssignment.UI.Create
 
         private void NewProjectButton_Click(object sender, RoutedEventArgs e)
         {
-
             string[] docLocations = GetSheetPaths();
+            List<string> badFiles = new List<string>();
             if (docLocations == null) return;
+            var courses = new List<Course>();
+            var tempList = new List<Course>();
+            courses = null;
 
-            List<Course> courses = null;
             try
             {
-                courses = SheetParser.Parse(docLocations, RoomRepository.GetInstance());
-            }
-            catch { }
+                foreach (string file in docLocations)
+                {
+                    var fileName = new DirectoryInfo(file).Name;
+                    tempList = SheetParser.Parse(file, RoomRepository.GetInstance());
 
-            if (courses == null || courses.Count == 0)
+                    if (tempList == null || tempList.Count == 0)
+                    {
+                        badFiles.Add(fileName);
+                        Console.WriteLine(fileName);
+                        tempList = null;
+                    }
+                    else if (tempList != null && courses == null)
+                    {
+                        courses = tempList;
+                        tempList = null;
+                    }
+                    else if (tempList != null && courses != null)
+                    {
+                        courses.AddRange(tempList);
+                        tempList = null;
+                    }
+                }
+            } catch (NullReferenceException nre)
             {
-                OnNewProjectCreationError();
+                Console.Out.WriteLine("NRE: " + nre);
+            }
+
+            string[] output = null;
+
+            if (badFiles.Count > 0)
+            {
+                output = badFiles.Select(i => i.ToString()).ToArray();
+            }
+
+            //try
+            //{
+            //    courses = SheetParser.Parse(docLocations, RoomRepository.GetInstance(), courses);
+            //}
+            //catch { }
+
+            if (output != null || courses.Count == 0 || courses == null)
+            {
+                OnNewProjectCreationError(string.Join(", ", output));
                 return;
             }
 
-            //InitCrossListedCourses(courses);
+            InitCrossListedCourses(courses);
 
             MemoryStream stream = new MemoryStream();
             IFormatter formatter = new BinaryFormatter();
@@ -66,14 +104,13 @@ namespace ClassroomAssignment.UI.Create
 
             CourseRepository.InitInstance(courses);
 
-
             NextPage(courses);
 
         }
 
-        private void OnNewProjectCreationError()
+        private void OnNewProjectCreationError(string filenames)
         {
-            ProjectCreationErrorTextBlock.Text = "Unable able to use selected folder to create new project.";
+            ProjectCreationErrorTextBlock.Text = "The following files could not be opened because they were improperly formatted.\n\t\t" + filenames;
         }
 
         private string[] GetSheetPaths()

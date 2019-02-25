@@ -60,7 +60,7 @@ namespace ClassroomAssignment.Model
         }
 
         #endregion
-
+       // public string pad { get; set; }
         public string ClassID { get; set; }
 
         public string SIS_ID { get; set; }
@@ -297,6 +297,9 @@ namespace ClassroomAssignment.Model
         public static bool operator !=(Course course1, Course course2)
         {
             return !(course1 == course2);
+
+
+
         }
     }
 }

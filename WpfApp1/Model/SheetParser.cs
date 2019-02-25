@@ -32,21 +32,21 @@ namespace ClassroomAssignment.Model
         /// <param name="filePaths"></param>
         /// <param name="roomRepo"></param>
         /// <returns> courses </returns>
-        public static List<Course> Parse(string[] filePaths, IRoomRepository roomRepo)
+        public static List<Course> Parse(string filePath, IRoomRepository roomRepo)
         {
+            var fileCourseList = new List<Course>();
             SheetParser.roomRepo = roomRepo;
 
-            var courses = new List<Course>();
-            
-            foreach (string file in filePaths)
-            {
-                fileHasMoreRecords = true;
-                var coursesFromFile = parseFile(file);
-                Console.WriteLine(coursesFromFile);
-                courses.AddRange(coursesFromFile);//Add courses in course list
-            }
+            //var courses = new List<Course>();
 
-            return courses;
+            //foreach (string file in filePaths)
+            //{
+            fileHasMoreRecords = true;
+                var coursesFromFile = parseFile(filePath);
+                fileCourseList.AddRange(coursesFromFile);//Add courses in course list
+            //}
+
+            return fileCourseList;
         }
         /// <summary>
         /// parse the file, and get information
@@ -59,22 +59,17 @@ namespace ClassroomAssignment.Model
             var coursesForFile = new List<Course>();
             var fileName = new DirectoryInfo(file).Name;
 
-            //if (file != null)
-            //{
-            //    Console.WriteLine("file " + fileName + " was not able to load");
-            //}
-
             try
             {
                 using (StreamReader fileStream = File.OpenText(file))
                 {
-
                     // Use CsvHelper library to read the file.
                     var csvReader = new CsvHelper.CsvReader(fileStream);
 
                     // configure csv reader
                     csvReader.Configuration.HasHeaderRecord = false;
                     csvReader.Configuration.RegisterClassMap<CourseClassMap>();
+                    csvReader.Configuration.MissingFieldFound = null;
 
                     skipHeaders(csvReader);
                     csvReader.Read(); // read first header and skip it.
@@ -83,11 +78,13 @@ namespace ClassroomAssignment.Model
                         coursesForFile.AddRange(parseRecordsForCourse(csvReader));
                     }
                 }
-            } catch (IOException e)
+            }
+            catch (IOException e)
             {
                 Console.WriteLine("file " + fileName + " was not able to load\n" + "Exception: " + e);
             }
 
+            //Console.WriteLine(coursesForFile);
             return coursesForFile;
         }
 
@@ -96,17 +93,11 @@ namespace ClassroomAssignment.Model
             // make sure not at header or end of file
             List<Course> courseList = new List<Course>();
 
-            Console.WriteLine("Parse 1");
             while ((fileHasMoreRecords = reader.Read()) && courseHasMoreRecords(reader))
             {
-                Console.WriteLine("Parse 2");
                 Course course = reader.GetRecord<Course>();
-                Console.WriteLine(course);
-                Console.WriteLine("Parse 3");
                 course.SetAllDerivedProperties();
-                Console.WriteLine("Parse 4");
                 courseList.Add(course); //add course to course list.
-                Console.WriteLine("Parse 5");
             }
 
             return courseList;
