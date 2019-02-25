@@ -22,5 +22,17 @@ namespace ClassroomAssignment.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("default")]
+        public string FilePath {
+            get {
+                return ((string)(this["FilePath"]));
+            }
+            set {
+                this["FilePath"] = value;
+            }
+        }
     }
 }
