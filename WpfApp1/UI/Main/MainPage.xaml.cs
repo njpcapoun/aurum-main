@@ -379,7 +379,15 @@ namespace ClassroomAssignment.UI.Main
           {
               // confirmation pop-up
           }
-
+          
+           /*
+           * Highlight text entered in search bar
+           */
+          private void CourseSearch_TextChanged(object sender, TextChangedEventArgs e)
+          {
+			FindItem(CoursesDataGrid);
+          }
+            
           public void FindItem(DependencyObject obj)
           {
                	for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
