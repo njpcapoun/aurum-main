@@ -22,10 +22,12 @@ namespace ClassroomAssignment.Model
 
         public override bool Equals(object obj)
         {
+            // I want to make this just check room name if possible
             var room = obj as Room;
             var result = room != null &&
                    RoomName == room.RoomName &&
-                   Capacity == room.Capacity;
+                   Capacity == room.Capacity &&
+                   Details == room.Details;
 
             return result;
         }

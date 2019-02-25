@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:ClassroomAssignment.UI.Main"
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       xmlns:rs="clr-namespace:ClassroomAssignment.Views.RoomSchedule"
+      xmlns:model="clr-namespace:ClassroomAssignment.Model"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage"
@@ -23,29 +24,33 @@
                 <scm:SortDescription PropertyName="ClassID_AsInt" Direction="Ascending" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
+        
+        <model:Room x:Key="RoomList"/>
+
         <local:GroupNameConverter x:Key="converter"/>
     </Page.Resources>
 
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-       <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
-                <Menu Padding="5">
-                    <MenuItem Header="_File">
-                        <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
-                        <MenuItem Header="Changes" Click="Menu_Changes" />
-                        <MenuItem Header="_Save" Click="Menu_Save"/>
-                    </MenuItem>
-                </Menu>
 
-            </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
+            <Menu Padding="5">
+                <MenuItem Header="_File">
+                    <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
+                    <MenuItem Header="Changes" Click="Menu_Changes" />
+                    <MenuItem Header="_Save" Click="Menu_Save"/>
+                </MenuItem>
+            </Menu>
+
+        </StackPanel>
 
         <Border Grid.Row="1">
-            <TabControl>
+            <TabControl RenderTransformOrigin="0.512,0.515">
                 <TabItem x:Name="AssignTabItem" Header="Assign">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -190,6 +195,47 @@
                         </ScrollViewer>
                     </Grid>
                 </TabItem>
+
+                <TabItem Header="Edit Room Info">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" MinHeight="56"/>
+                            <RowDefinition Height="39*" />
+                            <RowDefinition Height="67*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--ListBox Name="listBox" ItemsSource="{Binding AllRooms}" SelectionChanged="ListBox_Selected" SelectedItem="{Binding EditableRoom , Mode=TwoWay}"
+                                 SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"/-->
+                        <!--ItemsSource="{Binding Source= {StaticResource RoomList}}"-->
+                        <ListBox Name="listBox" ItemsSource="{Binding AllRooms}" IsSynchronizedWithCurrentItem="True"  SelectedItem="ListBox_Selected"
+                                 SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"/>
+    
+                        <WrapPanel Height="354" Margin="125,10,0,0" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="660" Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Room #: " HorizontalAlignment="Left" Width="70"/>
+                                <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Capacity: " Width="70"/>
+                                <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content= "Details: " Width="70"/>
+                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Detail}" Height="96" Width="256" TextAlignment="Left" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Save Changes" IsEnabled="False"/>
+                            </StackPanel>
+                        </WrapPanel>
+                        <Button Name="newButton" Content="New" Click="NewButton_Click" Height="24" Width="50" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="2" VerticalAlignment="Bottom"/>
+                        <Button Name="removeButton" Content="Remove" Click="RemoveButton_Click" Height="24" Width="50" HorizontalAlignment="Left" Margin="65,0,0,10" Grid.Row="2" VerticalAlignment="Bottom"/>
+                    </Grid>
+                </TabItem>
+
+
             </TabControl>
         </Border>
 

@@ -45,7 +45,6 @@ namespace ClassroomAssignment.Model.Repo
         public static RoomRepository GetInstance()
         {
             return instance ?? throw new InvalidOperationException("Room Repo not yet intialized");
-
         }
         /// <summary>
         /// Its add Rooms to room list with their number, capacity, and details.
@@ -96,19 +95,50 @@ namespace ClassroomAssignment.Model.Repo
         }
 
         // Used to add a new room, triggered from "Add Room" button on "Edit Rooms" screen
-        public void AddNewRoom(string roomName, int capacity, string details)
+        // returns false to prompt an error for repeat room name, true for unique
+        public bool AddNewRoom(string roomName, int capacity, string details)
         {
-            Rooms.Add(new Room() { RoomName = roomName, Capacity = capacity, Details = details });
+            bool isNewRoom = true;
+        
+            Room newRoom = new Room() {
+                RoomName = roomName,
+                Capacity = capacity,
+                Details = details
+            };
+
+            foreach (Room checkRoom in Rooms) {
+                if (Room.Equals(checkRoom, newRoom))
+                {   // Don't want to allow rooms of the same name
+                    isNewRoom = false;
+                }
+            }
+            if(isNewRoom)
+            {  // Only add if a unique room name
+                Rooms.Add(new Room() { RoomName = roomName, Capacity = capacity, Details = details });
+                // TODO: sort the rooms by number, will be good for formatting in the dropdowns
+                Rooms.Sort(delegate (Room x, Room y)
+                {
+                    return x.RoomName.CompareTo(y.RoomName);
+                });
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-    }
-
-    public class RoomList
-    {
-        public List<Room> Data { get; set; }
-
-        public List<Room> getData()
+        // Used to remove a room from the "Edit Rooms" screen
+        // Returns a bool for a notification on UI
+        // Will need to implement some form of ensuring all courses are unassigned from room
+        public bool RemoveRoom(string roomName, int capacity, string details)
         {
-            return this.Data;
+            return Rooms.Remove(new Room() { RoomName = roomName, Capacity = capacity, Details = details });
+        }
+
+        public void SaveData()
+        {
+            var output = JsonConvert.SerializeObject(Rooms);
+            File.WriteAllText("RoomData.json", output);
         }
     }
 }

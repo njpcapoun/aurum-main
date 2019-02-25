@@ -28,6 +28,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ClassroomAssignment.Model.Repo;
 
 namespace ClassroomAssignment.UI.Main
 {
@@ -40,23 +41,29 @@ namespace ClassroomAssignment.UI.Main
 
         private Dictionary<Course, Course> CrossListedToMain = new Dictionary<Course, Course>();
 
+        public Room SelectedRoom { get; set; }
+
+        public int index { get; set; }
+
+        private RoomRepository roomRepo;
+
         public MainPage()
         {
             InitializeComponent();
             ViewModel = new MainWindowViewModel(this);
+            roomRepo = ViewModel.RoomRepo;
             DataContext = ViewModel;
             this.Loaded += MainPage_Loaded;
         }
-
-      
-
+        
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            
             while (NavigationService.RemoveBackEntry() != null);
         }
 
-
+        /*
+         * The Save file function in the File menu
+         */
         private void Menu_Save(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog2 = new SaveFileDialog();
@@ -82,7 +89,6 @@ namespace ClassroomAssignment.UI.Main
                 {
                     Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
                 }
-
             }
         }
 
@@ -91,12 +97,17 @@ namespace ClassroomAssignment.UI.Main
             return App.Current.Resources["originalCourses"] as List<Course>;
         }
 
+        /*
+         * Moves to the Changes page, file menu item
+         */
         private void Menu_Changes(object sender, EventArgs e)
         {
             NavigationService.Navigate(new ChangesPage());
-
         }
 
+        /*
+         * Unimplemented, possibly meant to have a view for just crosslisted classes?
+         */
         private void ConflictsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //var conflict = ConflictsListView.SelectedItem as Conflict;
@@ -107,6 +118,9 @@ namespace ClassroomAssignment.UI.Main
             //}
         }
 
+        /*
+         * Sends selected courses to AssignmentPage to be assigned, right click menu
+         */
         private void AssignMenuItem_Click(object sender, RoutedEventArgs e)
         {
             List<Course> courses = new List<Course>();
@@ -121,6 +135,9 @@ namespace ClassroomAssignment.UI.Main
             NavigationService.Navigate(assignmentPage);
         }
 
+        /*
+         * Export the files to CSV format, file menu item
+         */
         private void Export_Click(object sender, RoutedEventArgs e)
         {
             if (ViewModel.Conflicts.Count != 0)
@@ -133,7 +150,6 @@ namespace ClassroomAssignment.UI.Main
 
                 if (result == MessageBoxResult.No) return;
             }
-            
 
             Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
             saveFileDialog.Filter = "Excel Worksheets|*.xls";
@@ -155,6 +171,9 @@ namespace ClassroomAssignment.UI.Main
             }
         }
 
+        /*
+         *  Sets which options are available for a course on right click
+         */
         private void CoursesContextMenu_Opened(object sender, RoutedEventArgs e)
         {
             var course = CoursesDataGrid.SelectedItem as Course;
@@ -185,6 +204,9 @@ namespace ClassroomAssignment.UI.Main
             else AssignmentNeeded.Visibility = Visibility.Collapsed;
         }
 
+        /*
+         * For the Edit Course option on right click 
+         */
         private void CoursesMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var course = CoursesDataGrid.SelectedItem as Course;
@@ -207,6 +229,9 @@ namespace ClassroomAssignment.UI.Main
             }
         }
 
+        /*
+         * Set Course as no assignment needed on click
+         */ 
         private void NoAssignmentNeededMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var courses = CoursesDataGrid.SelectedItems;
@@ -217,6 +242,9 @@ namespace ClassroomAssignment.UI.Main
             }
         }
 
+        /*
+         * Crosslists selected courses on click
+         */
         private void CrossListMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var courses = CoursesDataGrid.SelectedItems;
@@ -241,14 +269,15 @@ namespace ClassroomAssignment.UI.Main
             }
         }
 
-
-
         private void NewCourseMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new AddCourseDialogBox();
             dialog.Show();
         }
 
+        /*
+         * Move course to assignment needed on click
+         */
         private void AssignmentNeeded_Click(object sender, RoutedEventArgs e)
         {
             foreach (Course course in CoursesDataGrid.SelectedItems)
@@ -262,6 +291,9 @@ namespace ClassroomAssignment.UI.Main
             }
         }
 
+        /*
+         * Removes crosslisted courses from no assignment needed section, and removes the crosslist
+         */
         private void RemoveCrossListedCourseMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var contextMenu = (sender as System.Windows.Controls.MenuItem).Parent as System.Windows.Controls.ContextMenu;
@@ -274,6 +306,27 @@ namespace ClassroomAssignment.UI.Main
             crossListedCourse.NeedsRoom = crossListedCourse.QueryNeedsRoom();
             CrossListedToMain[crossListedCourse].RemoveCrossListedCourse(crossListedCourse);
             CrossListedToMain.Remove(crossListedCourse);
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ListBox_Selected(object sender, RoutedEventArgs e)
+        {
+            ViewModel.EditableRoom = (Room)listBox.SelectedItem;
+        }
+
+        private void NewButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new AddRoomDialogBox(roomRepo);
+            dialog.Show();
+        }
+
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            // confirmation pop-up
 
         }
     }
