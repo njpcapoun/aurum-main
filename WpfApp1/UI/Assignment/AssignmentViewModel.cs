@@ -70,6 +70,8 @@ namespace ClassroomAssignment.UI.Assignment
             }
         }
 
+       
+
         private void _currentCourse_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             OnCurrentCourseChanged();

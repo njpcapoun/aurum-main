@@ -14,17 +14,20 @@ namespace ClassroomAssignment.Model
     public class Room
     {
         /// <summary>
-        /// Getter and setter for RoomName and Capasity of the room.
+        /// Getter and setter for RoomName and Capacity of the room.
         /// </summary>
         public string RoomName { get; set; }
         public int Capacity { get; set; }
+        public string Details { get; set; }
 
         public override bool Equals(object obj)
         {
+            // I want to make this just check room name if possible
             var room = obj as Room;
             var result = room != null &&
                    RoomName == room.RoomName &&
-                   Capacity == room.Capacity;
+                   Capacity == room.Capacity &&
+                   Details == room.Details;
 
             return result;
         }
@@ -39,7 +42,7 @@ namespace ClassroomAssignment.Model
 
         public override string ToString()
         {
-            return RoomName; // RoomNumbee.
+            return RoomName; // RoomNumber.
         }
 
         public static bool operator ==(Room room1, Room room2)

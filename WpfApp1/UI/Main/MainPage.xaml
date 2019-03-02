@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:ClassroomAssignment.UI.Main"
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       xmlns:rs="clr-namespace:ClassroomAssignment.Views.RoomSchedule"
+      xmlns:model="clr-namespace:ClassroomAssignment.Model"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage"
@@ -20,13 +21,18 @@
             </CollectionViewSource.GroupDescriptions>
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription PropertyName="State" Direction="Ascending" />
+                <scm:SortDescription PropertyName="CourseName" />
                 <scm:SortDescription PropertyName="ClassID_AsInt" Direction="Ascending" />
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
+        
+        <model:Room x:Key="RoomList"/>
+
         <local:GroupNameConverter x:Key="converter"/>
     </Page.Resources>
 
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -39,20 +45,32 @@
                         <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
                         <MenuItem Header="Changes" Click="Menu_Changes" />
                         <MenuItem Header="_Save" Click="Menu_Save"/>
-                    </MenuItem>
+                        <MenuItem Header="Save As" Click="SaveAs"/>
+                </MenuItem>
                 </Menu>
+          </StackPanel>
 
-            </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
+            <Menu Padding="5">
+                <MenuItem Header="_File">
+                    <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
+                    <MenuItem Header="Changes" Click="Menu_Changes" />
+                    <MenuItem Header="_Save" Click="Menu_Save"/>
+                    <MenuItem Header="Save As" Click="SaveAs"/>
+                </MenuItem>
+            </Menu>
+
+        </StackPanel>
 
         <Border Grid.Row="1">
-            <TabControl>
+            <TabControl RenderTransformOrigin="0.512,0.515">
                 <TabItem x:Name="AssignTabItem" Header="Assign">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <DataGrid x:Name="CoursesDataGrid" ItemsSource="{Binding Source={StaticResource cvsCourses}}" AutoGenerateColumns="False" CanUserSortColumns="False" CanUserAddRows="False" >
+                        <DataGrid x:Name="CoursesDataGrid" ItemsSource="{Binding Source={StaticResource cvsCourses}}" AutoGenerateColumns="False" CanUserSortColumns="True" CanUserAddRows="False" >
                             <DataGrid.ContextMenu>
                                 <ContextMenu x:Name="CoursesContextMenu" Opened="CoursesContextMenu_Opened">
                                     <MenuItem x:Name="AssignMenuItem" Header="Assign" Click="AssignMenuItem_Click" />
@@ -60,6 +78,7 @@
                                     <MenuItem x:Name="NoAssignmentNeededMenuItem" Header="No Assignment Needed" Click="NoAssignmentNeededMenuItem_Click"/>
                                     <MenuItem x:Name="CrossListMenuItem" Header="CrossList" Click="CrossListMenuItem_Click"/>
                                     <MenuItem x:Name="AssignmentNeeded" Header="Assignment Needed" Click="AssignmentNeeded_Click"/>
+                                    <!-- <MenuItem x:Name="Unassign" Header="Unassign" Click="Unassign_Click"/> -->
                                 </ContextMenu>
                             </DataGrid.ContextMenu>
                             <DataGrid.GroupStyle>
@@ -190,10 +209,51 @@
                         </ScrollViewer>
                     </Grid>
                 </TabItem>
+
+                <TabItem Header="Edit Room Info">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" MinHeight="56"/>
+                            <RowDefinition Height="39*" />
+                            <RowDefinition Height="67*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--ListBox Name="listBox" ItemsSource="{Binding AllRooms}" SelectionChanged="ListBox_Selected" SelectedItem="{Binding EditableRoom , Mode=TwoWay}"
+                                 SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"/-->
+                        <!--ItemsSource="{Binding Source= {StaticResource RoomList}}"-->
+                        <ListBox Name="listBox" ItemsSource="{Binding AllRooms}" IsSynchronizedWithCurrentItem="True"  SelectedItem="ListBox_Selected"
+                                 SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"/>
+    
+                        <WrapPanel Height="354" Margin="125,10,0,0" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="660" Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Room #: " HorizontalAlignment="Left" Width="70"/>
+                                <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Capacity: " Width="70"/>
+                                <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content= "Details: " Width="70"/>
+                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Detail}" Height="96" Width="256" TextAlignment="Left" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Save Changes" IsEnabled="False"/>
+                            </StackPanel>
+                        </WrapPanel>
+                        <Button Name="newButton" Content="New" Click="NewButton_Click" Height="24" Width="50" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="2" VerticalAlignment="Bottom"/>
+                        <Button Name="removeButton" Content="Remove" Click="RemoveButton_Click" Height="24" Width="50" HorizontalAlignment="Left" Margin="65,0,0,10" Grid.Row="2" VerticalAlignment="Bottom"/>
+                    </Grid>
+                </TabItem>
+
+
             </TabControl>
         </Border>
 
-        <ListView x:Name="ConflictsListView" ItemsSource="{Binding Conflicts}" MouseDoubleClick="ConflictsListView_MouseDoubleClick"  MinHeight="90" Grid.Row="2">
+        <ListView x:Name="ConflictsListView" ItemsSource="{Binding Conflicts}" MouseDoubleClick="ConflictsListView_MouseDoubleClick"  MinHeight="60" MaxHeight="225" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
                     <Style.Triggers>
@@ -212,6 +272,10 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <StackPanel  x:Name="SearchHeader" Orientation="Horizontal"  Grid.Row="0" Margin="0,10,100,0" Grid.Column="0" HorizontalAlignment="Right">
+            <Label Content="Search: "/>
+            <TextBox Name="CourseSearch" HorizontalAlignment="Left" Height="23" Margin="0,0,50,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" MaxLength="50" TextChanged="CourseSearch_TextChanged"/>
+        </StackPanel>
     </Grid>
 
 

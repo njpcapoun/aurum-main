@@ -29,7 +29,7 @@ namespace ClassroomAssignment.Views.RoomSchedule
     {
 
         private const int COLUMN_WIDTH = 60;
-        private const int TIME_DURATION_UNIT_IN_MINUTES = 15;
+        private const int TIME_DURATION_UNIT_IN_MINUTES = 5;
         private static readonly TimeSpan FIRST_TIME_SLOT = new TimeSpan(7, 0, 0);
         private static readonly TimeSpan LAST_TIME_SLOT = new TimeSpan(22, 0, 0);
         private const DayOfWeek FIRST_DAY_OF_SCHEDULE = DayOfWeek.Sunday;

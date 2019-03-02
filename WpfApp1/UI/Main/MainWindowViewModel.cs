@@ -41,7 +41,6 @@ namespace ClassroomAssignment.UI.Main
         }
         public ObservableCollection<Conflict> Conflicts { get; } = new ObservableCollection<Conflict>();
 
-
         // Info tab
         private Room _currentRoom;
         public Room CurrentRoom
@@ -53,17 +52,23 @@ namespace ClassroomAssignment.UI.Main
                 SetCoursesForCurrentRoom();
             }
         }
-
-
-        
-
-        
+        private Room _editableRoom;
+        public Room EditableRoom
+        {
+            get => _editableRoom;
+            set
+            {
+                _editableRoom = value;
+                SetDataForEditableRoom();
+            }
+        }
+        public ObservableCollection<Room> RoomList { get; set; }
 
         public IEnumerable<Room> AllRooms { get; set; }
         public ObservableCollection<Course> CoursesForCurrentRoom { get; private set; }
 
         private CourseRepository CourseRepo;
-        private RoomRepository RoomRepo;
+        public RoomRepository RoomRepo;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -74,6 +79,7 @@ namespace ClassroomAssignment.UI.Main
         /// </summary>
         public MainWindowViewModel(MainPage page)
         {
+            this.Page = page;
             CourseRepo = CourseRepository.GetInstance();
             RoomRepo = RoomRepository.GetInstance();
 
@@ -88,6 +94,7 @@ namespace ClassroomAssignment.UI.Main
 
             AllRooms = RoomRepo.Rooms;
             CurrentRoom = AllRooms.FirstOrDefault();
+            EditableRoom = AllRooms.FirstOrDefault();
         }
 
         private void CourseRepo_ChangeInConflicts(object sender, CourseRepository.ChangeInConflictsEventArgs e)
@@ -103,6 +110,16 @@ namespace ClassroomAssignment.UI.Main
         private void SetCoursesForCurrentRoom()
         {
             CoursesForCurrentRoom = new ObservableCollection<Course>(CourseRepo.Courses.Where(x => x.NeedsRoom && x.RoomAssignment?.Equals(CurrentRoom) == true));
+        }
+
+        private void SetDataForEditableRoom()
+        {
+            RoomList = new ObservableCollection<Room>();
+            IEnumerator<Room> enumerator = AllRooms.GetEnumerator();
+            while(enumerator.MoveNext())
+            {
+                RoomList.Add(enumerator.Current);
+            }
         }
 
     }
