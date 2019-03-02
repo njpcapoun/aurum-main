@@ -6,4 +6,4 @@
         xmlns:local="clr-namespace:ClassroomAssignment.UI"
         mc:Ignorable="d"
         Title="Classroom Assignment" MinHeight="450" MinWidth="800"
-        Source="Create/CreateProjectPage.xaml" WindowStartupLocation="CenterScreen" />
+        Source="Create/CreateProjectPage.xaml" WindowStartupLocation="CenterScreen" Width="845.211" />
