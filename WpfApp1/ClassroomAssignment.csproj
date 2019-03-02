@@ -138,6 +138,7 @@
     <Compile Include="Model\CourseQueryRules.cs" />
     <Compile Include="Model\Room.cs" />
     <Compile Include="Operations\AvailableRoomSearch.cs" />
+    <Compile Include="Operations\SaveBase.cs" />
     <Compile Include="Operations\Conflict.cs" />
     <Compile Include="Notification\CourseConflictEventArgs.cs" />
     <Compile Include="Notification\NotificationManager.cs" />
@@ -173,6 +174,9 @@
     <Compile Include="Utils\DateUtil.cs" />
     <Compile Include="Utils\TimeUtil.cs" />
     <Compile Include="Views\RoomSearch\StringToTimeSpanValidationRule.cs" />
+    <Compile Include="Views\CourseDetailLocked.xaml.cs">
+      <DependentUpon>CourseDetailLocked.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Visual\ScheduleGridStructure.cs" />
     <Compile Include="UI\Ambiguity\AmbiguityResolverPage.xaml.cs">
       <DependentUpon>AmbiguityResolverPage.xaml</DependentUpon>
@@ -266,6 +270,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\RoomSearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CourseDetailLocked.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

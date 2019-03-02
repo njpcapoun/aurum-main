@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using ClassroomAssignment.Model;
 using ClassroomAssignment.Repo;
+using ClassroomAssignment.Operations;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -21,60 +22,15 @@ namespace ClassroomAssignment
 
         protected override void OnExit(ExitEventArgs e)
         {
-            Save();
+            SaveBase saveWork = new SaveBase();
+            saveWork.SaveWork();
             base.OnExit(e);
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-           
+
             base.OnStartup(e);
-        }
-
-        void Save()
-        {
-            SaveFileDialog saveFileDialog2 = new SaveFileDialog();
-            saveFileDialog2.Filter = "Assignment File | *.agn";
-            var fileName = "";
-
-            if (saveFileDialog2.ShowDialog() == DialogResult.OK)
-            {
-                fileName = saveFileDialog2.FileName;
-            }
-
-
-            try
-            {
-                List<Course> originalCourses = GetOriginalCourses();
-                AppState appState = new AppState(originalCourses, GetUpToDateCourses());
-
-                IFormatter formatter = new BinaryFormatter();
-                Stream stream = File.Open(fileName, FileMode.Create, FileAccess.Write);
-
-                formatter.Serialize(stream, appState);
-                stream.Close();
-
-            }
-            catch (SerializationException a)
-            {
-                Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
-            }
-
-            catch(Exception)
-            {
-
-            }
-
-        }
-
-        private List<Course> GetOriginalCourses()
-        {
-            return System.Windows.Application.Current.Resources["originalCourses"] as List<Course>;
-        }
-
-        private List<Course> GetUpToDateCourses()
-        {
-            return CourseRepository.GetInstance().Courses.OrderBy(x => int.Parse(x.ClassID)).ToList();
         }
 
     }
