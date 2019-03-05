@@ -48,7 +48,9 @@ namespace ClassroomAssignment.UI.Main
 
           private RoomRepository roomRepo;
 
-          Regex regex;
+        SaveBase saveWork = new SaveBase();
+
+        Regex regex;
 
           public MainPage()
           {
@@ -66,68 +68,12 @@ namespace ClassroomAssignment.UI.Main
 
           private void SaveAs(object sender, EventArgs e)
           {
-              SaveFileDialog saveFileDialog2 = new SaveFileDialog();
-              saveFileDialog2.Filter = "Assignment File | *.agn";
-
-              if (saveFileDialog2.ShowDialog() == DialogResult.OK)
-              {
-                  var fileName = saveFileDialog2.FileName;
-                  Properties.Settings.Default["SavePath"] = fileName;
-                  Properties.Settings.Default.Save();
-
-                  try
-                  {
-                      List<Course> originalCourses = GetOriginalCourses();
-                      AppState appState = new AppState(originalCourses, ViewModel.Courses.ToList());
-
-                      IFormatter formatter = new BinaryFormatter();
-                      Stream stream = File.Open(fileName, FileMode.Create, FileAccess.Write);
-
-                      formatter.Serialize(stream, appState);
-                      stream.Close();
-
-                  }
-                  catch (SerializationException a)
-                  {
-                      Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
-                  }
-              }
+            saveWork.SaveAs();
           }
 
           private void Menu_Save(object sender, EventArgs e)
           {
-              SaveFileDialog saveFileDialog2 = new SaveFileDialog();
-              saveFileDialog2.Filter = "Assignment File | *.agn";
-              var fileName = "";
-
-              if (Properties.Settings.Default["SavePath"] != null || (string)Properties.Settings.Default["SavePath"] != "default")
-              {
-                  fileName = (string)Properties.Settings.Default["SavePath"];
-              }
-              else if (saveFileDialog2.ShowDialog() == DialogResult.OK)
-              {
-                  fileName = saveFileDialog2.FileName;
-                  Properties.Settings.Default["SavePath"] = fileName;
-                  Properties.Settings.Default.Save();
-              }
-                  try
-                  {
-                      List<Course> originalCourses = GetOriginalCourses();
-                      AppState appState = new AppState(originalCourses, ViewModel.Courses.ToList());
-
-                      IFormatter formatter = new BinaryFormatter();
-                      Stream stream = File.Open(fileName, FileMode.Create, FileAccess.Write);
-
-                      formatter.Serialize(stream, appState);
-                      stream.Close();
-
-                  }
-                  catch (SerializationException a)
-                  {
-                      Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
-                  }
-
-
+            saveWork.SaveWork();
           }
 
           private List<Course> GetOriginalCourses()
