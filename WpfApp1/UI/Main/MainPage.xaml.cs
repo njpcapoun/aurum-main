@@ -187,8 +187,8 @@ namespace ClassroomAssignment.UI.Main
               if (!course.NeedsRoom && course.QueryMeetingDays().Count != 0 && course.QueryStartTime() != null && course.QueryEndTime() != null && int.TryParse(course.RoomCapRequest, out i)) AssignmentNeeded.Visibility = Visibility.Visible;
               else AssignmentNeeded.Visibility = Visibility.Collapsed;
 
-              // if (course.HasRoomAssignment) Unassign.Visibility = Visibility.Visible;
-              // else Unassign.Visibility = Visibility.Collapsed;
+              if (course.HasRoomAssignment) Unassign.Visibility = Visibility.Visible;
+              else Unassign.Visibility = Visibility.Collapsed;
           }
 
           /*
@@ -300,17 +300,24 @@ namespace ClassroomAssignment.UI.Main
 
           }
 
-          // Unassign an assigned course if "Unassign" is clicked in context menu.
-          /*private void Unassign_Click(object sender, RoutedEventArgs e)
-          {
-       			foreach (Course course in CoursesDataGrid.SelectedItems)
-               	{
-       				course.NeedsRoom = true; // should it be course.QueryNeedsRoom();???
-          			course.RoomAssignment = null;
-               	}
-           }*/
+		/* 
+		 * Unassign an assigned course if "Unassign" is clicked in context menu.
+		 */
+		private void Unassign_Click(object sender, RoutedEventArgs e)
+		{
+			foreach (Course course in CoursesDataGrid.SelectedItems)
+			{
+				course.NeedsRoom = true; // course.QueryNeedsRoom();???
+				course.RoomAssignment = null;
+				/*if (CrossListedToMain.ContainsKey(course))
+				{
+					CrossListedToMain[course].RemoveCrossListedCourse(course);
+					CrossListedToMain.Remove(course);
+				}*/
+			}
+		}
 
-          private void ListBox_Selected(object sender, RoutedEventArgs e)
+		private void ListBox_Selected(object sender, RoutedEventArgs e)
           {
               ViewModel.EditableRoom = (Room)listBox.SelectedItem;
           }
