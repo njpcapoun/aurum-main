@@ -15,9 +15,7 @@
                 <Button x:Name="NewProjectButton" Content="Create New Project" HorizontalAlignment="Center" VerticalAlignment="Center" Click="NewProjectButton_Click" Margin="0,0,0,30" Padding="5"/>
                 <Button x:Name="ExistingProjectButton" Content="Existing Project" HorizontalAlignment="Center" Height="Auto" VerticalAlignment="Center" Width="106" Click="ExistingProjectButton_Click" Padding="5"/>
                 <TextBlock x:Name="ProjectCreationErrorTextBlock" HorizontalAlignment="Center" Margin="0,40,0,0" Foreground="Red"/>
-
             </StackPanel>
-
         </Grid>
     </Grid>
 </Page>

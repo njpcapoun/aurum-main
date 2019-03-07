@@ -110,7 +110,7 @@ namespace ClassroomAssignment.UI.Create
 
         private void OnNewProjectCreationError(string filenames)
         {
-            ProjectCreationErrorTextBlock.Text = "The following files could not be opened because they were improperly formatted.\n\t\t" + filenames;
+            ProjectCreationErrorTextBlock.Text = "The following files could not be opened because they were improperly formatted.\n" + filenames;
         }
 
         private string[] GetSheetPaths()
