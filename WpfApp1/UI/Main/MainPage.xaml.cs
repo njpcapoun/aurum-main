@@ -2,6 +2,7 @@
 using ClassroomAssignment.Operations;
 using ClassroomAssignment.Repo;
 using ClassroomAssignment.UI.Assignment;
+using ClassroomAssignment.UI.Reassignment;
 using ClassroomAssignment.UI.Changes;
 using ClassroomAssignment.UI.Edit;
 using ClassroomAssignment.ViewModel;
@@ -117,6 +118,18 @@ namespace ClassroomAssignment.UI.Main
 
               var assignmentPage = new AssignmentPage(courses);
               NavigationService.Navigate(assignmentPage);
+          }
+
+          private void Reassignment_Click(object sender, RoutedEventArgs e)
+          {
+            System.Windows.Forms.TextBox getInfo = new System.Windows.Forms.TextBox();
+            getInfo.Text = "Capacity: ";
+            getInfo.Text = "Type: ";
+            string capacity = getInfo.Text;
+            string type = getInfo.Text;
+
+            Course c = CoursesDataGrid.SelectedItem;
+            var reassignmentPage = new ReassignmentPage(c, capacity, type)
           }
 
           /*

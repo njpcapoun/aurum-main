@@ -74,6 +74,7 @@
                             <DataGrid.ContextMenu>
                                 <ContextMenu x:Name="CoursesContextMenu" Opened="CoursesContextMenu_Opened">
                                     <MenuItem x:Name="AssignMenuItem" Header="Assign" Click="AssignMenuItem_Click" />
+                                    <MenuItem x:Name="ReassignmentItem" Header="Reassign" Click="Reassignment_Click" />
                                     <MenuItem x:Name="CoursesMenuItem" Header="Edit" Click="CoursesMenuItem_Click" />
                                     <MenuItem x:Name="NoAssignmentNeededMenuItem" Header="No Assignment Needed" Click="NoAssignmentNeededMenuItem_Click"/>
                                     <MenuItem x:Name="CrossListMenuItem" Header="CrossList" Click="CrossListMenuItem_Click"/>
