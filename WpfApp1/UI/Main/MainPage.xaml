@@ -135,10 +135,10 @@
                                 -->
                                 <DataGridTextColumn Header="Course Name" Binding="{Binding CourseName}" IsReadOnly="True" Width="Auto"/>
                                 <DataGridTextColumn Header="Section" Binding="{Binding SectionNumber}" IsReadOnly="True" Width="Auto"/>
+                                <DataGridTextColumn Header="Instructor" Binding="{Binding Instructor}" IsReadOnly="True" Width="Auto" />
                                 <DataGridTextColumn Header="Instruction Method" Binding="{Binding InstructionMethod}" IsReadOnly="True" Width="Auto" />
                                 <DataGridTextColumn Header="Meeting Pattern" Binding="{Binding MeetingPattern}" IsReadOnly="True" Width="Auto" />
                                 <DataGridTextColumn Header="Room" Binding="{Binding Room}" IsReadOnly="True" Width="Auto"/>
-                                <DataGridTextColumn Header="Campus" Binding="{Binding Campus}" IsReadOnly="True" Width="Auto" />
                                 <DataGridTextColumn Header="Room Assignment" Binding="{Binding RoomAssignment}" IsReadOnly="True" Width="Auto"/>
                                 <DataGridTextColumn Header="CrossListings" Binding="{Binding CrossListings}" IsReadOnly="True" Width="Auto"/>
                                 <DataGridTemplateColumn Header="Linked CrossListed Courses">
