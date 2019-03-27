@@ -1,4 +1,5 @@
 ﻿using ClassroomAssignment.Model;
+using ClassroomAssignment.UI.Reassignment;
 using ClassroomAssignment.Model.Repo;
 using ClassroomAssignment.Operations;
 using ClassroomAssignment.Repo;
@@ -16,13 +17,18 @@ using System.Windows.Input;
 namespace ClassroomAssignment.UI.Reassignment 
 {
     
-    class ReassignmentViewModel : INotifyPropertyChanged
+    public class ReassignmentViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public ObservableCollection<LinkedReassignments> ReassignPath { get; } = new ObservableCollection<LinkedReassignments>();
         
-        public ReassignmentViewModel(Course c)
+        public ReassignmentViewModel(LinkedReassignments node)
         {
-
+            while(node.next != null)
+            {
+                ReassignPath.Add(node);
+                node = node.next;
+            }
         }
     }
 }

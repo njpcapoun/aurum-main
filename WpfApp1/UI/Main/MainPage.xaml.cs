@@ -120,6 +120,9 @@ namespace ClassroomAssignment.UI.Main
               NavigationService.Navigate(assignmentPage);
           }
 
+          // When you click reassign it beings a popup
+          // Asking for the capacity and type of the room
+          // Then it goes to the reassignment page
           private void Reassignment_Click(object sender, RoutedEventArgs e)
           {
             System.Windows.Forms.TextBox getInfo = new System.Windows.Forms.TextBox();
@@ -128,8 +131,8 @@ namespace ClassroomAssignment.UI.Main
             string capacity = getInfo.Text;
             string type = getInfo.Text;
 
-            Course c = CoursesDataGrid.SelectedItem;
-            var reassignmentPage = new ReassignmentPage(c, capacity, type)
+            Course c = (Course) CoursesDataGrid.SelectedItem;
+            var reassignmentPage = new ReassignmentPage(c, capacity, type);
           }
 
           /*

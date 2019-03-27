@@ -24,17 +24,22 @@ namespace ClassroomAssignment.UI.Reassignment
     /// </summary>
     public partial class ReassignmentPage : Page
     {
+        private ReassignmentViewModel viewModel;
+
         public ReassignmentPage(Course c, string capacity, string type)
         {
+            LinkedReassignments node = new LinkedReassignments();
+            node.steps = 0;
+            node.courseSteps = c.CourseName;
+
             InitializeComponent();
-            viewModel = new ReassignmentViewModel(c);
-            recursiveReassign(c);
+            viewModel = new ReassignmentViewModel(recursiveReassign(node));
         }
 
-        // Not sure what the return type should be
-        public LinkedReassignments recursiveReassign(Course c)
+        // Still working on this
+        public LinkedReassignments recursiveReassign(LinkedReassignments node)
         {
-         
+            return node;
         }
     }
 }
