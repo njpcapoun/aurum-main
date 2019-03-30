@@ -221,27 +221,43 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <!--ListBox Name="listBox" ItemsSource="{Binding AllRooms}" SelectionChanged="ListBox_Selected" SelectedItem="{Binding EditableRoom , Mode=TwoWay}"
-                                 SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"/-->
-                        <!--ItemsSource="{Binding Source= {StaticResource RoomList}}"-->
-                        <ListBox Name="listBox" ItemsSource="{Binding AllRooms}" IsSynchronizedWithCurrentItem="True"  SelectedItem="ListBox_Selected"
-                                 SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"/>
+                        <ListBox Name="listBox" ItemsSource="{Binding AllRooms}" IsSynchronizedWithCurrentItem="True"  SelectedItem="{Binding Path=EditableRoom, Mode=TwoWay}"
+                                 SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"
+                                 SelectionChanged="ListBox_SelectionChanged"/>
     
                         <WrapPanel Height="354" Margin="125,10,0,0" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="660" Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Room #: " HorizontalAlignment="Left" Width="70"/>
-                                <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName}"/>
+                                <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName, Mode=TwoWay}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Capacity: " Width="70"/>
-                                <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
+                                <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity, Mode=TwoWay}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Room Type:" Width="75 "/>
+                                <RadioButton Name="Lab"  Content="Lab" GroupName="Type" Margin="0,5,5,0" />
+                                <RadioButton Name="Lecture"  Content="Lecture" GroupName="Type"  Margin="0,5,5,0" />
+                                <RadioButton Name="Conference"  Content="Conference"  GroupName="Type"  Margin="0,5,5,0" />
+                                <RadioButton Name="ITIN"  Content="ITIN" GroupName="Type"  Margin="0,5,5,0" />
+                                <RadioButton Name="CYBER"  Content="CYBER" GroupName="Type"  Margin="0,5,5,0"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content= "Details: " Width="70"/>
-                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Detail}" Height="96" Width="256" TextAlignment="Left" />
+                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Details, Mode=TwoWay}" Height="96" Width="256" TextAlignment="Left" VerticalContentAlignment="Top"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Save Changes" IsEnabled="False"/>
+                                <Button Content="Save Changes" Name="saveChanges" Margin="5,10,0,0" Click="SaveChanges_Click">
+                                    <Button.Style>
+                                        <Style>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=Details, Path=Text}" Value="">
+                                                    <Setter Property="Button.IsEnabled" Value="false"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </StackPanel>
                         </WrapPanel>
                         <Button Name="newButton" Content="New" Click="NewButton_Click" Height="24" Width="50" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="2" VerticalAlignment="Bottom"/>
