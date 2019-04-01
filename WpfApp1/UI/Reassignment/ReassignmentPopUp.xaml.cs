@@ -41,7 +41,6 @@ namespace ClassroomAssignment.UI.Reassignment
     {
         Course C;
         ReassignmentPage reassignmentPage;
-
         public ReassignmentPopUp(Course c)
         {
             C = c;
@@ -51,13 +50,15 @@ namespace ClassroomAssignment.UI.Reassignment
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
             string capacity = roomCap.Text;
-            string type = roomType.Text;
+            string type = TypeBox.SelectedItem as string;
+            Console.Write(type);
             reassignmentPage = new ReassignmentPage(C, capacity, type);
+            this.Close();
         }
 
         public ReassignmentPage getRP()
         {
-            return reassignmentPage;
+            return reassignmentPage; 
         }
     }
 }

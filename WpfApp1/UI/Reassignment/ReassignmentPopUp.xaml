@@ -35,8 +35,14 @@
         <Label Content="Room Capacity" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,35,0,0"/>
         <TextBox Name="roomCap" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Margin="135,38,0,0"/>
         <Label Content="Room Type" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,99,0,0"/>
-        <TextBox Name="roomType" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Margin="135,102,0,0"/>
         <Button Content="Submit" Click="Submit_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="102,151,0,0"/>
+        <ComboBox Name="TypeBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="135,102,0,0">
+            <ComboBoxItem>Lab</ComboBoxItem>
+            <ComboBoxItem>Lecture</ComboBoxItem>
+            <ComboBoxItem>Conference</ComboBoxItem>
+            <ComboBoxItem>ITIN</ComboBoxItem>
+            <ComboBoxItem>CYBER</ComboBoxItem>
+        </ComboBox>
 
     </Grid>
 </Window>

@@ -24,19 +24,19 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="{Binding Steps}" FontSize="12" Margin="0,0,5,0"/>
                             <Label Content="Number of steps" FontSize="12"/>
+                            <Label Content="{Binding steps}" FontSize="12" Margin="0,0,5,0"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
 
-        <ListView HorizontalAlignment="Left" Height="212" VerticalAlignment="Top" Width="158" Grid.Column="2" Margin="82,25,0,0">
+        <ListView x:Name="PathDisplay" HorizontalAlignment="Left"  Height="212" VerticalAlignment="Top" Width="158" Grid.Column="2" Margin="82,25,0,0">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-
+                        <Label Content="{Binding courseSteps}" FontSize="12" Margin="0,0,5,0"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

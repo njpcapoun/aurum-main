@@ -35,6 +35,7 @@ namespace ClassroomAssignment.UI.Reassignment
             InitializeComponent();
             viewModel = new ReassignmentViewModel(recursiveReassign(node));
             DataContext = viewModel;
+            PathDisplay.ItemsSource = ReassignPaths.SelectedItem as System.Collections.IEnumerable;
         }
 
         // Still working on this

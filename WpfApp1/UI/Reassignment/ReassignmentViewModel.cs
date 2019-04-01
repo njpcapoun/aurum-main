@@ -21,7 +21,7 @@ namespace ClassroomAssignment.UI.Reassignment
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<LinkedReassignments> ReassignPath { get; } = new ObservableCollection<LinkedReassignments>();
-        
+      
         public ReassignmentViewModel(LinkedReassignments node)
         {
             ReassignPath.Add(node);

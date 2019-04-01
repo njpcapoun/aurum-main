@@ -128,11 +128,10 @@ namespace ClassroomAssignment.UI.Main
         {
             Course c = CoursesDataGrid.SelectedItem as Course;
             ReassignmentPopUp reassignmentPopUp = new ReassignmentPopUp(c);
-            if (reassignmentPopUp.ShowDialog() == true) {
+            reassignmentPopUp.ShowDialog();  
             ReassignmentPage rp = reassignmentPopUp.getRP();
-            reassignmentPopUp.Close();
             NavigationService.Navigate(rp);
-            }
+            
         }
 
           /*
