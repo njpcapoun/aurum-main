@@ -32,5 +32,20 @@
             </ListView>
         </Grid>
 
+        <ListView HorizontalAlignment="Left" Height="212" VerticalAlignment="Top" Width="158" Grid.Column="2" Margin="82,25,0,0">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button Content="Commit" HorizontalAlignment="Left" Click="CommitReassign" VerticalAlignment="Top" Width="75" Margin="118,257,0,0" Grid.Column="2"/>
+
+
+
     </Grid>
 </Page>
+ 

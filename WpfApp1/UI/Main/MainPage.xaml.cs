@@ -31,6 +31,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClassroomAssignment.Model.Repo;
+using Microsoft.VisualBasic;
 
 namespace ClassroomAssignment.UI.Main
 {
@@ -119,20 +120,14 @@ namespace ClassroomAssignment.UI.Main
               var assignmentPage = new AssignmentPage(courses);
               NavigationService.Navigate(assignmentPage);
           }
-
-          // When you click reassign it beings a popup
+        
+          // When you click reassign it brings up two popups
           // Asking for the capacity and type of the room
           // Then it goes to the reassignment page
           private void Reassignment_Click(object sender, RoutedEventArgs e)
           {
-            System.Windows.Forms.TextBox getInfo = new System.Windows.Forms.TextBox();
-            getInfo.Text = "Capacity: ";
-            getInfo.Text = "Type: ";
-            string capacity = getInfo.Text;
-            string type = getInfo.Text;
-
-            Course c = (Course) CoursesDataGrid.SelectedItem;
-            var reassignmentPage = new ReassignmentPage(c, capacity, type);
+            Course c = CoursesDataGrid.SelectedItem as Course;
+            ReassignmentPopUp reassignmentPopUp = new ReassignmentPopUp(c); 
           }
 
           /*

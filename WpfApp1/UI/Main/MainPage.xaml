@@ -38,17 +38,17 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-       <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
-                <Menu Padding="5">
-                    <MenuItem Header="_File">
-                        <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
-                        <MenuItem Header="Changes" Click="Menu_Changes" />
-                        <MenuItem Header="_Save" Click="Menu_Save"/>
-                        <MenuItem Header="Save As" Click="SaveAs"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
+            <Menu Padding="5">
+                <MenuItem Header="_File">
+                    <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
+                    <MenuItem Header="Changes" Click="Menu_Changes" />
+                    <MenuItem Header="_Save" Click="Menu_Save"/>
+                    <MenuItem Header="Save As" Click="SaveAs"/>
                 </MenuItem>
-                </Menu>
-          </StackPanel>
+            </Menu>
+        </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
             <Menu Padding="5">
@@ -227,7 +227,7 @@
                         <!--ItemsSource="{Binding Source= {StaticResource RoomList}}"-->
                         <ListBox Name="listBox" ItemsSource="{Binding AllRooms}" IsSynchronizedWithCurrentItem="True"  SelectedItem="ListBox_Selected"
                                  SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"/>
-    
+
                         <WrapPanel Height="354" Margin="125,10,0,0" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="660" Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Room #: " HorizontalAlignment="Left" Width="70"/>
@@ -277,7 +277,6 @@
             <Label Content="Search: "/>
             <TextBox Name="CourseSearch" HorizontalAlignment="Left" Height="23" Margin="0,0,50,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" MaxLength="50" TextChanged="CourseSearch_TextChanged"/>
         </StackPanel>
+        
     </Grid>
-
-
 </Page>

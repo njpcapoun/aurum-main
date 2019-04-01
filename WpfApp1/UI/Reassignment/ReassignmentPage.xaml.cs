@@ -41,5 +41,10 @@ namespace ClassroomAssignment.UI.Reassignment
         {
             return node;
         }
+
+        public void CommitReassign(Object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
