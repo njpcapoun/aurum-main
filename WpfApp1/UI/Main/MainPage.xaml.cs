@@ -327,7 +327,7 @@ namespace ClassroomAssignment.UI.Main
             bool status = false;
             bool hasRooms = false;
 
-            if (ViewModel.CoursesForCurrentRoom != null)
+            if (ViewModel.CoursesForCurrentRoom.GetEnumerator().MoveNext())
             {
                 hasRooms = true;
             }
@@ -342,9 +342,7 @@ namespace ClassroomAssignment.UI.Main
                 MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Removing the Selected Room. Please Confirm ", "Confirm Room Removal", System.Windows.MessageBoxButton.OKCancel);
                 if (messageBoxResult == MessageBoxResult.OK)
                 {
-                    //ViewModel.RoomList.RemoveAt(ViewModel.EditableRoom.Index);
                     status = ViewModel.RoomRepo.RemoveRoom(ViewModel.EditableRoom);
-                    // Might need to edit the ViewModels active Room Lists to keep them on the same page
                     if (status == true)
                     {
                         ViewModel.UpdateRoomList();
@@ -435,19 +433,19 @@ namespace ClassroomAssignment.UI.Main
             {
                 ViewModel.EditableRoom = editedRoom;
                 MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Successfully edited the data of selected room ", "Edit Succeeded", System.Windows.MessageBoxButton.OK);
-                saveChanges.IsEnabled = false;
+                //saveChanges.IsEnabled = false;
 
                 ObservableCollection<Course> coursesNeedEditing = ViewModel.CoursesForCurrentRoom;
                 foreach (Course course in coursesNeedEditing)
                 {
                     course.RoomAssignment = editedRoom;
                 }
-
+                ViewModel.UpdateRoomList();
             }
             else
             {
                 MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("No Changes Were Detected ", "No Changes", System.Windows.MessageBoxButton.OK);
-                saveChanges.IsEnabled = false;
+                //saveChanges.IsEnabled = false;
             }
             
         }

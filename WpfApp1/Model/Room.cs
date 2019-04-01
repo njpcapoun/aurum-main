@@ -38,8 +38,9 @@ namespace ClassroomAssignment.Model
             var room = obj as Room;
             var result = room != null &&
                    RoomName == room.RoomName &&
-                   Capacity == room.Capacity;
-
+                   Capacity == room.Capacity; //&&
+                   //Details.Equals(room.Details) == true;
+                    //&& RoomType.Equals(room.RoomType) == true;
             return result;
         }
 

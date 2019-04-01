@@ -202,7 +202,7 @@
 
                         <StackPanel x:Name="ScheduleHeader" Orientation="Horizontal" Grid.Row="0" Margin="0,30,0,0" Grid.Column="0" HorizontalAlignment="Center">
                             <Label Content="Room: "/>
-                            <ComboBox ItemsSource="{Binding AllRooms, Mode=OneTime}" SelectedItem="{Binding CurrentRoom, Mode=TwoWay}"  MinWidth="40"/>
+                            <ComboBox ItemsSource="{Binding AllRooms, Mode=OneWay}" SelectedItem="{Binding CurrentRoom, Mode=TwoWay}"  MinWidth="40" IsSynchronizedWithCurrentItem="True"/>
                         </StackPanel>
                         <ScrollViewer x:Name="ScrollViewContainer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" Grid.Column="0" Height="500" HorizontalAlignment="Center">
                             <rs:RoomScheduleControl RoomScheduled="{Binding CurrentRoom, Mode=OneWay}" CoursesForRoom="{Binding CoursesForCurrentRoom, Mode=OneWay}" />
@@ -228,11 +228,11 @@
                         <WrapPanel Height="354" Margin="125,10,0,0" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="660" Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Room #: " HorizontalAlignment="Left" Width="70"/>
-                                <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName, Mode=TwoWay}"/>
+                                <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName, Mode=OneWay}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Capacity: " Width="70"/>
-                                <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity, Mode=TwoWay}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
+                                <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity, Mode=OneWay}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Room Type:" Width="75 "/>
@@ -244,20 +244,10 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content= "Details: " Width="70"/>
-                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Details, Mode=TwoWay}" Height="96" Width="256" TextAlignment="Left" VerticalContentAlignment="Top"/>
+                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Details, Mode=OneWay}" Height="96" Width="256" TextAlignment="Left" VerticalContentAlignment="Top"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Save Changes" Name="saveChanges" Margin="5,10,0,0" Click="SaveChanges_Click">
-                                    <Button.Style>
-                                        <Style>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=Details, Path=Text}" Value="">
-                                                    <Setter Property="Button.IsEnabled" Value="false"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
+                                <Button Content="Save Changes" Name="saveChanges" Margin="5,10,0,0" Click="SaveChanges_Click" />
                             </StackPanel>
                         </WrapPanel>
                         <Button Name="newButton" Content="New" Click="NewButton_Click" Height="24" Width="50" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="2" VerticalAlignment="Bottom"/>
