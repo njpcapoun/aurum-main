@@ -301,21 +301,21 @@ namespace ClassroomAssignment.UI.Main
         }
 
         /* 
-		    * Unassign an assigned course if "Unassign" is clicked in context menu.
-		    */
-		    private void Unassign_Click(object sender, RoutedEventArgs e)
-		    {
-			    foreach (Course course in CoursesDataGrid.SelectedItems)
-			    {
-				    course.NeedsRoom = true; // course.QueryNeedsRoom();???
-				    course.RoomAssignment = null;
-				    /*if (CrossListedToMain.ContainsKey(course))
-				    {
-					    CrossListedToMain[course].RemoveCrossListedCourse(course);
-					    CrossListedToMain.Remove(course);
-				    }*/
-			    }
-		    }
+	* Unassign an assigned course if "Unassign" is clicked in context menu.
+	*/
+	private void Unassign_Click(object sender, RoutedEventArgs e)
+	{
+	    foreach (Course course in CoursesDataGrid.SelectedItems)
+	    {
+		course.NeedsRoom = true; // course.QueryNeedsRoom();???
+		course.RoomAssignment = null;
+		/*if (CrossListedToMain.ContainsKey(course))
+		{
+		    CrossListedToMain[course].RemoveCrossListedCourse(course);
+		    CrossListedToMain.Remove(course);
+		}*/
+	    }
+	}
 
         private void NewButton_Click(object sender, RoutedEventArgs e)
         {
