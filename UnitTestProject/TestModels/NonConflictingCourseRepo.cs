@@ -78,7 +78,7 @@ namespace UnitTestProject.TestModels
             testCourse.InstructionMethod = "In Person";
             testCourse.Comments = "";
             testCourse.Notes = "PKI 158";
-            testCourse.SetDerivedProperties();
+            testCourse.SetAllDerivedProperties();
 
             _courses.Add(testCourse);
         }
@@ -103,7 +103,7 @@ namespace UnitTestProject.TestModels
             testCourse.InstructionMethod = "In Person";
             testCourse.Comments = "";
             testCourse.Notes = "PKI 158";
-            testCourse.SetDerivedProperties();
+            testCourse.SetAllDerivedProperties();
 
             _courses.Add(testCourse);
         }

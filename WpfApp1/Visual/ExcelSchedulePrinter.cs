@@ -180,7 +180,7 @@ namespace ClassroomAssignment.Visual
 
         private string getCourseLabel(Course course)
         {
-            return course.CourseTitle 
+            return course.CourseName 
                 + Environment.NewLine
                 + string.Format("Sect. {0}", course.SectionNumber)
                 + Environment.NewLine

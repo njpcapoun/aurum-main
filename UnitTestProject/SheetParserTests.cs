@@ -11,7 +11,7 @@ using ClassroomAssignment.Model.Repo;
 
 namespace UnitTestProject
 {
-
+	/*
     [TestClass]
     public class SheetParserTests
     {
@@ -101,4 +101,5 @@ namespace UnitTestProject
         }
 
     }
+	*/
 }
