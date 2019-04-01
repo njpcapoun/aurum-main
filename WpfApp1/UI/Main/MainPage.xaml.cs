@@ -187,9 +187,9 @@ namespace ClassroomAssignment.UI.Main
             if (!course.NeedsRoom && course.QueryMeetingDays().Count != 0 && course.QueryStartTime() != null && course.QueryEndTime() != null && int.TryParse(course.RoomCapRequest, out i)) AssignmentNeeded.Visibility = Visibility.Visible;
             else AssignmentNeeded.Visibility = Visibility.Collapsed;
 
-            // if (course.HasRoomAssignment) Unassign.Visibility = Visibility.Visible;
-            // else Unassign.Visibility = Visibility.Collapsed;
-        }
+              if (course.HasRoomAssignment) Unassign.Visibility = Visibility.Visible;
+              else Unassign.Visibility = Visibility.Collapsed;
+          }
 
         /*
            * For the Edit Course option on right click
@@ -301,14 +301,14 @@ namespace ClassroomAssignment.UI.Main
         }
 
         // Unassign an assigned course if "Unassign" is clicked in context menu.
-        /*private void Unassign_Click(object sender, RoutedEventArgs e)
+        private void Unassign_Click(object sender, RoutedEventArgs e)
         {
               foreach (Course course in CoursesDataGrid.SelectedItems)
               {
                   course.NeedsRoom = true; // should it be course.QueryNeedsRoom();???
                   course.RoomAssignment = null;
               }
-         }*/
+         }
 
         private void NewButton_Click(object sender, RoutedEventArgs e)
         {
@@ -462,4 +462,232 @@ namespace ClassroomAssignment.UI.Main
 
     }
 
-}
+         // Unassign an assigned course if "Unassign" is clicked in context menu.
+        private void Unassign_Click(object sender, RoutedEventArgs e)
+        {
+              foreach (Course course in CoursesDataGrid.SelectedItems)
+              {
+				  course.NeedsRoom = false;
+                  mainCourse.AddCrossListedCourse(course);
+                  CrossListedToMain[course] = mainCourse;
+              }
+          }
+
+          private void NewCourseMenuItem_Click(object sender, RoutedEventArgs e)
+          {
+              var dialog = new AddCourseDialogBox();
+              dialog.Show();
+          }
+
+          /*
+           * Move course to assignment needed on click
+           */
+          private void AssignmentNeeded_Click(object sender, RoutedEventArgs e)
+          {
+              foreach (Course course in CoursesDataGrid.SelectedItems)
+              {
+                  course.NeedsRoom = true;
+                  if (CrossListedToMain.ContainsKey(course))
+                  {
+                      CrossListedToMain[course].RemoveCrossListedCourse(course);
+                      CrossListedToMain.Remove(course);
+                  }
+              }
+          }
+
+          /*
+           * Removes crosslisted courses from no assignment needed section, and removes the crosslist
+           */
+          private void RemoveCrossListedCourseMenuItem_Click(object sender, RoutedEventArgs e)
+          {
+              var contextMenu = (sender as System.Windows.Controls.MenuItem).Parent as System.Windows.Controls.ContextMenu;
+              var crossListedCourse = (contextMenu.PlacementTarget as System.Windows.Controls.ComboBox).SelectedItem as Course;
+              var mainCourse = CoursesDataGrid.SelectedItem as Course;
+
+              if (mainCourse == null) return;
+
+              mainCourse.RemoveCrossListedCourse(crossListedCourse);
+              crossListedCourse.NeedsRoom = crossListedCourse.QueryNeedsRoom();
+              CrossListedToMain[crossListedCourse].RemoveCrossListedCourse(crossListedCourse);
+              CrossListedToMain.Remove(crossListedCourse);
+          }
+
+          private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+          {
+
+          }
+
+		/* 
+		 * Unassign an assigned course if "Unassign" is clicked in context menu.
+		 */
+		private void Unassign_Click(object sender, RoutedEventArgs e)
+		{
+			foreach (Course course in CoursesDataGrid.SelectedItems)
+			{
+				course.NeedsRoom = true; // course.QueryNeedsRoom();???
+				course.RoomAssignment = null;
+				/*if (CrossListedToMain.ContainsKey(course))
+				{
+					CrossListedToMain[course].RemoveCrossListedCourse(course);
+					CrossListedToMain.Remove(course);
+				}*/
+			}
+		}
+
+		private void ListBox_Selected(object sender, RoutedEventArgs e)
+          {
+              ViewModel.EditableRoom = (Room)listBox.SelectedItem;
+          }
+
+        private void NewButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new AddRoomDialogBox(roomRepo);
+            dialog.Closing += new System.ComponentModel.CancelEventHandler(Dialog_Closing);
+            dialog.Show();
+        }
+		
+		private void Dialog_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ViewModel.UpdateRoomList();
+        }
+
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            bool status = false;
+            bool hasRooms = false;
+
+            if (ViewModel.CoursesForCurrentRoom.GetEnumerator().MoveNext())
+            {
+                hasRooms = true;
+            }
+
+            if (hasRooms == true)
+            {
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("The selected room must have no assignments before removing ", "ERROR: Room Still has Assignments", System.Windows.MessageBoxButton.OK);
+                // Unsure if need to handle the OK click
+            }
+            else
+            {
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Removing the Selected Room. Please Confirm ", "Confirm Room Removal", System.Windows.MessageBoxButton.OKCancel);
+                if (messageBoxResult == MessageBoxResult.OK)
+                {
+                    status = ViewModel.RoomRepo.RemoveRoom(ViewModel.EditableRoom);
+                    if (status == true)
+                    {
+                        ViewModel.UpdateRoomList();
+                        messageBoxResult = System.Windows.MessageBox.Show("Successful removal of selected room ", "Removal Succeeded", System.Windows.MessageBoxButton.OK);
+                    }
+                    else
+                    {
+                        messageBoxResult = System.Windows.MessageBox.Show("An error occurred in the removal, please find the problem and try again ", "Removal Unsucessful", System.Windows.MessageBoxButton.OK);
+                    }
+                }
+            }
+
+        }
+          
+           /*
+           * Highlight text entered in search bar
+           */
+          private void CourseSearch_TextChanged(object sender, TextChangedEventArgs e)
+          {
+			FindItem(CoursesDataGrid);
+          }
+            
+          public void FindItem(DependencyObject obj)
+          {
+               	for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+               	{
+               		System.Windows.Controls.DataGridCell dg = obj as System.Windows.Controls.DataGridCell;
+               		if (dg != null)
+               		{
+               			HighlightText(dg);
+               		}
+               		FindItem(VisualTreeHelper.GetChild(obj as DependencyObject, i));
+               	}
+          }
+
+          private void HighlightText(Object itx)
+          {
+               	if (itx != null)
+               	{
+               		if (itx is TextBlock)
+               		{
+               			regex = new Regex("(" + CourseSearch.Text + ")", RegexOptions.IgnoreCase);
+               			TextBlock tb = itx as TextBlock;
+       					if (CourseSearch.Text.Length == 0)
+               			{
+               				string str = tb.Text;
+               				tb.Inlines.Clear();
+               				tb.Inlines.Add(str);
+               			    return;
+               			}
+               			string[] substr = regex.Split(tb.Text);
+               			tb.Inlines.Clear();
+               			foreach (var item in substr)
+               			{
+               				if (regex.Match(item).Success)
+               				{
+               					Run runx = new Run(item);
+               					runx.Background = Brushes.GreenYellow;
+               					tb.Inlines.Add(runx);
+               				}
+               				else
+               				{
+               					tb.Inlines.Add(item);
+               				}
+               			}
+               			return;
+               		}
+               		else
+               		{
+               			for (int i = 0; i < VisualTreeHelper.GetChildrenCount(itx as DependencyObject); i++)
+               			{
+               				HighlightText(VisualTreeHelper.GetChild(itx as DependencyObject, i));
+               			}
+               		}
+               	}
+           }
+		   
+		private void SaveChanges_Click(object sender, RoutedEventArgs e)
+        {
+            Room editedRoom = new Room();
+            editedRoom.RoomName = ViewModel.EditableRoom.RoomName;
+            editedRoom.Capacity = int.Parse(capacityText.Text);
+            editedRoom.Details = detailsText.Text;
+            editedRoom.RoomType = GetRoomType();
+            editedRoom.Index = ViewModel.EditableRoom.Index;
+
+            if (!editedRoom.Equals(ViewModel.EditableRoom))
+            {
+                ViewModel.EditableRoom = editedRoom;
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Successfully edited the data of selected room ", "Edit Succeeded", System.Windows.MessageBoxButton.OK);
+                //saveChanges.IsEnabled = false;
+
+                ObservableCollection<Course> coursesNeedEditing = ViewModel.CoursesForCurrentRoom;
+                foreach (Course course in coursesNeedEditing)
+                {
+                    course.RoomAssignment = editedRoom;
+                }
+                ViewModel.UpdateRoomList();
+            }
+            else
+            {
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("No Changes Were Detected ", "No Changes", System.Windows.MessageBoxButton.OK);
+                //saveChanges.IsEnabled = false;
+            }
+            
+        }
+		
+		private string GetRoomType()
+        {
+            return RoomType.Lab;
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ViewModel.CurrentRoom = ViewModel.EditableRoom;
+        }
+		
+      }
+  }

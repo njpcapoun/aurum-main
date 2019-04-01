@@ -80,7 +80,7 @@ namespace UnitTestProject.TestModels
             testCourse.Campus = "UNO";
             testCourse.InstructionMethod = "In Person";
             testCourse.Comments = "";
-            testCourse.SetDerivedProperties();
+            testCourse.SetAllDerivedProperties();
             testCourse.RoomAssignment = room;
 
             _courses.Add(testCourse);
@@ -105,7 +105,7 @@ namespace UnitTestProject.TestModels
             testCourse.Campus = "UNO";
             testCourse.InstructionMethod = "In Person";
             testCourse.Comments = "";
-            testCourse.SetDerivedProperties();
+            testCourse.SetAllDerivedProperties();
             testCourse.RoomAssignment = room;
 
             _courses.Add(testCourse);
