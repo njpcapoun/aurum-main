@@ -120,15 +120,20 @@ namespace ClassroomAssignment.UI.Main
               var assignmentPage = new AssignmentPage(courses);
               NavigationService.Navigate(assignmentPage);
           }
-        
-          // When you click reassign it brings up two popups
-          // Asking for the capacity and type of the room
-          // Then it goes to the reassignment page
-          private void Reassignment_Click(object sender, RoutedEventArgs e)
-          {
+
+        // When you click reassign it brings up two popups
+        // Asking for the capacity and type of the room
+        // Then it goes to the reassignment page
+        private void Reassignment_Click(object sender, RoutedEventArgs e)
+        {
             Course c = CoursesDataGrid.SelectedItem as Course;
-            ReassignmentPopUp reassignmentPopUp = new ReassignmentPopUp(c); 
-          }
+            ReassignmentPopUp reassignmentPopUp = new ReassignmentPopUp(c);
+            if (reassignmentPopUp.ShowDialog() == true) {
+            ReassignmentPage rp = reassignmentPopUp.getRP();
+            reassignmentPopUp.Close();
+            NavigationService.Navigate(rp);
+            }
+        }
 
           /*
            * Export the files to CSV format, file menu item

@@ -34,6 +34,7 @@ namespace ClassroomAssignment.UI.Reassignment
 
             InitializeComponent();
             viewModel = new ReassignmentViewModel(recursiveReassign(node));
+            DataContext = viewModel;
         }
 
         // Still working on this

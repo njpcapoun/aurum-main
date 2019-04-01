@@ -40,6 +40,8 @@ namespace ClassroomAssignment.UI.Reassignment
     public partial class ReassignmentPopUp : Window
     {
         Course C;
+        ReassignmentPage reassignmentPage;
+
         public ReassignmentPopUp(Course c)
         {
             C = c;
@@ -50,9 +52,12 @@ namespace ClassroomAssignment.UI.Reassignment
         {
             string capacity = roomCap.Text;
             string type = roomType.Text;
-            var reassignmentPage = new ReassignmentPage(C, capacity, type);
-            NavigationService.Navigate(reassignmentPage);
-            this.Close();
+            reassignmentPage = new ReassignmentPage(C, capacity, type);
+        }
+
+        public ReassignmentPage getRP()
+        {
+            return reassignmentPage;
         }
     }
 }
