@@ -64,7 +64,7 @@ namespace ClassroomAssignment.UI.Main
         }
         public ObservableCollection<Room> RoomList { get; set; }
 
-        public IEnumerable<Room> AllRooms { get; set; }
+        public BindingList<Room> AllRooms { get; set; }
         public ObservableCollection<Course> CoursesForCurrentRoom { get; private set; }
 
         private CourseRepository CourseRepo;
@@ -92,7 +92,7 @@ namespace ClassroomAssignment.UI.Main
 
             CourseRepo.ChangeInConflicts += CourseRepo_ChangeInConflicts;
 
-            AllRooms = RoomRepo.Rooms;
+            AllRooms = convertToBindingList(RoomRepo.Rooms);
             CurrentRoom = AllRooms.FirstOrDefault();
             EditableRoom = AllRooms.FirstOrDefault();
         }
@@ -104,7 +104,7 @@ namespace ClassroomAssignment.UI.Main
             {
                 Conflicts.Add(conflict);
             }
-            
+           
         }
 
         private void SetCoursesForCurrentRoom()
@@ -120,6 +120,25 @@ namespace ClassroomAssignment.UI.Main
             {
                 RoomList.Add(enumerator.Current);
             }
+            Page.saveChanges.IsEnabled = true;
+        }
+
+        private BindingList<Room> convertToBindingList(List<Room> rooms)
+        {
+            BindingList<Room> bindRooms = new BindingList<Room>();
+            foreach (Room r in rooms)
+            {
+                bindRooms.Add(r);
+            }
+            return bindRooms;
+        }
+
+        public void UpdateRoomList()
+        {
+            AllRooms = convertToBindingList(RoomRepo.Rooms);
+            CurrentRoom = AllRooms.FirstOrDefault();
+            EditableRoom = AllRooms.FirstOrDefault();
+            RoomRepo.SaveData();
         }
 
     }

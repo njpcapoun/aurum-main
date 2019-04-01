@@ -10,15 +10,27 @@ using static ClassroomAssignment.Model.DataConstants;
 
 namespace ClassroomAssignment.Model
 {
+
+    public class RoomType
+    {
+        public const string Lab = "Lab";
+        public const string Lecture = "Lecture";
+        public const string Conference = "Conference";
+        public const string Itin = "ITIN";
+        public const string Cyber = "CYBER";
+    }
+
     [Serializable]
     public class Room
     {
         /// <summary>
         /// Getter and setter for RoomName and Capacity of the room.
         /// </summary>
+        public int Index { get; set; }
         public string RoomName { get; set; }
         public int Capacity { get; set; }
         public string Details { get; set; }
+        public string RoomType { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -26,9 +38,9 @@ namespace ClassroomAssignment.Model
             var room = obj as Room;
             var result = room != null &&
                    RoomName == room.RoomName &&
-                   Capacity == room.Capacity &&
-                   Details == room.Details;
-
+                   Capacity == room.Capacity; //&&
+                   //Details.Equals(room.Details) == true;
+                    //&& RoomType.Equals(room.RoomType) == true;
             return result;
         }
 
