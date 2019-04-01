@@ -467,9 +467,5 @@ namespace ClassroomAssignment.UI.Main
             ViewModel.CurrentRoom = ViewModel.EditableRoom;
         }
 
-        private void ListBox_Selected(object sender, RoutedEventArgs e)
-        {
-              ViewModel.EditableRoom = (Room)listBox.SelectedItem;
-        }
     }
 }
