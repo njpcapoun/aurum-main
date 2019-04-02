@@ -63,7 +63,7 @@
         </StackPanel>
 
         <Border Grid.Row="1">
-            <TabControl RenderTransformOrigin="0.512,0.515">
+            <TabControl RenderTransformOrigin="0.512,0.515" Name="MainTab" SelectionChanged="TabControl_SelectionChanged">
                 <TabItem x:Name="AssignTabItem" Header="Assign">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -278,9 +278,12 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel  x:Name="SearchHeader" Orientation="Horizontal"  Grid.Row="0" Margin="0,10,100,0" Grid.Column="0" HorizontalAlignment="Right">
-            <Label Content="Search: "/>
-            <TextBox Name="CourseSearch" HorizontalAlignment="Left" Height="23" Margin="0,0,50,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" MaxLength="50" TextChanged="CourseSearch_TextChanged"/>
+        <StackPanel  x:Name="SearchHeader" Orientation="Horizontal"  Grid.Row="0" Margin="0,10,10,0" Grid.Column="0" HorizontalAlignment="Right">
+            <TextBox Name="CourseSearch" HorizontalAlignment="Left" Height="23" Margin="0,0,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" MaxLength="50" KeyDown="CourseSearch_KeyDown"/>
+            <Button Name="EnterSearch" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Search" Width="60" Height="23" Click="EnterSearch_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Row="0" HorizontalAlignment="Right">
+            <Label Name="Matches" Content="Number of Matches:" Margin="0,30,155,0" Visibility="Hidden" HorizontalAlignment="Left"/>
         </StackPanel>
     </Grid>
 
