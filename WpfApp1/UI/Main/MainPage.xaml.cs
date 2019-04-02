@@ -52,6 +52,8 @@ namespace ClassroomAssignment.UI.Main
 
         Regex regex;
 
+        int count = 0;
+
         public MainPage()
         {
             InitializeComponent();
@@ -297,7 +299,25 @@ namespace ClassroomAssignment.UI.Main
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            TabItem thisTab = (TabItem)MainTab.SelectedItem;
+            if (thisTab != null)
+            {
+                if (thisTab.Name.Equals("AssignTabItem"))
+                {
+                    CourseSearch.Visibility = Visibility.Visible;
+                    EnterSearch.Visibility = Visibility.Visible;
+                    if (!CourseSearch.Text.Equals(""))
+                    {
+                        Matches.Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    CourseSearch.Visibility = Visibility.Hidden;
+                    EnterSearch.Visibility = Visibility.Hidden;
+                    Matches.Visibility = Visibility.Hidden;
+                }
+            }
         }
 
         /* 
@@ -364,14 +384,6 @@ namespace ClassroomAssignment.UI.Main
 
         }
 
-        /*
-             Highlight text entered in search bar
-        */
-        private void CourseSearch_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            FindItem(CoursesDataGrid);
-        }
-
         public void FindItem(DependencyObject obj)
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
@@ -409,6 +421,7 @@ namespace ClassroomAssignment.UI.Main
                             Run runx = new Run(item);
                             runx.Background = Brushes.GreenYellow;
                             tb.Inlines.Add(runx);
+                            count++;
                         }
                         else
                         {
@@ -465,6 +478,36 @@ namespace ClassroomAssignment.UI.Main
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ViewModel.CurrentRoom = ViewModel.EditableRoom;
+        }
+
+        private void EnterSearch_Click(object sender, RoutedEventArgs e)
+        {
+            FindItem(CoursesDataGrid);
+            SetMatches();
+        }
+
+        private void CourseSearch_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                FindItem(CoursesDataGrid);
+                SetMatches();
+            }
+        }
+
+        private void SetMatches()
+        {
+            Matches.Visibility = Visibility.Visible;
+            Matches.Content = "Number of Matches: " + count;
+            if (count == 0)
+            {
+                Matches.Foreground = Brushes.Red;
+            }
+            else
+            {
+                Matches.Foreground = Brushes.Green;
+            }
+            count = 0;
         }
 
     }
