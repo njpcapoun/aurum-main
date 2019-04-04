@@ -29,13 +29,17 @@ namespace ClassroomAssignment.UI.Reassignment
         public ReassignmentPage(Course c, string capacity, string type)
         {
             LinkedReassignments node = new LinkedReassignments();
+            
+            // These are for testing and display only, when we implement
+            // The algorithm the nodes will contain instructions for various
+            // Reassignment Paths
             node.steps = 0;
             node.courseSteps = c.CourseName;
+            node.roomSteps = c.RoomAssignment.ToString();
 
             InitializeComponent();
             viewModel = new ReassignmentViewModel(recursiveReassign(node));
             DataContext = viewModel;
-            PathDisplay.ItemsSource = ReassignPaths.SelectedItem as System.Collections.IEnumerable;
         }
 
         // Still working on this
@@ -47,6 +51,20 @@ namespace ClassroomAssignment.UI.Reassignment
         public void CommitReassign(Object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ReassignPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string display;
+            LinkedReassignments node = ReassignPaths.SelectedItem as LinkedReassignments;
+
+            // This is for testing, in the future the instructions will be seperated by a delimiter
+            // And be split and then displayed properly
+            display = node.courseSteps;
+            display += " is assigned to room ";
+            display += node.roomSteps;
+
+            PathDisplay.Text = display;
         }
     }
 }

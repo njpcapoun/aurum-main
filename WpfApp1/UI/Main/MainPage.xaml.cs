@@ -127,11 +127,22 @@ namespace ClassroomAssignment.UI.Main
         private void Reassignment_Click(object sender, RoutedEventArgs e)
         {
             Course c = CoursesDataGrid.SelectedItem as Course;
-            ReassignmentPopUp reassignmentPopUp = new ReassignmentPopUp(c);
-            reassignmentPopUp.ShowDialog();  
-            ReassignmentPage rp = reassignmentPopUp.getRP();
-            NavigationService.Navigate(rp);
-            
+            if (c.HasRoomAssignment == false)
+            {
+                System.Windows.Forms.MessageBox.Show("Can't reassign a room that isn't assigned to a room");
+            }
+
+            else
+            {
+                ReassignmentPopUp reassignmentPopUp = new ReassignmentPopUp(c);
+                reassignmentPopUp.ShowDialog();
+                ReassignmentPage rp = reassignmentPopUp.getRP();
+
+                if (rp != null)
+                { 
+                    NavigationService.Navigate(rp);
+                }
+            }
         }
 
           /*

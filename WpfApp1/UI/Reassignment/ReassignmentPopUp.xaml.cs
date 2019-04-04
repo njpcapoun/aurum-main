@@ -39,19 +39,23 @@ namespace ClassroomAssignment.UI.Reassignment
     /// </summary>
     public partial class ReassignmentPopUp : Window
     {
+        // Add a list of strings to use for the combobox itemsource
         Course C;
         ReassignmentPage reassignmentPage;
+        public List<string> types;
         public ReassignmentPopUp(Course c)
         {
             C = c;
             InitializeComponent();
+            types = new List<string> {"Lab", "Lecture", "Conference", "ITIN", "CYBER"};
+            DataContext = this;
+            TypeBox.ItemsSource = types;
         }
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
             string capacity = roomCap.Text;
-            string type = TypeBox.SelectedItem as string;
-            Console.Write(type);
+            string type = TypeBox.SelectedItem.ToString();
             reassignmentPage = new ReassignmentPage(C, capacity, type);
             this.Close();
         }
@@ -59,6 +63,12 @@ namespace ClassroomAssignment.UI.Reassignment
         public ReassignmentPage getRP()
         {
             return reassignmentPage; 
+        }
+
+        public void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            reassignmentPage = null;
+            this.Close();
         }
     }
 }
