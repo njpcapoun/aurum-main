@@ -55,9 +55,16 @@ namespace ClassroomAssignment.UI.Reassignment
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
             string capacity = roomCap.Text;
-            string type = TypeBox.SelectedItem.ToString();
-            reassignmentPage = new ReassignmentPage(C, capacity, type);
-            this.Close();
+            if (int.TryParse(capacity, out int i) == false)
+            {
+                System.Windows.MessageBox.Show("Invalid capacity");
+            }
+            else
+            {
+                string type = TypeBox.SelectedItem.ToString();
+                reassignmentPage = new ReassignmentPage(C, capacity, type);
+                this.Close();
+            }
         }
 
         public ReassignmentPage getRP()

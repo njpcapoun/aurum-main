@@ -25,6 +25,7 @@ namespace ClassroomAssignment.UI.Reassignment
     public partial class ReassignmentPage : Page
     {
         private ReassignmentViewModel viewModel;
+        private CourseRepository CourseRepo = CourseRepository.GetInstance();
 
         public ReassignmentPage(Course c, string capacity, string type)
         {
@@ -40,11 +41,27 @@ namespace ClassroomAssignment.UI.Reassignment
             InitializeComponent();
             viewModel = new ReassignmentViewModel(recursiveReassign(node));
             DataContext = viewModel;
+
+            var courses = from course in CourseRepo.Courses
+                          where course.CourseName == c.CourseName
+                          select course;
+
+            foreach (Course course in courses)
+            {
+                course.RoomCapRequest = capacity;
+            }
+
         }
 
         // Still working on this
         public LinkedReassignments recursiveReassign(LinkedReassignments node)
         {
+            
+            if ()
+            {
+                
+            }
+
             return node;
         }
 

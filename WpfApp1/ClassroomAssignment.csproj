@@ -145,6 +145,7 @@
     <Compile Include="Notification\NotificationManager.cs" />
     <Compile Include="Operations\AssignmentConflictDetector.cs" />
     <Compile Include="Operations\ScheduleSlot.cs" />
+    <Compile Include="Operations\SearchParametersWithType.cs" />
     <Compile Include="Operations\SearchParameters.cs" />
     <Compile Include="UI\AddRoomDialogBox.xaml.cs">
       <DependentUpon>AddRoomDialogBox.xaml</DependentUpon>
