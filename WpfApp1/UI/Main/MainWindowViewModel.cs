@@ -74,6 +74,8 @@ namespace ClassroomAssignment.UI.Main
 
         private MainPage Page;
 
+        public List<String> RoomTypes { get; set; }
+
         /// <summary>
         /// initializes main window
         /// </summary>
@@ -91,6 +93,13 @@ namespace ClassroomAssignment.UI.Main
             }
 
             CourseRepo.ChangeInConflicts += CourseRepo_ChangeInConflicts;
+
+            RoomTypes = new List<string>();
+            RoomTypes.Add(RoomType.Lab);
+            RoomTypes.Add(RoomType.Lecture);
+            RoomTypes.Add(RoomType.Conference);
+            RoomTypes.Add(RoomType.Itin);
+            RoomTypes.Add(RoomType.Cyber);
 
             AllRooms = convertToBindingList(RoomRepo.Rooms);
             CurrentRoom = AllRooms.FirstOrDefault();

@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ClassroomAssignment.Model.Repo;
+using ClassroomAssignment.UI.Main;
 
 namespace ClassroomAssignment.UI
 {
@@ -31,19 +32,22 @@ namespace ClassroomAssignment.UI
         public string RoomName;
         public int Capacity;
         public string Details;
-        public string type;
+        public string type = RoomType.Lab;
         
-        public AddRoomDialogBox(RoomRepository roomRepository)
+        public AddRoomDialogBox(RoomRepository roomRepository, MainWindowViewModel ViewModel)
         {
+            CopyRoom = new Room();
+            RoomTypes = ViewModel.RoomTypes;
             roomRepo = roomRepository;
             InitializeComponent();
-            CopyRoom = new Room();
+            DataContext = this;
         }
 
         public Room CopyRoom { get; set; }
 
         private List<PropertyInfo> propertiesChanged = new List<PropertyInfo>();
 
+        private List<string> RoomTypes;
        
         private void CopyRoom_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -61,7 +65,7 @@ namespace ClassroomAssignment.UI
             RoomName = enterRoomName.Text;
             Capacity = int.Parse(enterCapacity.Text);
             Details = enterDetails.Text;
-            //get type from rad buttons
+            type = (string)enterType.SelectedItem;
 
             bool success = roomRepo.AddNewRoom(index, RoomName, Capacity, Details, type);
             if(success)
@@ -72,32 +76,6 @@ namespace ClassroomAssignment.UI
             else
             {
                 MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("The submitted Room Name is already a room in use", "ERROR: Room Already Exists", System.Windows.MessageBoxButton.OK);
-            }
-        }
-
-        private void Handle_Checked(object sender, RoutedEventArgs e)
-        {
-            RadioButton rb = sender as RadioButton;
-            string name = rb.Name;
-            switch(name)
-            {
-                case "Lab":
-                    type = RoomType.Lab;
-                    break;
-                case "Lecture":
-                    type = RoomType.Lecture;
-                    break;
-                case "Conference":
-                    type = RoomType.Conference;
-                    break;
-                case "ITIN":
-                    type = RoomType.Itin;
-                    break;
-                case "CYBER":
-                    type = RoomType.Cyber;
-                    break;
-                default:    //This shouldn't occur
-                    break;
             }
         }
 
