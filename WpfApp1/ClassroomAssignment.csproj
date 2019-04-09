@@ -85,6 +85,7 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.1.0.145, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.1.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -144,12 +145,21 @@
     <Compile Include="Notification\NotificationManager.cs" />
     <Compile Include="Operations\AssignmentConflictDetector.cs" />
     <Compile Include="Operations\ScheduleSlot.cs" />
+    <Compile Include="Operations\SearchParametersWithType.cs" />
     <Compile Include="Operations\SearchParameters.cs" />
     <Compile Include="UI\AddRoomDialogBox.xaml.cs">
       <DependentUpon>AddRoomDialogBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\AddCourseDialogBox.xaml.cs">
       <DependentUpon>AddCourseDialogBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Reassignment\LinkedReassignments.cs" />
+    <Compile Include="UI\Reassignment\ReassignmentPopUp.xaml.cs">
+      <DependentUpon>ReassignmentPopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Reassignment\ReassignmentViewModel.cs" />
+    <Compile Include="UI\Reassignment\ReassignmentPage.xaml.cs">
+      <DependentUpon>ReassignmentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\SearchViewModel.cs" />
     <Compile Include="Views\RoomSearch\AvailableRoomSearchControl.xaml.cs">
@@ -215,6 +225,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\AddCourseDialogBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Reassignment\ReassignmentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Reassignment\ReassignmentPopUp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
