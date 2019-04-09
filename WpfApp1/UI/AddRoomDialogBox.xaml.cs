@@ -27,6 +27,11 @@ namespace ClassroomAssignment.UI
     {
 
         private RoomRepository roomRepo;
+
+        public string RoomName;
+        public int Capacity;
+        public string Details;
+        public string type;
         
         public AddRoomDialogBox(RoomRepository roomRepository)
         {
@@ -52,9 +57,49 @@ namespace ClassroomAssignment.UI
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            Room newRoom = new Room();
-            //newRoom.RoomName = RoomName;
-            
+            int index = roomRepo.Rooms.Count;
+            RoomName = enterRoomName.Text;
+            Capacity = int.Parse(enterCapacity.Text);
+            Details = enterDetails.Text;
+            //get type from rad buttons
+
+            bool success = roomRepo.AddNewRoom(index, RoomName, Capacity, Details, type);
+            if(success)
+            {
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("The submitted room has been added", "SUCCESS!", System.Windows.MessageBoxButton.OK);
+                this.Close();
+            }
+            else
+            {
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("The submitted Room Name is already a room in use", "ERROR: Room Already Exists", System.Windows.MessageBoxButton.OK);
+            }
         }
+
+        private void Handle_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            string name = rb.Name;
+            switch(name)
+            {
+                case "Lab":
+                    type = RoomType.Lab;
+                    break;
+                case "Lecture":
+                    type = RoomType.Lecture;
+                    break;
+                case "Conference":
+                    type = RoomType.Conference;
+                    break;
+                case "ITIN":
+                    type = RoomType.Itin;
+                    break;
+                case "CYBER":
+                    type = RoomType.Cyber;
+                    break;
+                default:    //This shouldn't occur
+                    break;
+            }
+        }
+
     }
 }

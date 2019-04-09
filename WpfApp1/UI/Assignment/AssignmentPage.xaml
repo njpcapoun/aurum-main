@@ -58,9 +58,8 @@
             </ListView>
         </Grid>
 
-                <ScrollViewer Grid.Column="1">
-                    
-                    <StackPanel Orientation="Vertical">
+        <ScrollViewer Grid.Column="1">
+            <StackPanel Orientation="Vertical">
                 <views:CourseDetailLocked x:Name="CourseDetailLocked" IsEnabled="True" DataContext="{Binding CurrentCourse, Mode=TwoWay}"/>
 
                 <Grid>
