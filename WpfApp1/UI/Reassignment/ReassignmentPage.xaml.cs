@@ -56,12 +56,6 @@ namespace ClassroomAssignment.UI.Reassignment
         // Still working on this
         public LinkedReassignments recursiveReassign(LinkedReassignments node)
         {
-            
-            if ()
-            {
-                
-            }
-
             return node;
         }
 
