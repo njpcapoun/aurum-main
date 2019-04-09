@@ -218,23 +218,20 @@
                         <WrapPanel Height="354" Margin="125,10,0,0" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="660" Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Room #: " HorizontalAlignment="Left" Width="70"/>
-                                <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName, Mode=OneWay}"/>
+                                <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName, Mode=TwoWay}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Capacity: " Width="70"/>
-                                <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity, Mode=OneWay}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
+                                <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity, Mode=TwoWay}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
+                                <Label Name="capacityError" Content="The capacity must be an integer" Visibility="Hidden" Foreground="Red"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Room Type:" Width="75 "/>
-                                <RadioButton Name="Lab"  Content="Lab" GroupName="Type" Margin="0,5,5,0" />
-                                <RadioButton Name="Lecture"  Content="Lecture" GroupName="Type"  Margin="0,5,5,0" />
-                                <RadioButton Name="Conference"  Content="Conference"  GroupName="Type"  Margin="0,5,5,0" />
-                                <RadioButton Name="ITIN"  Content="ITIN" GroupName="Type"  Margin="0,5,5,0" />
-                                <RadioButton Name="CYBER"  Content="CYBER" GroupName="Type"  Margin="0,5,5,0"/>
+                                <ComboBox Name="RoomTypeBox" SelectedItem="{Binding Path=EditableRoom.RoomType, Mode=TwoWay}" ItemsSource="{Binding RoomTypes}" Width="100" Height="24"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content= "Details: " Width="70"/>
-                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Details, Mode=OneWay}" Height="96" Width="256" TextAlignment="Left" VerticalContentAlignment="Top"/>
+                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Details, Mode=TwoWay}" Height="96" Width="256" TextAlignment="Left" VerticalContentAlignment="Top"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="Save Changes" Name="saveChanges" Margin="5,10,0,0" Click="SaveChanges_Click" />

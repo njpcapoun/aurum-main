@@ -45,28 +45,24 @@
 
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
                     <Label Content="Room Name"  Style="{StaticResource LabelStyle}" />
-                    <TextBox Name="enterRoomName" Text="{Binding Path=RoomName, Mode=TwoWay}" Style="{StaticResource ValueStyle}" Width="80" TextAlignment="Left"/>
+                    <TextBox Name="enterRoomName" Text="{Binding RoomName, Mode=TwoWay}" Style="{StaticResource ValueStyle}" Width="80" TextAlignment="Left"/>
                     <Label Name="nameError" Content="Room Name is Required" Visibility="Hidden" Foreground="Red"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
                     <Label Content="Capacity" Style="{StaticResource LabelStyle}"/>
-                    <TextBox Name="enterCapacity" Text="{Binding Path=Capacity, Mode=TwoWay}"  Style="{StaticResource ValueStyle}" TextAlignment="Left"/>
+                    <TextBox Name="enterCapacity" Text="{Binding Capacity, Mode=TwoWay}" Style="{StaticResource ValueStyle}" TextAlignment="Left"/>
                     <Label Name="capacityError" Content="Room Capacity is Required" Visibility="Hidden" Foreground="Red"/>
                 </StackPanel>
                 
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
                     <Label Content="Room Type" Style="{StaticResource LabelStyle}"/>
-                    <RadioButton Name="Lab"  Content="Lab" Checked="Handle_Checked" GroupName="Type" IsChecked="True" Margin="0,5,5,0"/>
-                    <RadioButton Name="Lecture"  Content="Lecture" Checked="Handle_Checked" GroupName="Type"  Margin="0,5,5,0"/>
-                    <RadioButton Name="Conference"  Content="Conference" Checked="Handle_Checked" GroupName="Type"  Margin="0,5,5,0"/>
-                    <RadioButton Name="ITIN"  Content="ITIN" Checked="Handle_Checked" GroupName="Type"  Margin="0,5,5,0"/>
-                    <RadioButton Name="CYBER"  Content="CYBER" Checked="Handle_Checked"  GroupName="Type"  Margin="0,5,5,0"/>
+                    <ComboBox Name="enterType" Width="100" Height="24" Loaded="EnterType_Loaded" SelectionChanged="EnterType_SelectionChanged"/>
                 </StackPanel>
                     
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
                     <Label Content="Details" Style="{StaticResource LabelStyle}"/>
-                    <TextBox Name ="enterDetails" Text="{Binding Path=Details, Mode=TwoWay}"  Style="{StaticResource ValueStyle}" Width="280" Height="100" TextAlignment="Left"/>
+                    <TextBox Name ="enterDetails" Text="{Binding Details, Mode=TwoWay}"  Style="{StaticResource ValueStyle}" Width="280" Height="100" TextAlignment="Left" VerticalContentAlignment="Top"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="10,0,0,0" Style="{StaticResource PairStyle}">
                     <Button Name="submit" Content="Add Room" Width="75" Click="Submit_Click"/>

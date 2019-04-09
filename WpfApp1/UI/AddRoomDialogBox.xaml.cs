@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ClassroomAssignment.Model.Repo;
+using ClassroomAssignment.UI.Main;
 
 namespace ClassroomAssignment.UI
 {
@@ -28,22 +29,22 @@ namespace ClassroomAssignment.UI
 
         private RoomRepository roomRepo;
 
-        public string RoomName;
-        public int Capacity;
-        public string Details;
-        public string type;
+        public string RoomName = "";
+        public int Capacity = 0;
+        public string Details = "";
+        public string type = RoomType.Lab;
         
-        public AddRoomDialogBox(RoomRepository roomRepository)
+        public AddRoomDialogBox(RoomRepository roomRepository, MainWindowViewModel ViewModel)
         {
+            CopyRoom = new Room();
             roomRepo = roomRepository;
             InitializeComponent();
-            CopyRoom = new Room();
+            DataContext = this;
         }
 
         public Room CopyRoom { get; set; }
 
         private List<PropertyInfo> propertiesChanged = new List<PropertyInfo>();
-
        
         private void CopyRoom_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -57,11 +58,30 @@ namespace ClassroomAssignment.UI
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
+            int temp;
             int index = roomRepo.Rooms.Count;
-            RoomName = enterRoomName.Text;
-            Capacity = int.Parse(enterCapacity.Text);
+            if (enterRoomName.Text != "")
+            {
+                RoomName = enterRoomName.Text;
+            }
+            else
+            {
+                nameError.Visibility = Visibility.Visible;
+                return;
+            }
+
+            if (Int32.TryParse(enterCapacity.Text, out temp))
+            {
+                Capacity = temp;
+            }
+            else
+            {
+                capacityError.Content = "The capacity must be an integer.";
+                capacityError.Visibility = Visibility.Visible;
+                return;
+            }
             Details = enterDetails.Text;
-            //get type from rad buttons
+            type = (string)enterType.SelectedItem;
 
             bool success = roomRepo.AddNewRoom(index, RoomName, Capacity, Details, type);
             if(success)
@@ -75,31 +95,26 @@ namespace ClassroomAssignment.UI
             }
         }
 
-        private void Handle_Checked(object sender, RoutedEventArgs e)
+        private void EnterType_Loaded(object sender, RoutedEventArgs e)
         {
-            RadioButton rb = sender as RadioButton;
-            string name = rb.Name;
-            switch(name)
-            {
-                case "Lab":
-                    type = RoomType.Lab;
-                    break;
-                case "Lecture":
-                    type = RoomType.Lecture;
-                    break;
-                case "Conference":
-                    type = RoomType.Conference;
-                    break;
-                case "ITIN":
-                    type = RoomType.Itin;
-                    break;
-                case "CYBER":
-                    type = RoomType.Cyber;
-                    break;
-                default:    //This shouldn't occur
-                    break;
-            }
+            List<string> RoomTypes = new List<string>();
+            RoomTypes.Add(RoomType.Lab);
+            RoomTypes.Add(RoomType.Lecture);
+            RoomTypes.Add(RoomType.Conference);
+            RoomTypes.Add(RoomType.Itin);
+            RoomTypes.Add(RoomType.Cyber);
+            var combo = sender as ComboBox;
+            combo.ItemsSource = RoomTypes;
+            combo.SelectedIndex = 0;
         }
 
+        private void EnterType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItem = sender as ComboBox;
+            type = selectedItem.SelectedItem as string;
+        }
     }
+
 }
+
+

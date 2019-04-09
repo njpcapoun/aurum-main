@@ -62,6 +62,7 @@ namespace ClassroomAssignment.UI.Main
             roomRepo = ViewModel.RoomRepo;
             DataContext = ViewModel;
             this.Loaded += MainPage_Loaded;
+
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -350,7 +351,7 @@ namespace ClassroomAssignment.UI.Main
 
         private void NewButton_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new AddRoomDialogBox(roomRepo);
+            var dialog = new AddRoomDialogBox(roomRepo, ViewModel);
             dialog.Closing += new System.ComponentModel.CancelEventHandler(Dialog_Closing);
             dialog.Show();
         }
@@ -453,17 +454,26 @@ namespace ClassroomAssignment.UI.Main
 
         private void SaveChanges_Click(object sender, RoutedEventArgs e)
         {
+            int temp;
+            bool error = false;
             Room editedRoom = new Room();
-            editedRoom.RoomName = ViewModel.EditableRoom.RoomName;
-            editedRoom.Capacity = int.Parse(capacityText.Text);
+            editedRoom.RoomName = ViewModel.EditableRoom.RoomName;          
+            if (Int32.TryParse(capacityText.Text, out temp))
+            {
+                editedRoom.Capacity = int.Parse(capacityText.Text);
+            }
+            else
+            {
+                capacityError.Visibility = Visibility.Visible;
+                error = true;
+            }
             editedRoom.Details = detailsText.Text;
-            editedRoom.RoomType = GetRoomType();
+            editedRoom.RoomType = (string)RoomTypeBox.SelectedItem;
             editedRoom.Index = ViewModel.EditableRoom.Index;
 
-            if (!editedRoom.Equals(ViewModel.EditableRoom))
+            if (!error)
             {
-                ViewModel.EditableRoom = editedRoom;
-                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Successfully edited the data of selected room ", "Edit Succeeded", System.Windows.MessageBoxButton.OK);
+                ViewModel.CurrentRoom = editedRoom;
                 //saveChanges.IsEnabled = false;
 
                 ObservableCollection<Course> coursesNeedEditing = ViewModel.CoursesForCurrentRoom;
@@ -472,13 +482,9 @@ namespace ClassroomAssignment.UI.Main
                     course.RoomAssignment = editedRoom;
                 }
                 ViewModel.UpdateRoomList();
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Successfully edited the data of selected room ", "Edit Succeeded", System.Windows.MessageBoxButton.OK);
+                capacityError.Visibility = Visibility.Hidden;
             }
-            else
-            {
-                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("No Changes Were Detected ", "No Changes", System.Windows.MessageBoxButton.OK);
-                //saveChanges.IsEnabled = false;
-            }
-            
         }
 
         private string GetRoomType()
@@ -488,6 +494,7 @@ namespace ClassroomAssignment.UI.Main
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            capacityError.Visibility = Visibility.Hidden;
             ViewModel.CurrentRoom = ViewModel.EditableRoom;
         }
 
