@@ -38,17 +38,6 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
-       <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
-                <Menu Padding="5">
-                    <MenuItem Header="_File">
-                        <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
-                        <MenuItem Header="Changes" Click="Menu_Changes" />
-                        <MenuItem Header="_Save" Click="Menu_Save"/>
-                        <MenuItem Header="Save As" Click="SaveAs"/>
-                </MenuItem>
-                </Menu>
-          </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
             <Menu Padding="5">
@@ -59,8 +48,8 @@
                     <MenuItem Header="Save As" Click="SaveAs"/>
                 </MenuItem>
             </Menu>
-
         </StackPanel>
+        
 
         <Border Grid.Row="1">
             <TabControl RenderTransformOrigin="0.512,0.515" Name="MainTab" SelectionChanged="TabControl_SelectionChanged">
@@ -75,6 +64,7 @@
                                 <ContextMenu x:Name="CoursesContextMenu" Opened="CoursesContextMenu_Opened">
                                     <MenuItem x:Name="AssignMenuItem" Header="Assign" Click="AssignMenuItem_Click" />
                                     <MenuItem x:Name="CoursesMenuItem" Header="Edit" Click="CoursesMenuItem_Click" />
+                                    <MenuItem x:Name="ReassignMenuItem" Header="Reassign" Click="ReassignMenuItem_Click"/>
                                     <MenuItem x:Name="NoAssignmentNeededMenuItem" Header="No Assignment Needed" Click="NoAssignmentNeededMenuItem_Click"/>
                                     <MenuItem x:Name="CrossListMenuItem" Header="CrossList" Click="CrossListMenuItem_Click"/>
                                     <MenuItem x:Name="AssignmentNeeded" Header="Assignment Needed" Click="AssignmentNeeded_Click"/>

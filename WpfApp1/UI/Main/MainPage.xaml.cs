@@ -3,6 +3,7 @@ using ClassroomAssignment.Operations;
 using ClassroomAssignment.Repo;
 using ClassroomAssignment.UI.Assignment;
 using ClassroomAssignment.UI.Changes;
+using ClassroomAssignment.UI.Reassignment;
 using ClassroomAssignment.UI.Edit;
 using ClassroomAssignment.ViewModel;
 using ClassroomAssignment.Visual;
@@ -119,6 +120,16 @@ namespace ClassroomAssignment.UI.Main
 
             var assignmentPage = new AssignmentPage(courses);
             NavigationService.Navigate(assignmentPage);
+        }
+
+        private void ReassignMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+            Course c = CoursesDataGrid.SelectedItem as Course;
+            ReassignmentPopUp popUp = new ReassignmentPopUp(c);
+            popUp.ShowDialog();
+            ReassignmentPage reassignmentPage = popUp.getRP();
+            NavigationService.Navigate(reassignmentPage);
         }
 
         /*

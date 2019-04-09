@@ -25,7 +25,7 @@ namespace ClassroomAssignment.Operations
         /// <param name="endTime"></param>
         /// <param name="capacity"></param>
         /// <param name="duration"></param>
-        public SearchParametersWithType(IEnumerable<DayOfWeek> meetingDays, TimeSpan startTime, TimeSpan endTime, int capacity = int.MaxValue, TimeSpan duration = new TimeSpan(), string roomtype)
+        public SearchParametersWithType(IEnumerable<DayOfWeek> meetingDays, string roomtype, TimeSpan startTime, TimeSpan endTime, int capacity = int.MaxValue, TimeSpan duration = new TimeSpan())
         {
             MeetingDays = meetingDays;
             StartTime = startTime;
