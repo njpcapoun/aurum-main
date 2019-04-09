@@ -233,6 +233,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Capacity: " Width="70"/>
                                 <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity, Mode=TwoWay}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
+                                <Label Name="capacityError" Content="The capacity must be an integer" Visibility="Hidden" Foreground="Red"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Room Type:" Width="75 "/>

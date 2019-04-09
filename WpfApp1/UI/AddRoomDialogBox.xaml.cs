@@ -29,15 +29,14 @@ namespace ClassroomAssignment.UI
 
         private RoomRepository roomRepo;
 
-        public string RoomName;
-        public int Capacity;
-        public string Details;
+        public string RoomName = "";
+        public int Capacity = 0;
+        public string Details = "";
         public string type = RoomType.Lab;
         
         public AddRoomDialogBox(RoomRepository roomRepository, MainWindowViewModel ViewModel)
         {
             CopyRoom = new Room();
-            RoomTypes = ViewModel.RoomTypes;
             roomRepo = roomRepository;
             InitializeComponent();
             DataContext = this;
@@ -46,8 +45,6 @@ namespace ClassroomAssignment.UI
         public Room CopyRoom { get; set; }
 
         private List<PropertyInfo> propertiesChanged = new List<PropertyInfo>();
-
-        private List<string> RoomTypes;
        
         private void CopyRoom_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -61,9 +58,28 @@ namespace ClassroomAssignment.UI
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
+            int temp;
             int index = roomRepo.Rooms.Count;
-            RoomName = enterRoomName.Text;
-            Capacity = int.Parse(enterCapacity.Text);
+            if (enterRoomName.Text != "")
+            {
+                RoomName = enterRoomName.Text;
+            }
+            else
+            {
+                nameError.Visibility = Visibility.Visible;
+                return;
+            }
+
+            if (Int32.TryParse(enterCapacity.Text, out temp))
+            {
+                Capacity = temp;
+            }
+            else
+            {
+                capacityError.Content = "The capacity must be an integer.";
+                capacityError.Visibility = Visibility.Visible;
+                return;
+            }
             Details = enterDetails.Text;
             type = (string)enterType.SelectedItem;
 
@@ -79,5 +95,26 @@ namespace ClassroomAssignment.UI
             }
         }
 
+        private void EnterType_Loaded(object sender, RoutedEventArgs e)
+        {
+            List<string> RoomTypes = new List<string>();
+            RoomTypes.Add(RoomType.Lab);
+            RoomTypes.Add(RoomType.Lecture);
+            RoomTypes.Add(RoomType.Conference);
+            RoomTypes.Add(RoomType.Itin);
+            RoomTypes.Add(RoomType.Cyber);
+            var combo = sender as ComboBox;
+            combo.ItemsSource = RoomTypes;
+            combo.SelectedIndex = 0;
+        }
+
+        private void EnterType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItem = sender as ComboBox;
+            type = selectedItem.SelectedItem as string;
+        }
     }
+
 }
+
+

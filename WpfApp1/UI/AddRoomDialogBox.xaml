@@ -51,18 +51,18 @@
 
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
                     <Label Content="Capacity" Style="{StaticResource LabelStyle}"/>
-                    <TextBox Name="enterCapacity" Text="{Binding Capacity, Mode=TwoWay}"  Style="{StaticResource ValueStyle}" TextAlignment="Left"/>
+                    <TextBox Name="enterCapacity" Text="{Binding Capacity, Mode=TwoWay}" Style="{StaticResource ValueStyle}" TextAlignment="Left"/>
                     <Label Name="capacityError" Content="Room Capacity is Required" Visibility="Hidden" Foreground="Red"/>
                 </StackPanel>
                 
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
                     <Label Content="Room Type" Style="{StaticResource LabelStyle}"/>
-                    <ComboBox Name="enterType" SelectedItem="{Binding type, Mode=TwoWay}" ItemsSource="{Binding RoomTypes}" Width="100" Height="24"/>
+                    <ComboBox Name="enterType" Width="100" Height="24" Loaded="EnterType_Loaded" SelectionChanged="EnterType_SelectionChanged"/>
                 </StackPanel>
                     
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
                     <Label Content="Details" Style="{StaticResource LabelStyle}"/>
-                    <TextBox Name ="enterDetails" Text="{Binding Details, Mode=TwoWay}"  Style="{StaticResource ValueStyle}" Width="280" Height="100" TextAlignment="Left"/>
+                    <TextBox Name ="enterDetails" Text="{Binding Details, Mode=TwoWay}"  Style="{StaticResource ValueStyle}" Width="280" Height="100" TextAlignment="Left" VerticalContentAlignment="Top"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="10,0,0,0" Style="{StaticResource PairStyle}">
                     <Button Name="submit" Content="Add Room" Width="75" Click="Submit_Click"/>
