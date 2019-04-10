@@ -16,6 +16,7 @@ using ClassroomAssignment.Repo;
 using ClassroomAssignment.Operations;
 using ClassroomAssignment.ViewModel;
 using ClassroomAssignment.UI.Reassignment;
+using ClassroomAssignment.Model.Repo;
 
 namespace ClassroomAssignment.UI.Reassignment
 {
@@ -25,12 +26,17 @@ namespace ClassroomAssignment.UI.Reassignment
     public partial class ReassignmentPage : Page
     {
         private ReassignmentViewModel viewModel;
-        private CourseRepository CourseRepo = CourseRepository.GetInstance();
+        private ICourseRepository CourseRepo = CourseRepository.GetInstance();
+        public string Type;
+        public string Capacity;
+        public IRoomRepository RoomRepo = RoomRepository.GetInstance();
 
         public ReassignmentPage(Course c, string capacity, string type)
         {
             LinkedReassignments node = new LinkedReassignments();
-            
+            Type = type;
+            Capacity = capacity;
+
             // These are for testing and display only, when we implement
             // The algorithm the nodes will contain instructions for various
             // Reassignment Paths
@@ -39,7 +45,7 @@ namespace ClassroomAssignment.UI.Reassignment
             node.roomSteps = c.RoomAssignment.ToString();
 
             InitializeComponent();
-            viewModel = new ReassignmentViewModel(recursiveReassign(node));
+            viewModel = new ReassignmentViewModel(recursiveReassign(node, c));
             DataContext = viewModel;
 
             var courses = from course in CourseRepo.Courses
@@ -54,8 +60,40 @@ namespace ClassroomAssignment.UI.Reassignment
         }
 
         // Still working on this
-        public LinkedReassignments recursiveReassign(LinkedReassignments node)
+        public LinkedReassignments recursiveReassign(LinkedReassignments node, Course c)
         {
+            AvailableRoomSearch availableRoomSearch = new AvailableRoomSearch(RoomRepo, CourseRepo);
+            IEnumerable<Room> rooms = availableRoomSearch.AvailableRooms(c.MeetingDays, (TimeSpan)c.StartTime, (TimeSpan)c.EndTime, int.Parse(c.RoomCapRequest), Type);
+
+            node.steps++;
+
+            if (node.steps > 3)
+            {
+                node.steps--;
+                return node;
+            }
+            
+            // If there are available rooms with regards to types, 
+            else if (rooms != null)
+            {
+                foreach(var room in rooms)
+                {
+                    LinkedReassignments next = new LinkedReassignments();
+                    next.steps = node.steps;
+                    next.courseSteps = node.courseSteps;
+                    next.roomSteps = (node.roomSteps + room.RoomName);
+                    node.listAppend(next);
+                }
+
+                return node;
+            }
+
+            // Finds the best room among all rooms, takes that room, then goes through everything 
+            else
+            {
+
+            }
+
             return node;
         }
 

@@ -18,6 +18,24 @@ namespace ClassroomAssignment.UI.Reassignment
 
         public LinkedReassignments next { get; set; }
 
-       
+        public void listAppend(LinkedReassignments node)
+        {
+            if (this.next != null)
+            {
+                LinkedReassignments current = this.next;
+
+                while (current.next != null)
+                {
+                    current = current.next;
+                }
+
+                current.next = node;
+            }
+
+            else
+            {
+                this.next = node;
+            }
+        }
     }
 }
