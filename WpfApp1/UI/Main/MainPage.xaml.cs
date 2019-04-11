@@ -292,19 +292,21 @@ namespace ClassroomAssignment.UI.Main
             }
         }
 
-        /*
+		/*
             * Removes crosslisted courses from no assignment needed section, and removes the crosslist
         */
-        private void RemoveCrossListedCourseMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            var contextMenu = (sender as System.Windows.Controls.MenuItem).Parent as System.Windows.Controls.ContextMenu;
-            var crossListedCourse = (contextMenu.PlacementTarget as System.Windows.Controls.ComboBox).SelectedItem as Course;
-            var mainCourse = CoursesDataGrid.SelectedItem as Course;
+		private void RemoveCrossListedCourseMenuItem_Click(object sender, RoutedEventArgs e)
+		{
+			var contextMenu = (sender as System.Windows.Controls.MenuItem).Parent as System.Windows.Controls.ContextMenu;
+			var crossListedCourse = (contextMenu.PlacementTarget as System.Windows.Controls.ComboBox).SelectedItem as Course;
+			var mainCourse = CoursesDataGrid.SelectedItem as Course;
 
-            if (mainCourse == null) return;
+			if (mainCourse == null) return;
 
-            mainCourse.RemoveCrossListedCourse(crossListedCourse);
-            crossListedCourse.NeedsRoom = crossListedCourse.QueryNeedsRoom();
+			if (crossListedCourse != null) { 
+				mainCourse.RemoveCrossListedCourse(crossListedCourse);
+				crossListedCourse.NeedsRoom = crossListedCourse.QueryNeedsRoom();
+			}
             //CrossListedToMain[crossListedCourse].RemoveCrossListedCourse(crossListedCourse);
             //CrossListedToMain.Remove(crossListedCourse);
         }
