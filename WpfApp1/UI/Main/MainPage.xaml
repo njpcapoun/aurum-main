@@ -232,7 +232,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content= "Details: " Width="75"/>
-                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Details, Mode=TwoWay}" Height="96" Width="256" TextAlignment="Left" VerticalContentAlignment="Top"/>
+                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Details, Mode=TwoWay}" Height="96" Width="256" TextAlignment="Left" VerticalContentAlignment="Top" TextWrapping="WrapWithOverflow"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="Save Changes" Name="saveChanges" Margin="5,10,0,0" Click="SaveChanges_Click" />

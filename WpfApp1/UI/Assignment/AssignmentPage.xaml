@@ -11,7 +11,6 @@
       Title="AssignmentPage"
       ShowsNavigationUI="True" >
 
-
     <Grid>
     
         <Grid.ColumnDefinitions>
@@ -88,7 +87,7 @@
                         </ListView>
                     </Grid>
 
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Orientation="Horizontal">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
                         <TextBlock Text="Room Assignment: " Margin="0,0,5,0" LineHeight="10" VerticalAlignment="Center"/>
                         <ComboBox x:Name="RoomOptionsComboBox" ItemsSource="{Binding AllRooms}" Text="Rooms" IsReadOnly="True" IsEditable="True" Height="20" SelectedValue="{Binding CurrentCourse.RoomAssignment, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
@@ -103,8 +102,23 @@
                         </ComboBox>
                     </StackPanel>
                 </Grid>
-                <Button Grid.ColumnSpan="2" Content="Save" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="OnClickSave" ClickMode="Press" ScrollViewer.CanContentScroll="True" Margin="0,-100,125,0"/>
-
+                <Grid>
+                    <Button Grid.ColumnSpan="2" Content="Save" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Click="OnClickSave" ClickMode="Press" ScrollViewer.CanContentScroll="True" Margin="0,-100,125,0"/>    
+                </Grid>
+                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="0" Orientation="Horizontal" Margin="10,10,0,0">
+                    <StackPanel>
+                        <Label Content="Room Type"  MinWidth="10" FontWeight="DemiBold"/>
+                        <Label Name="typeLabel" Content="{Binding Path=CurrentRoom.RoomType}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Content="Room Details"  MinWidth="10" FontWeight="DemiBold"/>
+                        <Label Name="detailsLabel" Width="225">
+                            <Label.Content>
+                                <AccessText TextWrapping="WrapWithOverflow" Text="{Binding Path=CurrentRoom.Details}"/>
+                            </Label.Content>
+                        </Label>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
 
         </ScrollViewer>
