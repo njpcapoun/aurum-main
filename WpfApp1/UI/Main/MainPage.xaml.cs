@@ -41,7 +41,7 @@ namespace ClassroomAssignment.UI.Main
     {
         public MainWindowViewModel ViewModel { get; set; }
 
-        private Dictionary<Course, Course> CrossListedToMain = new Dictionary<Course, Course>();
+        //private Dictionary<Course, Course> CrossListedToMain = new Dictionary<Course, Course>();
 
         public Room SelectedRoom { get; set; }
 
@@ -266,7 +266,7 @@ namespace ClassroomAssignment.UI.Main
 
                 course.NeedsRoom = false;
                 mainCourse.AddCrossListedCourse(course);
-                CrossListedToMain[course] = mainCourse;
+                //CrossListedToMain[course] = mainCourse;
             }
         }
 
@@ -284,11 +284,11 @@ namespace ClassroomAssignment.UI.Main
             foreach (Course course in CoursesDataGrid.SelectedItems)
             {
                 course.NeedsRoom = true;
-                if (CrossListedToMain.ContainsKey(course))
+                /*if (CrossListedToMain.ContainsKey(course))
                 {
                     CrossListedToMain[course].RemoveCrossListedCourse(course);
                     CrossListedToMain.Remove(course);
-                }
+                }*/
             }
         }
 
@@ -305,8 +305,8 @@ namespace ClassroomAssignment.UI.Main
 
             mainCourse.RemoveCrossListedCourse(crossListedCourse);
             crossListedCourse.NeedsRoom = crossListedCourse.QueryNeedsRoom();
-            CrossListedToMain[crossListedCourse].RemoveCrossListedCourse(crossListedCourse);
-            CrossListedToMain.Remove(crossListedCourse);
+            //CrossListedToMain[crossListedCourse].RemoveCrossListedCourse(crossListedCourse);
+            //CrossListedToMain.Remove(crossListedCourse);
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
