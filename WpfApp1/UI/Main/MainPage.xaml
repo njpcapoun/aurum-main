@@ -39,7 +39,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,30">
             <Menu Padding="5">
                 <MenuItem Header="_File">
                     <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
@@ -49,8 +49,9 @@
                 </MenuItem>
             </Menu>
         </StackPanel>
-        
-
+        <StackPanel Grid.Row="0">
+            <Label Content="Classroom Assignment" FontSize="32" Margin="50,0,0,0"/>
+        </StackPanel>
         <Border Grid.Row="1">
             <TabControl RenderTransformOrigin="0.512,0.515" Name="MainTab" SelectionChanged="TabControl_SelectionChanged">
                 <TabItem x:Name="AssignTabItem" Header="Assign">
@@ -217,11 +218,11 @@
     
                         <WrapPanel Height="354" Margin="125,10,0,0" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="660" Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Room #: " HorizontalAlignment="Left" Width="70"/>
+                                <Label Content="Room #: " HorizontalAlignment="Left" Width="75"/>
                                 <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName, Mode=TwoWay}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Capacity: " Width="70"/>
+                                <Label Content="Capacity: " Width="75"/>
                                 <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity, Mode=TwoWay}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
                                 <Label Name="capacityError" Content="The capacity must be an integer" Visibility="Hidden" Foreground="Red"/>
                             </StackPanel>
@@ -230,7 +231,7 @@
                                 <ComboBox Name="RoomTypeBox" SelectedItem="{Binding Path=EditableRoom.RoomType, Mode=TwoWay}" ItemsSource="{Binding RoomTypes}" Width="100" Height="24"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content= "Details: " Width="70"/>
+                                <Label Content= "Details: " Width="75"/>
                                 <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Details, Mode=TwoWay}" Height="96" Width="256" TextAlignment="Left" VerticalContentAlignment="Top" TextWrapping="WrapWithOverflow"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
