@@ -24,7 +24,11 @@ namespace ClassroomAssignment.UI.Reassignment
       
         public ReassignmentViewModel(LinkedReassignments node)
         {
-            ReassignPath.Add(node);
+            if (node.next != null)
+            {
+                // skips first node because it doesn't hold the right data
+                node = node.next;
+            }
 
             while(node.next != null)
             {
