@@ -46,6 +46,7 @@
                     <MenuItem Header="Changes" Click="Menu_Changes" />
                     <MenuItem Header="_Save" Click="Menu_Save"/>
                     <MenuItem Header="Save As" Click="SaveAs"/>
+                    <MenuItem Header="Automatic Crosslisting" Click="AutomaticCrosslisting"/>
                 </MenuItem>
             </Menu>
         </StackPanel>

@@ -31,6 +31,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClassroomAssignment.Model.Repo;
+using System.ComponentModel;
 
 namespace ClassroomAssignment.UI.Main
 {
@@ -85,6 +86,70 @@ namespace ClassroomAssignment.UI.Main
             return App.Current.Resources["originalCourses"] as List<Course>;
         }
 
+		private void AutomaticCrosslisting(object sender, EventArgs e)
+		{
+			HashSet<Course> MainCourses = new HashSet<Course>();
+			bool isMainCourse = true;
+			var courses = CoursesDataGrid.ItemsSource;
+
+			foreach (Course course in courses)
+			{
+				isMainCourse = true;
+				List<Course> crossListedCourses = new List<Course>();
+
+				HashSet<string> subjectCodes = new HashSet<string>();
+				HashSet<string> catalogNumbers = new HashSet<string>();
+				HashSet<string> sectionNumbers = new HashSet<string>();
+
+				if (!string.IsNullOrEmpty(course.CrossListings))
+				{
+					var regex = new Regex(@"([A-Z]+)\s*(\d+)[- ]+(\d+)");
+					var matches = regex.Matches(course.CrossListings);
+
+					for (int i = 0; i < matches.Count; i++)
+					{
+						var subjectCode = matches[i].Groups[1].Value;
+						subjectCodes.Add(subjectCode);
+						var catalogNumber = matches[i].Groups[2].Value;
+						catalogNumbers.Add(catalogNumber);
+						var catalogNumber2 = catalogNumber.TrimStart(new char[] { '0' });
+						catalogNumbers.Add(catalogNumber2);
+						var sectionNumber = matches[i].Groups[3].Value;
+						sectionNumbers.Add(sectionNumber);
+						var sectionNumber2 = sectionNumber.TrimStart(new char[] { '0' });
+						sectionNumbers.Add(sectionNumber2);
+					}
+
+					foreach (Course y in courses)
+					{
+						if (course == y)
+							continue;
+						if (subjectCodes.Contains(y.SubjectCode) &&
+							catalogNumbers.Contains(y.CatalogNumber) &&
+							sectionNumbers.Contains(y.SectionNumber))
+						{
+							crossListedCourses.Add(y);
+							if (MainCourses.Contains(y))
+								isMainCourse = false;
+						}
+					}
+
+					if (isMainCourse)
+					{
+						MainCourses.Add(course);
+						foreach (Course crossListed in crossListedCourses)
+						{
+							crossListed.NeedsRoom = false;
+							if (!course.CrossListedCourses.Contains(crossListed))
+							{
+								course.AddCrossListedCourse(crossListed);
+							}
+						}
+					}
+				}
+			}
+		}
+
         /*
             * Moves to the Changes page, file menu item
         */
@@ -107,7 +172,7 @@ namespace ClassroomAssignment.UI.Main
         }
 
         /*
-            * Sends selected courses to AssignmentPage to be assigned, right click menu
+        * Sends selected courses to AssignmentPage to be assigned, right click menu
         */
         private void AssignMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -265,7 +330,8 @@ namespace ClassroomAssignment.UI.Main
                 if (course == mainCourse) continue;
 
                 course.NeedsRoom = false;
-                mainCourse.AddCrossListedCourse(course);
+				if(!mainCourse.CrossListedCourses.Contains(course))
+					mainCourse.AddCrossListedCourse(course);
                 //CrossListedToMain[course] = mainCourse;
             }
         }
@@ -334,22 +400,22 @@ namespace ClassroomAssignment.UI.Main
             }
         }
 
-        /* 
-	* Unassign an assigned course if "Unassign" is clicked in context menu.
-	*/
-	private void Unassign_Click(object sender, RoutedEventArgs e)
-	{
-	    foreach (Course course in CoursesDataGrid.SelectedItems)
-	    {
-		course.NeedsRoom = true; // course.QueryNeedsRoom();???
-		course.RoomAssignment = null;
-		/*if (CrossListedToMain.ContainsKey(course))
+		/* 
+		* Unassign an assigned course if "Unassign" is clicked in context menu.
+		*/
+		private void Unassign_Click(object sender, RoutedEventArgs e)
 		{
-		    CrossListedToMain[course].RemoveCrossListedCourse(course);
-		    CrossListedToMain.Remove(course);
-		}*/
-	    }
-	}
+			foreach (Course course in CoursesDataGrid.SelectedItems)
+			{
+				course.NeedsRoom = true; // course.QueryNeedsRoom();???
+				course.RoomAssignment = null;
+				/*if (CrossListedToMain.ContainsKey(course))
+				{
+					CrossListedToMain[course].RemoveCrossListedCourse(course);
+					CrossListedToMain.Remove(course);
+				}*/
+			}
+		}
 
         private void NewButton_Click(object sender, RoutedEventArgs e)
         {
@@ -529,6 +595,5 @@ namespace ClassroomAssignment.UI.Main
             }
             count = 0;
         }
-
     }
 }

@@ -44,11 +44,6 @@ namespace ClassroomAssignment.UI.Ambiguity
 
         }
 
-
-  
-     
-
-
         private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (var course in _ambiguousCourses)
