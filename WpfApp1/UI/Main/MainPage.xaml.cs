@@ -555,11 +555,6 @@ namespace ClassroomAssignment.UI.Main
             }
         }
 
-        private string GetRoomType()
-        {
-            return RoomType.Lab;
-        }
-
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             capacityError.Visibility = Visibility.Hidden;
