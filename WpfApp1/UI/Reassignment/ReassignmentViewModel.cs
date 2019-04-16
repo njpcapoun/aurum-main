@@ -24,16 +24,13 @@ namespace ClassroomAssignment.UI.Reassignment
       
         public ReassignmentViewModel(LinkedReassignments node)
         {
-            if (node.next != null)
-            {
-                // skips first node because it doesn't hold the right data
-                node = node.next;
-            }
+            LinkedReassignments traverser = node;
+            ReassignPath.Add(traverser);
 
-            while(node.next != null)
+            while (traverser.next != null)
             {
-                ReassignPath.Add(node);
-                node = node.next;
+                traverser = traverser.next;
+                ReassignPath.Add(traverser);
             }
         }
     }

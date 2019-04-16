@@ -16,26 +16,6 @@ namespace ClassroomAssignment.UI.Reassignment
         public string courseSteps { get; set; }
         public string roomSteps { get; set; }
 
-        public LinkedReassignments next { get; set; }
-
-        public void listAppend(LinkedReassignments node)
-        {
-            if (this.next != null)
-            {
-                LinkedReassignments current = this.next;
-
-                while (current.next != null)
-                {
-                    current = current.next;
-                }
-
-                current.next = node;
-            }
-
-            else
-            {
-                this.next = node;
-            }
-        }
+        public LinkedReassignments next;
     }
 }

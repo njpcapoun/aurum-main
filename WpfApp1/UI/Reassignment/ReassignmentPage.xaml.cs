@@ -41,9 +41,12 @@ namespace ClassroomAssignment.UI.Reassignment
             node.steps = 0;
             node.courseSteps = c.CourseName;
             node.roomSteps = c.RoomAssignment.ToString();
+            node.next = null;
 
             InitializeComponent();
-            viewModel = new ReassignmentViewModel(recursiveReassign(node, c));
+            node = recursiveReassign(node, c);
+            LinkedReassignments traverser = node;
+            viewModel = new ReassignmentViewModel(node);
             DataContext = viewModel;
 
             var courses = from course in CourseRepo.Courses
@@ -61,25 +64,34 @@ namespace ClassroomAssignment.UI.Reassignment
         public LinkedReassignments recursiveReassign(LinkedReassignments node, Course c)
         {
             int steps = node.steps + 1;
+            LinkedReassignments traverser;
             AvailableRoomSearch availableRoomSearch = new AvailableRoomSearch(RoomRepo, CourseRepo);
             IEnumerable<Room> rooms = availableRoomSearch.AvailableRooms(c.MeetingDays, (TimeSpan)c.StartTime, (TimeSpan)c.EndTime, int.Parse(c.RoomCapRequest), Type);
-            LinkedReassignments newnode = new LinkedReassignments();
+            LinkedReassignments newnode;
 
             // If it takes more than three shuffles then that's too much and ends it
             if (steps > 3)
             {
                 return null;
             }
-            
+
             // If there are available rooms with regards to room type 
-            else if (rooms != null)
-            {
-                foreach(var room in rooms)
+            else if (rooms.Count() > 0)
+            { 
+                foreach (var room in rooms)
                 {
+                    traverser = node;
+                    newnode = new LinkedReassignments();
                     newnode.steps = steps;
                     newnode.courseSteps = node.courseSteps + "," + c.CourseName;
                     newnode.roomSteps = (node.roomSteps + "," + room.RoomName);
-                    node.listAppend(newnode);
+                    newnode.next = null;
+                    while(traverser.next != null)
+                    {
+                        traverser = traverser.next;
+                    }
+
+                    traverser.next = newnode;
                 }
 
                 return node;
@@ -103,22 +115,31 @@ namespace ClassroomAssignment.UI.Reassignment
                     // I'm trying to get a query that gets all the courses
                     // Assigned to the rooms and match the meeting times
                     List<Course> courses = courseGroup.Courses
-                    .Where(x => x.HasRoomAssignment && x.MeetingDays.Intersect(c.MeetingDays).Count(z => true) != 0 && x.StartTime.HasValue && !(x.StartTime.Value >= c.EndTime || x.EndTime <= c.StartTime))
+                    .Where(x => x.HasRoomAssignment && x.MeetingDays.Intersect(c.MeetingDays).Count(z => true) != 0 && x.StartTime.HasValue && (x.StartTime.Value <= c.EndTime || x.EndTime >= c.StartTime))
                     .OrderBy(x => x.StartTime.Value)
                     .ToList();
 
                     // Then we'll go through all the paths trying to shuffle here
                     for (int i = 0; i < courses.Count; i++)
-                    { 
+                    {
+                        newnode = new LinkedReassignments();
+                        traverser = node;
                         newnode.steps = steps;
-                        newnode.courseSteps = node.courseSteps;
-                        newnode.roomSteps = node.roomSteps + "," + courseGroup.Room.RoomName;
-                        node.listAppend(recursiveReassign(newnode, courses[i]));
+                        newnode.courseSteps = node.courseSteps + "," + c.CourseName + "," + courses[i].CourseName;
+                        newnode.roomSteps = node.roomSteps + "," + courses[i].RoomAssignment.RoomName + "," + courses[i].RoomAssignment.RoomName;
+                        newnode.next = null;
+                        newnode = recursiveReassign(newnode, courses[i]);
+                        while(traverser.next != null)
+                        {
+                            traverser = traverser.next;
+                        }
+
+                        traverser.next = newnode;
                     }
                 }
-            }
 
-            return node;
+                return node;
+            }
         }
 
         public void CommitReassign(Object sender, RoutedEventArgs e)
@@ -137,10 +158,23 @@ namespace ClassroomAssignment.UI.Reassignment
             display1 = node.courseSteps.Split(',');
             display2 = node.roomSteps.Split(',');
 
-            for(int i = 0; i < display2.Length; i+= 2)
+            for(int i = 0; i < display2.Length; i++)
             {
-                display += display1[i] + " assigned to" + display2[i] + "\n";
-                display += display[i + 1] + " will be assigned to " + display2[i + 1] + "\n";
+                if (node.steps == 0)
+                {
+                    display += display1[i] + " is assigned to " + display2[i] + "\n\n";
+                    display += "If this is the only item you see the reassignment has failed";
+                }
+
+                else if(i != 0 && i % 2 == 1)
+                {
+                    display += display1[i] + " will be assigned to " + display2[i] + "\n\n";
+                }
+
+                else
+                {
+                    display += display1[i] + " was assigned to " + display2[i] + "\n\n";
+                }
             }
 
             PathDisplay.Text = display;
