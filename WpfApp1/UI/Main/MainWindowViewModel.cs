@@ -100,6 +100,7 @@ namespace ClassroomAssignment.UI.Main
             RoomTypes.Add(RoomType.Conference);
             RoomTypes.Add(RoomType.Itin);
             RoomTypes.Add(RoomType.Cyber);
+            RoomTypes.Add(RoomType.Distance);
 
             AllRooms = convertToBindingList(RoomRepo.Rooms);
             CurrentRoom = AllRooms.FirstOrDefault();
