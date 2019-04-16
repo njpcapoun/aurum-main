@@ -168,6 +168,7 @@ namespace ClassroomAssignment.Model
         public string Notes { get; set; }
 
         private Room _roomAssignment;
+        public string _currentTeacher;
         public Room RoomAssignment
         {
             get => _roomAssignment;
@@ -178,6 +179,21 @@ namespace ClassroomAssignment.Model
                 foreach (var course in CrossListedCourses)
                 {
                     course.RoomAssignment = _roomAssignment;
+                }
+
+            }
+        }
+
+        public string CurrentTeacherInfo
+        {
+            get => Instructor;
+            set
+            {
+                _currentTeacher = value;
+
+                foreach (var course in CrossListedCourses)
+                {
+                    course.CurrentTeacherInfo = _currentTeacher;
                 }
 
             }

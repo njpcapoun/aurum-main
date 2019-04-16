@@ -28,7 +28,6 @@ namespace ClassroomAssignment.Model
                    RoomName == room.RoomName &&
                    Capacity == room.Capacity &&
                    Details == room.Details;
-
             return result;
         }
 

@@ -152,6 +152,9 @@
       <DependentUpon>AddCourseDialogBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\SearchViewModel.cs" />
+    <Compile Include="Views\RoomSchedule\TeacherRoomScheduleControl.xaml.cs">
+      <DependentUpon>TeacherRoomScheduleControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RoomSearch\AvailableRoomSearchControl.xaml.cs">
       <DependentUpon>AvailableRoomSearchControl.xaml</DependentUpon>
     </Compile>
@@ -217,6 +220,10 @@
     <Page Include="UI\AddCourseDialogBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RoomSchedule\TeacherRoomScheduleControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\RoomSearch\AvailableRoomSearchControl.xaml">
       <SubType>Designer</SubType>

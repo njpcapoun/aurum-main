@@ -21,7 +21,7 @@ using static ClassroomAssignment.Model.Course;
 namespace ClassroomAssignment.Repo
 {
     [Serializable]
-    class CourseRepository : ICourseRepository
+    public class CourseRepository : ICourseRepository
     {
         public IEnumerable<Course> Courses { get; }
 

@@ -38,6 +38,7 @@ namespace ClassroomAssignment.UI.Main
       /// </summary>
       public partial class MainPage : Page
       {
+        List<string> output;
           public MainWindowViewModel ViewModel { get; set; }
 
           private Dictionary<Course, Course> CrossListedToMain = new Dictionary<Course, Course>();
@@ -48,13 +49,18 @@ namespace ClassroomAssignment.UI.Main
 
           private RoomRepository roomRepo;
 
+        public string teacherName;
+
+        public ObservableCollection<Course> CoursesForCurrentTeacher { get; private set; }
+
         SaveBase saveWork = new SaveBase();
 
         Regex regex;
 
           public MainPage()
           {
-              InitializeComponent();
+            output = new List<string>();
+            InitializeComponent();
               ViewModel = new MainWindowViewModel(this);
               roomRepo = ViewModel.RoomRepo;
               DataContext = ViewModel;
@@ -148,11 +154,13 @@ namespace ClassroomAssignment.UI.Main
 
                       workbook.MissingCellPolicy = MissingCellPolicy.CREATE_NULL_AS_BLANK;
                       ExcelSchedulePrinter printer = new ExcelSchedulePrinter(fileName, workbook);
-                      ICourseRepository courseRepository = CourseRepository.GetInstance();
+                    ICourseRepository courseRepository = CourseRepository.GetInstance();
+                    //ICourseRepository export_courses = (ICourseRepository)CoursesForCurrentTeacher;
 
-                      new ScheduleVisualization(courseRepository, null, printer).PrintSchedule();
-                  }
-              }
+                    new ScheduleVisualization(courseRepository, null, printer).PrintSchedule();
+                    //new ScheduleVisualization(export_courses, null, printer).PrintSchedule();
+                }
+            }
           }
 
           /*
@@ -297,7 +305,14 @@ namespace ClassroomAssignment.UI.Main
 
           private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
           {
-
+            //TabItem currTab = (TabItem)MainTab.SelectedItem;
+            //if (currTab != null)
+            //{
+            //    if (currTab.Name.Equals("Teacher View"))
+            //    {
+            //        Console.WriteLine("Teacehr View Tab Selected");
+            //    }
+            //}
           }
 
 		/* 
@@ -339,7 +354,7 @@ namespace ClassroomAssignment.UI.Main
           private void CourseSearch_TextChanged(object sender, TextChangedEventArgs e)
           {
 			FindItem(CoursesDataGrid);
-          }
+        }
             
           public void FindItem(DependencyObject obj)
           {
@@ -354,7 +369,14 @@ namespace ClassroomAssignment.UI.Main
                	}
           }
 
-          private void HighlightText(Object itx)
+          private void Expander_Expanded(object sender, RoutedEventArgs e)
+          {
+              var window = Window.GetWindow(this);
+              if (window == null) return;
+              window.SizeToContent = SizeToContent.Width;
+          }
+
+        private void HighlightText(Object itx)
           {
                	if (itx != null)
                	{
@@ -395,5 +417,152 @@ namespace ClassroomAssignment.UI.Main
                		}
                	}
            }
-      }
-  }
+
+        private void Teacher_Search_Click(object sender, RoutedEventArgs e)
+        {
+            string[] multi = {""};
+            string delim = "; ";
+            List<string> listOfTeachers;
+            listOfTeachers = new List<string>();
+            List<string> tempDuplicates;
+            tempDuplicates = new List<string>();
+            List<string> listOfDistinctTeachers;
+            listOfDistinctTeachers = new List<string>();
+            output = new List<string>();
+
+            ViewModel.CurrentTeacher = SuggestedTeacherlistBox.SelectedItems.ToString();
+
+            Regex rgx = new Regex(@"(\S*,.*?)\s*\(\d*\)");
+            Match match;
+            string NewInstructor;
+            NewInstructor = TeacherSearch.Text;
+            ObservableCollection<Course> Courses = new ObservableCollection<Course>(ViewModel.CourseRepo.Courses);
+
+            /*This for loop removes the (ID) at the end of each teacher's name, I only included it for testing on my branch*/
+            /*Comment it out or remove it when merging back into the master*/
+            foreach (var course in Courses)
+            {
+                NewInstructor = "";
+                match = rgx.Match(course.Instructor);
+                while (match.Success)
+                {
+                    NewInstructor += match.Groups[1].Value + "; ";
+                    match = match.NextMatch();
+                }
+                if (NewInstructor != "")
+                {
+                    course.Instructor = NewInstructor.Substring(0, NewInstructor.Length - 2);
+                }
+            }
+
+            /*Loop through the list of teachers and return the possible suggestions that match the input*/
+            foreach (var course3 in Courses)
+            {
+                if (course3.Instructor.Contains(';') == false)
+                {
+                    listOfTeachers.Add(course3.Instructor);
+                }
+            }
+
+            /*Collect all of the teachers names in the courses with multiple teachers*/
+            foreach (var course4 in Courses)
+            {
+                if (course4.Instructor.Contains(';') == true)
+                {
+                    multi = Regex.Split(course4.Instructor, delim);
+                    foreach (var d in multi)
+                    {
+                        tempDuplicates.Add(d);
+                    }
+                }
+            }
+
+            /*Sort and get all distinct teachers*/
+            tempDuplicates.Sort();
+            tempDuplicates = tempDuplicates.Distinct().ToList();
+
+            /*If the global list of unique teachers doesn't contain the teacher then add it to the list*/
+            /*This logic deals with the courses that have multiple teachers listed in the record*/
+            foreach (var u in tempDuplicates)
+            {
+                if (listOfTeachers.Contains(u) == false)
+                {
+                    listOfTeachers.Add(u);
+                }
+            }
+
+            listOfTeachers.Sort();
+            listOfDistinctTeachers = listOfTeachers.Distinct().ToList(); //The distinct list of teachers in CourseRepo
+
+            foreach (var v in listOfDistinctTeachers)
+            {
+                if (v.Contains(TeacherSearch.Text))
+                {
+                    output.Add(v);
+                }
+            }
+
+            if (TeacherSearch.Text.Equals("") == true)
+            {
+                output = new List<string>();
+                SuggestedTeacherlistBox.ItemsSource = output; // Dispay auto-suggested teacehrs
+            }
+            else
+            {
+                SuggestedTeacherlistBox.ItemsSource = output; // Dispay auto-suggested teacehrs
+            }
+        }
+
+        private void Teacher_ListBox_Selected(object sender, SelectionChangedEventArgs e)
+        {
+            ObservableCollection<Course> Courses = new ObservableCollection<Course>(ViewModel.CourseRepo.Courses);
+
+            try
+            {
+                /*This loop builds the list of courses that the user wanted to look up in the search bar (by teacher name)*/
+                foreach (var course2 in Courses)
+                {
+                    /*On initial loadup of the page, there is no search term so skip it*/
+                    if (TeacherSearch.Text == null)
+                    {
+                        continue;
+                    }
+                    /*If the instructer = Staff but the search term != Staff then skip it*/
+                    else if (course2.Instructor.Equals("Staff") && SuggestedTeacherlistBox.SelectedItems.Contains("Staff") == false)
+                    {
+                        continue;
+                    }
+                    /* If the instructor = Staff and the search term == Staff then add it to the list*/
+                    //else if (course2.Instructor.Equals("Staff") && SuggestedTeacherlistBox.SelectedItems.Contains("Staff") == true)
+                    //{
+                    //    CoursesForCurrentTeacher = new ObservableCollection<Course>(Courses.Where(x => x.CurrentTeacherInfo?.Equals(SuggestedTeacherlistBox.SelectedItem) == true));
+                    //}
+                    /*In this case, the Instructor name contains the search term so add it to the list*/
+                    else if (course2.Instructor.Equals(SuggestedTeacherlistBox.SelectedValue.ToString()) == true)
+                    {
+                        CoursesForCurrentTeacher = new ObservableCollection<Course>(Courses.Where(x => x.CurrentTeacherInfo?.Equals(SuggestedTeacherlistBox.SelectedItem) == true));
+                    }
+                    /*If the course has multiple teachers then use the clicked event to get the courses with that insructor*/
+                    else if (course2.Instructor.Contains(SuggestedTeacherlistBox.SelectedValue.ToString()))
+                    {
+                        CoursesForCurrentTeacher = new ObservableCollection<Course>(Courses.Where(x => x.CurrentTeacherInfo?.Equals(course2.Instructor) == true));
+                    }
+                }
+            }
+            catch (NullReferenceException nre)
+            {
+                /*If nothing has been selected and the user deletes their search query then create a blank lsit of classes to display underneath the suggested teachers box*/
+                CoursesForCurrentTeacher = new ObservableCollection<Course>();
+            }
+
+            TeacherlistBox.ItemsSource = CoursesForCurrentTeacher;
+            //ICollection<Course> teacherCourseList = (ICollection<Course>)CoursesForCurrentTeacher;
+            //CourseRepository.InitInstance(CoursesForCurrentTeacher);
+        }
+
+        private void RoomSchedule_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+    }
+}

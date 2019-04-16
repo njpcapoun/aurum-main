@@ -19,6 +19,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using ClassroomAssignment.Model.Repo;
+using System.Text.RegularExpressions;
 
 namespace ClassroomAssignment.UI.Main
 {
@@ -43,6 +44,15 @@ namespace ClassroomAssignment.UI.Main
 
         // Info tab
         private Room _currentRoom;
+        public string _currentTeacher;
+        public string CurrentTeacher
+        {
+            get => _currentTeacher;
+            set
+            {
+                _currentTeacher = value;
+            }
+        }
         public Room CurrentRoom
         {
             get => _currentRoom;
@@ -66,8 +76,9 @@ namespace ClassroomAssignment.UI.Main
 
         public IEnumerable<Room> AllRooms { get; set; }
         public ObservableCollection<Course> CoursesForCurrentRoom { get; private set; }
+        public ObservableCollection<Course> CoursesForCurrentTeacher { get; private set; }
 
-        private CourseRepository CourseRepo;
+        public CourseRepository CourseRepo;
         public RoomRepository RoomRepo;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -121,7 +132,6 @@ namespace ClassroomAssignment.UI.Main
                 RoomList.Add(enumerator.Current);
             }
         }
-
     }
     
 }
