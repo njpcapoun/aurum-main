@@ -33,7 +33,8 @@ namespace ClassroomAssignment.UI.Ambiguity
         public AmbiguityResolverPage()
         {
             InitializeComponent();
-            RoomOptions = new List<Room>() { RoomRepository.NoRoom };
+			Application.Current.MainWindow.WindowState = WindowState.Maximized;
+			RoomOptions = new List<Room>() { RoomRepository.NoRoom };
             RoomOptions.AddRange(RoomRepository.GetInstance().Rooms);
 
             var allCourses = CourseRepository.GetInstance().Courses;

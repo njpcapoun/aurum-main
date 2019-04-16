@@ -59,11 +59,11 @@ namespace ClassroomAssignment.UI.Main
         public MainPage()
         {
             InitializeComponent();
-            ViewModel = new MainWindowViewModel(this);
+			System.Windows.Application.Current.MainWindow.WindowState = WindowState.Maximized;
+			ViewModel = new MainWindowViewModel(this);
             roomRepo = ViewModel.RoomRepo;
             DataContext = ViewModel;
             this.Loaded += MainPage_Loaded;
-
         }
 
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
