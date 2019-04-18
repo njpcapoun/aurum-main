@@ -122,7 +122,8 @@ namespace ClassroomAssignment.UI.Reassignment
                     // If no available rooms are found find all the courses assigned
                     // to rooms that match the specifications and run the algorithm on them
                     List<Course> courses = courseGroup.Courses
-                    .Where(x => x.HasRoomAssignment && x.MeetingDays.Intersect(c.MeetingDays).Count(z => true) != 0 && x.StartTime.HasValue && (x.StartTime.Value <= c.EndTime || x.EndTime >= c.StartTime))
+                    .Where(x => x.HasRoomAssignment && x.MeetingDays.Intersect(c.MeetingDays).Count(z => true) != 0 && x.StartTime.HasValue && 
+                    ((x.StartTime.Value <= c.EndTime && x.StartTime.Value >= c.StartTime) || (x.EndTime >= c.StartTime && x.EndTime <= c.EndTime)))
                     .OrderBy(x => x.StartTime.Value)
                     .ToList();
 
@@ -139,16 +140,19 @@ namespace ClassroomAssignment.UI.Reassignment
                         newnode = recursiveReassign(newnode, courses[i]);
 
                         // The first node is just this nodes info which isn't what we want
-                        if (newnode.next != null)
+                        if (newnode != null)
                         {
-                            newnode = newnode.next;
-
-                            while (traverser.next != null)
+                            if (newnode.next != null)
                             {
-                                traverser = traverser.next;
-                            }
+                                newnode = newnode.next;
 
-                            traverser.next = newnode;
+                                while (traverser.next != null)
+                                {
+                                    traverser = traverser.next;
+                                }
+
+                                traverser.next = newnode;
+                            }
                         }
                     }
                 }
