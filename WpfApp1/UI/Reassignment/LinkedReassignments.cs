@@ -13,6 +13,7 @@ namespace ClassroomAssignment.UI.Reassignment
         public event PropertyChangedEventHandler PropertyChanged;
 
         public int steps { get; set; }
+        public string courseSections { get; set; }
         public string courseSteps { get; set; }
         public string roomSteps { get; set; }
 
