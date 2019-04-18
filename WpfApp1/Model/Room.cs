@@ -18,6 +18,7 @@ namespace ClassroomAssignment.Model
         public const string Conference = "Conference";
         public const string Itin = "ITIN";
         public const string Cyber = "CYBER";
+        public const string Distance = "Distance";
     }
 
     [Serializable]

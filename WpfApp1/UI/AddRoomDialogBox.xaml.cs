@@ -103,6 +103,7 @@ namespace ClassroomAssignment.UI
             RoomTypes.Add(RoomType.Conference);
             RoomTypes.Add(RoomType.Itin);
             RoomTypes.Add(RoomType.Cyber);
+            RoomTypes.Add(RoomType.Distance);
             var combo = sender as ComboBox;
             combo.ItemsSource = RoomTypes;
             combo.SelectedIndex = 0;
