@@ -61,9 +61,13 @@ namespace ClassroomAssignment.UI.Reassignment
 
             InitializeComponent();
             node = recursiveReassign(node, c);
-            LinkedReassignments traverser = node;
             viewModel = new ReassignmentViewModel(node);
             DataContext = viewModel;
+
+            if(viewModel.ReassignPath.Count() == 0)
+            {
+                PathDisplay.Text = "Couldn't reassign the course.\nPlease change the course time or manually reassign the room";
+            }
         }
 
         // Still working on this
