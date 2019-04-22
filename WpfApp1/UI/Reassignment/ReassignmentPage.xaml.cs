@@ -249,7 +249,7 @@ namespace ClassroomAssignment.UI.Reassignment
 
                     foreach(Course course in thecourse)
                     {
-                        infoDisplay += course.CourseName + " Section " + course.SectionNumber + "\n"  + course.MeetingPattern.ToString() + "\n"; 
+                        infoDisplay += course.CourseName + " Section " + course.SectionNumber + "\n"  + course.MeetingPattern.ToString() + "\n\n"; 
                     }
                 }
             }
