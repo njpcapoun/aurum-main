@@ -138,6 +138,7 @@
     <Compile Include="Model\Course.cs" />
     <Compile Include="Model\CourseQueryRules.cs" />
     <Compile Include="Model\Room.cs" />
+    <Compile Include="Operations\AssignmentConflictDetectorSchedule.cs" />
     <Compile Include="Operations\AvailableRoomSearch.cs" />
     <Compile Include="Operations\SaveBase.cs" />
     <Compile Include="Operations\Conflict.cs" />
@@ -147,6 +148,8 @@
     <Compile Include="Operations\ScheduleSlot.cs" />
     <Compile Include="Operations\SearchParametersWithType.cs" />
     <Compile Include="Operations\SearchParameters.cs" />
+    <Compile Include="Repo\TeacherScheduleRepository.cs" />
+    <Compile Include="Repo\ITeacherScheduleRepository.cs" />
     <Compile Include="UI\AddRoomDialogBox.xaml.cs">
       <DependentUpon>AddRoomDialogBox.xaml</DependentUpon>
     </Compile>
@@ -162,6 +165,11 @@
       <DependentUpon>ReassignmentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\SearchViewModel.cs" />
+    <Compile Include="Views\TeacherRoomSchedule\AvailableSlotLabel.cs" />
+    <Compile Include="Views\TeacherRoomSchedule\CourseLabel.cs" />
+    <Compile Include="Views\TeacherRoomSchedule\TeacherRoomScheduleControl.xaml.cs">
+      <DependentUpon>TeacherRoomScheduleControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RoomSearch\AvailableRoomSearchControl.xaml.cs">
       <DependentUpon>AvailableRoomSearchControl.xaml</DependentUpon>
     </Compile>
@@ -227,6 +235,10 @@
     <Page Include="UI\AddCourseDialogBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TeacherRoomSchedule\TeacherRoomScheduleControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\Reassignment\ReassignmentPage.xaml">
       <SubType>Designer</SubType>

@@ -150,6 +150,9 @@ namespace ClassroomAssignment.Visual
 
         private void PrintCourses(ISheet sheet, List<Course> courses)
         {
+            int otherStartRow = 5;
+            int otherEndRow = 9;
+            int otherColumn = 11;
             foreach (Course course in courses)
             {
                 foreach (DayOfWeek meetingDay in course.MeetingDays)
@@ -174,6 +177,26 @@ namespace ClassroomAssignment.Visual
                     CellRangeAddress cellRange = new CellRangeAddress(startRow , endRow, column, column);
                     var regionIndex = sheet.AddMergedRegion(cellRange);
                 }
+
+                if (course.MeetingPattern.Equals("Does Not Meet"))
+                {
+                    //Get cell
+                    var row = sheet.GetRow(otherStartRow);
+                    var cell = row.GetCell(otherColumn);
+
+                    // Style cell
+                    cell.CellStyle = Template.GetCellStyle(_workbook, course.SubjectCode);
+
+                    var cellValue = getCourseLabel(course);
+                    cell.SetCellValue(cellValue);
+                    sheet.AutoSizeColumn(otherColumn, true);
+
+                    CellRangeAddress cellRange = new CellRangeAddress(otherStartRow, otherEndRow, otherColumn, otherColumn);
+                    var regionIndex = sheet.AddMergedRegion(cellRange);
+                    
+                    otherStartRow += 6;
+                    otherEndRow += 6;
+                }
             }
 
         }
@@ -186,7 +209,9 @@ namespace ClassroomAssignment.Visual
                 + Environment.NewLine
                 + course.Instructor 
                 + Environment.NewLine 
-                + course.MeetingPattern;
+                + course.MeetingPattern
+                + Environment.NewLine
+                + course.RoomAssignment;
         }
 
         private int GetRowForTime(TimeSpan time)
@@ -203,7 +228,35 @@ namespace ClassroomAssignment.Visual
             }
         }
 
-        
+        public void PrintSchedule(ITeacherScheduleRepository teacherCourseSchedule, IRoomRepository roomRepo, string teacherName)
+        {
+            List<Course> courses = teacherCourseSchedule.Courses.ToList();
+
+            var coursesInRoom = from course in courses
+                                where (course.State == Course.CourseState.Assigned && course.MeetingDays != null) ||
+                                      (course.State != Course.CourseState.Assigned || course.MeetingDays == null) ||
+                                      (course.State != Course.CourseState.Assigned || course.MeetingDays != null)
+                                group course by new { name = course.Instructor, roomNameAssignment = course.RoomAssignment };
+
+            ISheet sheet = _workbook.CloneSheet(_workbook.GetSheetIndex(_scheduleTemplate));
+
+            foreach (var courseGroup in coursesInRoom)
+            {
+                Room room = courseGroup.Key.roomNameAssignment;
+                var sheetIndex = _workbook.GetSheetIndex(sheet);
+
+                _workbook.SetSheetName(sheetIndex, teacherName);
+                _workbook.SetSheetHidden(sheetIndex, SheetState.Visible);
+
+                PrintCourses(sheet, courseGroup.ToList());
+                printLegend(sheet);
+            }
+
+            _workbook.SortWorksheets();
+            _workbook.SetActiveSheet(0);
+
+            _workbook.WriteToFile(_outputFile);
+        }
     }
 
     

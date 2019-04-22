@@ -21,19 +21,19 @@ using static ClassroomAssignment.Model.Course;
 namespace ClassroomAssignment.Repo
 {
     [Serializable]
-    public class CourseRepository : ICourseRepository
+    public class TeacherScheduleRepository : ITeacherScheduleRepository
     {
         public IEnumerable<Course> Courses { get; }
 
-        private static CourseRepository _instance;
-        private AssignmentConflictDetector roomConflictDetector;
+        private static TeacherScheduleRepository _instanceOfSchedule;
+        private AssignmentConflictDetectorSchedule roomConflictDetector;
         
 
         public event EventHandler<ChangeInConflictsEventArgs> ChangeInConflicts;
 
-        public static CourseRepository GetInstance()
+        public static TeacherScheduleRepository GetInstance()
         {
-            return _instance;
+            return _instanceOfSchedule;
         }
 
         /// <summary>
@@ -45,11 +45,11 @@ namespace ClassroomAssignment.Repo
         {
             if (courses == null) throw new ArgumentNullException();
 
-            _instance = new CourseRepository(courses);
-            _instance.roomConflictDetector = new AssignmentConflictDetector(_instance);
+            _instanceOfSchedule = new TeacherScheduleRepository(courses);
+            _instanceOfSchedule.roomConflictDetector = new AssignmentConflictDetectorSchedule(_instanceOfSchedule);
         }
 
-        private CourseRepository(IEnumerable<Course> courses)
+        private TeacherScheduleRepository(IEnumerable<Course> courses)
         {
             Courses = courses;
             
@@ -104,7 +104,7 @@ namespace ClassroomAssignment.Repo
         /// <returns>AllConflicts</returns>
         public List<Conflict> GetConflicts()
         {
-            return new AssignmentConflictDetector(this).AllConflicts();
+            return new AssignmentConflictDetectorSchedule(this).AllConflicts();
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace ClassroomAssignment.Repo
         /// <returns> ConflictInvolvingCourses(course)</returns>
         public List<Conflict> GetConflictsInvolvingCourses(List<Course> courses)
         {
-            return new AssignmentConflictDetector(this).ConflictsInvolvingCourses(courses);
+            return new AssignmentConflictDetectorSchedule(this).ConflictsInvolvingCourses(courses);
         }
 
 
@@ -122,6 +122,5 @@ namespace ClassroomAssignment.Repo
         {
             public IEnumerable<Conflict> Conflicts { get; set; }
         }
-
     }
 }

@@ -12,18 +12,18 @@ namespace ClassroomAssignment.Operations
     /// <summary>
     /// THis file conflict detector. Check if there is room conflict at the time also day.
     /// </summary>
-    public class AssignmentConflictDetector
+    public class AssignmentConflictDetectorSchedule
     {
-        private ICourseRepository courseRepository;
+        //private ICourseRepository courseRepository;
+        private ITeacherScheduleRepository CourseSchedule;
         /// <summary>
         /// Initilize courseRepo to courseRepository.
         /// </summary>
         /// <param name="courseRepo"></param>
-        public AssignmentConflictDetector(ICourseRepository courseRepo)
+        public AssignmentConflictDetectorSchedule(ITeacherScheduleRepository courseSchedule)
         {
-            courseRepository = courseRepo;
+            CourseSchedule = courseSchedule;
         }
-
         /// <summary>
         /// This return all time conlict courses. 
         /// Check class assign time and see if any other course use same room at that time.
@@ -31,7 +31,7 @@ namespace ClassroomAssignment.Operations
         /// <returns>conflicts</returns>
         public List<Conflict> AllConflicts()
         {
-            var courseGroupByRoom = from course in courseRepository.Courses
+            var courseGroupByRoom = from course in CourseSchedule.Courses
                                     where course.NeedsRoom && course.HasRoomAssignment
                                     group course by course.RoomAssignment;
             //Create conflicts list 

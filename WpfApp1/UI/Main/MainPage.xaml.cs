@@ -656,8 +656,258 @@ namespace ClassroomAssignment.UI.Main
 		private void EnterSearch_Click(object sender, RoutedEventArgs e)
 		{
 			FindItem(CoursesDataGrid);
-			SetMatches();
+      SetMatches();
 		}
+            
+          public void FindItem(DependencyObject obj)
+          {
+               	for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+               	{
+               		System.Windows.Controls.DataGridCell dg = obj as System.Windows.Controls.DataGridCell;
+               		if (dg != null)
+               		{
+               			HighlightText(dg);
+               		}
+               		FindItem(VisualTreeHelper.GetChild(obj as DependencyObject, i));
+               	}
+          }
+
+          private void Expander_Expanded(object sender, RoutedEventArgs e)
+          {
+              var window = Window.GetWindow(this);
+              if (window == null) return;
+              window.SizeToContent = SizeToContent.Width;
+          }
+
+        private void HighlightText(Object itx)
+          {
+               	if (itx != null)
+               	{
+               		if (itx is TextBlock)
+               		{
+               			regex = new Regex("(" + CourseSearch.Text + ")", RegexOptions.IgnoreCase);
+               			TextBlock tb = itx as TextBlock;
+       					if (CourseSearch.Text.Length == 0)
+               			{
+               				string str = tb.Text;
+               				tb.Inlines.Clear();
+               				tb.Inlines.Add(str);
+               			    return;
+               			}
+               			string[] substr = regex.Split(tb.Text);
+               			tb.Inlines.Clear();
+               			foreach (var item in substr)
+               			{
+               				if (regex.Match(item).Success)
+               				{
+               					Run runx = new Run(item);
+               					runx.Background = Brushes.GreenYellow;
+               					tb.Inlines.Add(runx);
+               				}
+               				else
+               				{
+               					tb.Inlines.Add(item);
+               				}
+               			}
+               			return;
+               		}
+               		else
+               		{
+               			for (int i = 0; i < VisualTreeHelper.GetChildrenCount(itx as DependencyObject); i++)
+               			{
+               				HighlightText(VisualTreeHelper.GetChild(itx as DependencyObject, i));
+               			}
+               		}
+               	}
+           }
+
+        private void Teacher_Search_Click(object sender, RoutedEventArgs e)
+        {
+            string[] multi = {""};
+            string delim = "; ";
+            List<string> listOfTeachers;
+            listOfTeachers = new List<string>();
+            List<string> tempDuplicates;
+            tempDuplicates = new List<string>();
+            List<string> listOfDistinctTeachers;
+            listOfDistinctTeachers = new List<string>();
+            output = new List<string>();
+
+            ViewModel.CurrentTeacher = SuggestedTeacherlistBox.SelectedItems.ToString();
+
+            Regex rgx = new Regex(@"(\S*,.*?)\s*\(\d*\)");
+            Match match;
+            string NewInstructor;
+            NewInstructor = TeacherSearch.Text;
+            ObservableCollection<Course> Courses = new ObservableCollection<Course>(ViewModel.CourseRepo.Courses);
+
+            /*This for loop removes the (ID) at the end of each teacher's name, I only included it for testing on my branch*/
+            /*Comment it out or remove it when merging back into the master*/
+            foreach (var course in Courses)
+            {
+                NewInstructor = "";
+                match = rgx.Match(course.Instructor);
+                while (match.Success)
+                {
+                    NewInstructor += match.Groups[1].Value + "; ";
+                    match = match.NextMatch();
+                }
+                if (NewInstructor != "")
+                {
+                    course.Instructor = NewInstructor.Substring(0, NewInstructor.Length - 2);
+                }
+            }
+
+            /*Loop through the list of teachers and return the possible suggestions that match the input*/
+            foreach (var course3 in Courses)
+            {
+                if (course3.Instructor.Contains(';') == false)
+                {
+                    listOfTeachers.Add(course3.Instructor);
+                }
+            }
+
+            /*Collect all of the teachers names in the courses with multiple teachers*/
+            foreach (var course4 in Courses)
+            {
+                if (course4.Instructor.Contains(';') == true)
+                {
+                    multi = Regex.Split(course4.Instructor, delim);
+                    foreach (var d in multi)
+                    {
+                        tempDuplicates.Add(d);
+                    }
+                }
+            }
+
+            /*Sort and get all distinct teachers*/
+            tempDuplicates.Sort();
+            tempDuplicates = tempDuplicates.Distinct().ToList();
+
+            /*If the global list of unique teachers doesn't contain the teacher then add it to the list*/
+            /*This logic deals with the courses that have multiple teachers listed in the record*/
+            foreach (var u in tempDuplicates)
+            {
+                if (listOfTeachers.Contains(u) == false)
+                {
+                    listOfTeachers.Add(u);
+                }
+            }
+
+            listOfTeachers.Sort();
+            listOfDistinctTeachers = listOfTeachers.Distinct().ToList(); //The distinct list of teachers in CourseRepo
+
+            foreach (var v in listOfDistinctTeachers)
+            {
+                if (v.Contains(TeacherSearch.Text))
+                {
+                    output.Add(v);
+                }
+            }
+
+            if (TeacherSearch.Text.Equals("") == true)
+            {
+                output = new List<string>();
+                SuggestedTeacherlistBox.ItemsSource = output; // Dispay auto-suggested teacehrs
+            }
+            else
+            {
+                SuggestedTeacherlistBox.ItemsSource = output; // Dispay auto-suggested teacehrs
+            }
+        }
+
+        private void Teacher_ListBox_Selected(object sender, SelectionChangedEventArgs e)
+        {
+            ObservableCollection<Course> Courses = new ObservableCollection<Course>(ViewModel.CourseRepo.Courses);
+
+            try
+            {
+                /*This loop builds the list of courses that the user wanted to look up in the search bar (by teacher name)*/
+                foreach (var course2 in Courses)
+                {
+                    /*On initial loadup of the page, there is no search term so skip it*/
+                    if (TeacherSearch.Text == null)
+                    {
+                        continue;
+                    }
+                    /*If the instructer = Staff but the search term != Staff then skip it*/
+                    else if (course2.Instructor.Equals("Staff") && SuggestedTeacherlistBox.SelectedItems.Contains("Staff") == false)
+                    {
+                        continue;
+                    }
+                    /* If the instructor = Staff and the search term == Staff then add it to the list*/
+                    //else if (course2.Instructor.Equals("Staff") && SuggestedTeacherlistBox.SelectedItems.Contains("Staff") == true)
+                    //{
+                    //    CoursesForCurrentTeacher = new ObservableCollection<Course>(Courses.Where(x => x.CurrentTeacherInfo?.Equals(SuggestedTeacherlistBox.SelectedItem) == true));
+                    //}
+                    /*In this case, the Instructor name contains the search term so add it to the list*/
+                    else if (course2.Instructor.Equals(SuggestedTeacherlistBox.SelectedValue.ToString()) == true)
+                    {
+                        CoursesForCurrentTeacher = new ObservableCollection<Course>(Courses.Where(x => x.CurrentTeacherInfo?.Equals(SuggestedTeacherlistBox.SelectedItem) == true));
+                    }
+                    /*If the course has multiple teachers then use the clicked event to get the courses with that insructor*/
+                    else if (course2.Instructor.Contains(SuggestedTeacherlistBox.SelectedValue.ToString()))
+                    {
+                        CoursesForCurrentTeacher = new ObservableCollection<Course>(Courses.Where(x => x.CurrentTeacherInfo?.Equals(course2.Instructor) == true));
+                    }
+                }
+            }
+            catch (NullReferenceException nre)
+            {
+                /*If nothing has been selected and the user deletes their search query then create a blank lsit of classes to display underneath the suggested teachers box*/
+                CoursesForCurrentTeacher = new ObservableCollection<Course>();
+            }
+
+            TeacherlistBox.ItemsSource = CoursesForCurrentTeacher;
+            //ViewModel.CoursesForCurrentTeacher = CoursesForCurrentTeacher;
+
+            //ICollection<Course> teacherCourseList = (ICollection<Course>)CoursesForCurrentTeacher;
+            //CourseRepository.InitInstance(CoursesForCurrentTeacher);
+        }
+
+        private void RoomSchedule_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Teacher_Export_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.Conflicts.Count != 0)
+            {
+                string message = "Exporting to Excel while there are conflicts may result in incorrect output. Do you wish to continue with the export?";
+                string caption = "Export to Excel";
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                MessageBoxButton button = MessageBoxButton.YesNo;
+                MessageBoxResult result = System.Windows.MessageBox.Show(message, caption, button, icon);
+
+                if (result == MessageBoxResult.No) return;
+            }
+
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+            saveFileDialog.Filter = "Excel Worksheets|*.xls";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var fileName = saveFileDialog.FileName;
+                var templateFile = System.IO.Path.Combine(Environment.CurrentDirectory, "ClassroomGridTemplate.xls");
+                using (var fileStream = File.OpenRead(templateFile))
+                {
+                    IWorkbook workbook = new HSSFWorkbook(fileStream);
+                    workbook.RemoveSheetAt(workbook.GetSheetIndex("Sheet1"));
+
+                    workbook.MissingCellPolicy = MissingCellPolicy.CREATE_NULL_AS_BLANK;
+                    ExcelSchedulePrinter printer = new ExcelSchedulePrinter(fileName, workbook);
+                    ICourseRepository courseRepository = CourseRepository.GetInstance();
+                    //ITeacherScheduleRepository courseSchedule = TeacherScheduleRepository.GetInstance();
+                    TeacherScheduleRepository.InitInstance(CoursesForCurrentTeacher);
+                    ITeacherScheduleRepository courseSchedule = TeacherScheduleRepository.GetInstance();
+                    //ICourseRepository export_courses = (ICourseRepository)CoursesForCurrentTeacher;
+
+                    new ScheduleVisualization(courseRepository, null, printer, SuggestedTeacherlistBox.SelectedValue.ToString(), courseSchedule).PrintTeacherSchedule();
+                    //new ScheduleVisualization(export_courses, null, printer).PrintSchedule();
+                }
+            }
+        }
+    }
 
 		/// <summary>
 		/// Search for text entered in search box when enter key has been pressed.
