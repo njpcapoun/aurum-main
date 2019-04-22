@@ -35,7 +35,7 @@
 
         <TextBox Name="PathDisplay" IsReadOnly="True" HorizontalAlignment="Left" Height="174" TextWrapping="Wrap" VerticalAlignment="Top" Width="209" Grid.Column="2" Margin="118,23,0,0"/>
 
-            <Grid VerticalAlignment="Top"  Grid.Column="2">
+        <Grid VerticalAlignment="Top"  Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition />
@@ -43,12 +43,13 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-                
+
             <ScrollViewer x:Name="ScrollViewContainer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="800" HorizontalAlignment="Center" Margin= "350,0,-108,-115.2" Width="900">
-                    <rs:RoomScheduleControl RoomScheduled="{Binding CurrentRoom, Mode=OneWay}" CoursesForRoom="{Binding CoursesForCurrentRoom, Mode=OneWay}" Loaded="RoomScheduleControl_Loaded" />
-                </ScrollViewer>
-            </Grid>
-        
+                <rs:RoomScheduleControl RoomScheduled="{Binding CurrentRoom, Mode=OneWay}" CoursesForRoom="{Binding CoursesForCurrentRoom, Mode=OneWay}" Loaded="RoomScheduleControl_Loaded" />
+            </ScrollViewer>
+            <TextBox Name="RoomInfo" IsReadOnly="True" HorizontalAlignment="Left" Height="91" TextWrapping="Wrap" VerticalAlignment="Top" Width="207" Margin="115,359,0,0"/>
+        </Grid>
+
         <StackPanel HorizontalAlignment="Left" Height="376" VerticalAlignment="Top" Width="209" Grid.Column="2" Margin="118,0,0,0">
             <Button Content="Commit" ClickMode="Press" HorizontalAlignment="Center" Click="CommitReassign" VerticalAlignment="Top" Width="75" Margin="67,227,67.6,0"/>
         </StackPanel>

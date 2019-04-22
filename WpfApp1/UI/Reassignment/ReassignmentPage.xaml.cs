@@ -67,6 +67,7 @@ namespace ClassroomAssignment.UI.Reassignment
             if(viewModel.ReassignPath.Count() == 0)
             {
                 PathDisplay.Text = "Couldn't reassign the course.\nPlease change the course time or manually reassign the room";
+                RoomInfo.Text = "";
             }
         }
 
@@ -214,13 +215,16 @@ namespace ClassroomAssignment.UI.Reassignment
         private void ReassignPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string display = "";
-            string [] display1;
-            string [] display2;
+            string infoDisplay = "";
+            string [] display1; // Contains the course names
+            string [] display2; // Contains the room names
+            string [] display3;  // Contains the course sections
             LinkedReassignments node = ReassignPaths.SelectedItem as LinkedReassignments;
 
             // Splits the strings
             display1 = node.courseSteps.Split(',');
             display2 = node.roomSteps.Split(',');
+            display3 = node.courseSections.Split(',');
 
             for(int i = 0; i < display2.Length; i++)
             {
@@ -238,10 +242,20 @@ namespace ClassroomAssignment.UI.Reassignment
                 else
                 {
                     display += display1[i] + " was assigned to " + display2[i] + "\n";
+
+                    var thecourse = from course in CourseRepo.Courses
+                                    where course.CourseName == display1[i] && course.SectionNumber == display3[i]
+                                    select course;
+
+                    foreach(Course course in thecourse)
+                    {
+                        infoDisplay += course.CourseName + " Section " + course.SectionNumber + "\n"  + course.MeetingPattern.ToString() + "\n"; 
+                    }
                 }
             }
 
             PathDisplay.Text = display;
+            RoomInfo.Text = infoDisplay;
         }
 
         private void RoomScheduleControl_Loaded(object sender, RoutedEventArgs e)
