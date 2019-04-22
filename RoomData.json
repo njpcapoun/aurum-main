@@ -1,0 +1,135 @@
+[
+    {
+	  "Index": 0,
+      "RoomName": "PKI 153",
+      "Capacity": 40,
+      "Details": "2 projectors, 2 whiteboards",
+	  "RoomType": "Lecture"
+    },
+    {
+	  "Index": 1,
+      "RoomName": "PKI 155",
+      "Capacity": 45,
+      "Details": "",
+	  "RoomType": "Lecture"
+    },
+    {
+	  "Index": 2,
+      "RoomName": "PKI 157",
+      "Capacity": 24,
+      "Details": "",
+	  "RoomType": "Lecture"
+    },
+    {
+	  "Index": 3,
+      "RoomName": "PKI 160",
+      "Capacity": 44,
+      "Details": "",
+	  "RoomType": "Lecture"
+    },
+    {
+	  "Index": 4,
+      "RoomName": "PKI 161",
+      "Capacity": 30,
+      "Details": "",
+	  "RoomType": "Lecture"
+    },
+    {
+	  "Index": 5,
+      "RoomName": "PKI 164",
+      "Capacity": 56,
+      "Details": "",
+	  "RoomType": "Lecture"
+    },
+    {
+	  "Index": 6,
+      "RoomName": "PKI 252",
+      "Capacity": 58,
+      "Details": "",
+	  "RoomType": "Lecture"
+    },
+    {
+	  "Index": 7,
+      "RoomName": "PKI 256",
+      "Capacity": 40,
+      "Details": "",
+	  "RoomType": "Lecture"
+    },
+    {
+	  "Index": 8,
+      "RoomName": "PKI 259",
+      "Capacity": 20,
+      "Details": "",
+	  "RoomType": "Conference"
+    },
+    {
+	  "Index": 9,
+      "RoomName": "PKI 260",
+      "Capacity": 40,
+      "Details": "",
+	  "RoomType": "Lab"
+    },
+    {
+	  "Index": 10,
+      "RoomName": "PKI 261",
+      "Capacity": 24,
+      "Details": "",
+	  "RoomType": "Lecture"
+    },
+    {
+	  "Index": 11,
+      "RoomName": "PKI 263",
+      "Capacity": 48,
+      "Details": "",
+	  "RoomType": "Lab"
+    },
+    {
+	  "Index": 12,
+      "RoomName": "PKI 269",
+      "Capacity": 30,
+      "Details": "",
+	  "RoomType": "ITIN"
+    },
+    {
+	  "Index": 13,
+      "RoomName": "PKI 270",
+      "Capacity": 16,
+      "Details": "",
+	  "RoomType": "Lab"
+    },
+    {
+	  "Index": 14,
+      "RoomName": "PKI 274",
+      "Capacity": 30,
+      "Details": "",
+	  "RoomType": "Lab"
+    },
+    {
+	  "Index": 15,
+      "RoomName": "PKI 276",
+      "Capacity": 35,
+      "Details": "",
+	  "RoomType": "Lab"
+    },
+    {
+	  "Index": 16,
+      "RoomName": "PKI 278",
+      "Capacity": 35,
+      "Details": "",
+	  "RoomType": "Lab"
+    },
+    {
+	  "Index": 17,
+      "RoomName": "PKI 279",
+      "Capacity": 30,
+      "Details": "",
+	  "RoomType": "Lab"
+    },
+    {
+	  "Index": 18,
+      "RoomName": "PKI 361",
+      "Capacity": 35,
+      "Details": "",
+	  "RoomType": "CYBER"
+    }
+]
