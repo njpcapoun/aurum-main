@@ -56,19 +56,23 @@
             </Menu>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,30">
             <Menu Padding="5">
                 <MenuItem Header="_File">
                     <MenuItem Header="Export Room Schedules" Click="Export_Click"/>
                     <MenuItem Header="Changes" Click="Menu_Changes" />
                     <MenuItem Header="_Save" Click="Menu_Save"/>
                     <MenuItem Header="Save As" Click="SaveAs"/>
+                    <MenuItem Header="Automatic Crosslisting" Click="AutomaticCrosslisting"/>
                 </MenuItem>
             </Menu>
-
         </StackPanel>
 
+        <StackPanel Grid.Row="0">
+            <Label Content="Classroom Assignment" FontSize="32" Margin="50,0,0,0"/>
+        </StackPanel>
         <Border Grid.Row="1" Grid.RowSpan="2">
+
             <TabControl RenderTransformOrigin="0.512,0.515" Name="MainTab" SelectionChanged="TabControl_SelectionChanged">
                 <TabItem x:Name="AssignTabItem" Header="Assign">
                     <Grid>
@@ -81,6 +85,7 @@
                                 <ContextMenu x:Name="CoursesContextMenu" Opened="CoursesContextMenu_Opened">
                                     <MenuItem x:Name="AssignMenuItem" Header="Assign" Click="AssignMenuItem_Click" />
                                     <MenuItem x:Name="CoursesMenuItem" Header="Edit" Click="CoursesMenuItem_Click" />
+                                    <MenuItem x:Name="ReassignMenuItem" Header="Reassign" Click="ReassignMenuItem_Click"/>
                                     <MenuItem x:Name="NoAssignmentNeededMenuItem" Header="No Assignment Needed" Click="NoAssignmentNeededMenuItem_Click"/>
                                     <MenuItem x:Name="CrossListMenuItem" Header="CrossList" Click="CrossListMenuItem_Click"/>
                                     <MenuItem x:Name="AssignmentNeeded" Header="Assignment Needed" Click="AssignmentNeeded_Click"/>
@@ -141,10 +146,10 @@
                                 -->
                                 <DataGridTextColumn Header="Course Name" Binding="{Binding CourseName}" IsReadOnly="True" Width="Auto"/>
                                 <DataGridTextColumn Header="Section" Binding="{Binding SectionNumber}" IsReadOnly="True" Width="Auto"/>
+                                <DataGridTextColumn Header="Instructor" Binding="{Binding Instructor}" IsReadOnly="True" Width="Auto" />
                                 <DataGridTextColumn Header="Instruction Method" Binding="{Binding InstructionMethod}" IsReadOnly="True" Width="Auto" />
                                 <DataGridTextColumn Header="Meeting Pattern" Binding="{Binding MeetingPattern}" IsReadOnly="True" Width="Auto" />
                                 <DataGridTextColumn Header="Room" Binding="{Binding Room}" IsReadOnly="True" Width="Auto"/>
-                                <DataGridTextColumn Header="Campus" Binding="{Binding Campus}" IsReadOnly="True" Width="Auto" />
                                 <DataGridTextColumn Header="Room Assignment" Binding="{Binding RoomAssignment}" IsReadOnly="True" Width="Auto"/>
                                 <DataGridTextColumn Header="CrossListings" Binding="{Binding CrossListings}" IsReadOnly="True" Width="Auto"/>
                                 <DataGridTemplateColumn Header="Linked CrossListed Courses">
@@ -208,7 +213,7 @@
 
                         <StackPanel x:Name="ScheduleHeader" Orientation="Horizontal" Grid.Row="0" Margin="0,30,0,0" Grid.Column="0" HorizontalAlignment="Center">
                             <Label Content="Room: "/>
-                            <ComboBox ItemsSource="{Binding AllRooms, Mode=OneTime}" SelectedItem="{Binding CurrentRoom, Mode=TwoWay}"  MinWidth="40"/>
+                            <ComboBox ItemsSource="{Binding AllRooms, Mode=OneWay}" SelectedItem="{Binding CurrentRoom, Mode=TwoWay}"  MinWidth="40" IsSynchronizedWithCurrentItem="True"/>
                         </StackPanel>
                         <ScrollViewer x:Name="ScrollViewContainer" Grid.Row="1" HorizontalScrollBarVisibility="Auto" Grid.Column="0" Height="500" HorizontalAlignment="Center">
                             <rs:RoomScheduleControl RoomScheduled="{Binding CurrentRoom, Mode=OneWay}" CoursesForRoom="{Binding CoursesForCurrentRoom, Mode=OneWay}" />
@@ -291,27 +296,30 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <!--ListBox Name="listBox" ItemsSource="{Binding AllRooms}" SelectionChanged="ListBox_Selected" SelectedItem="{Binding EditableRoom , Mode=TwoWay}"
-                                 SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"/-->
-                        <!--ItemsSource="{Binding Source= {StaticResource RoomList}}"-->
-                        <ListBox Name="listBox" ItemsSource="{Binding AllRooms}" IsSynchronizedWithCurrentItem="True"  SelectedItem="ListBox_Selected"
-                                 SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"/>
-
+                        <ListBox Name="listBox" ItemsSource="{Binding AllRooms}" IsSynchronizedWithCurrentItem="True"  SelectedItem="{Binding Path=EditableRoom, Mode=TwoWay}"
+                                 SelectionMode="Single" HorizontalAlignment="Left" Height="325" Margin="10,10,0,0" VerticalAlignment="Top" Width="105" Grid.RowSpan="3"
+                                 SelectionChanged="ListBox_SelectionChanged"/>
+    
                         <WrapPanel Height="354" Margin="125,10,0,0" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="660" Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Room #: " HorizontalAlignment="Left" Width="70"/>
-                                <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName}"/>
+                                <Label Content="Room #: " HorizontalAlignment="Left" Width="75"/>
+                                <Label Name="numberText" Content="{Binding Path=EditableRoom.RoomName, Mode=TwoWay}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Capacity: " Width="70"/>
-                                <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
+                                <Label Content="Capacity: " Width="75"/>
+                                <TextBox Name="capacityText" Text="{Binding Path=EditableRoom.Capacity, Mode=TwoWay}" Height="24" HorizontalAlignment="Left" Width="70" TextAlignment="Left"/>
+                                <Label Name="capacityError" Content="The capacity must be an integer" Visibility="Hidden" Foreground="Red"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content= "Details: " Width="70"/>
-                                <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Detail}" Height="96" Width="256" TextAlignment="Left" />
+                                <Label Content="Room Type:" Width="75 "/>
+                                <ComboBox Name="RoomTypeBox" SelectedItem="{Binding Path=EditableRoom.RoomType, Mode=TwoWay}" ItemsSource="{Binding RoomTypes}" Width="100" Height="24"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Save Changes" IsEnabled="False"/>
+                                <Label Content= "Details: " Width="75"/>
+                                    <TextBox Name="detailsText" Text="{Binding Path=EditableRoom.Details, Mode=TwoWay}" Height="96" Width="256" TextAlignment="Left" VerticalContentAlignment="Top" TextWrapping="WrapWithOverflow"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Save Changes" Name="saveChanges" Margin="5,10,0,0" Click="SaveChanges_Click" />
                             </StackPanel>
                         </WrapPanel>
                         <Button Name="newButton" Content="New" Click="NewButton_Click" Height="24" Width="50" HorizontalAlignment="Left" Margin="10,0,0,10" Grid.Row="2" VerticalAlignment="Bottom"/>
@@ -342,9 +350,12 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel  x:Name="SearchHeader" Orientation="Horizontal"  Grid.Row="0" Margin="0,10,100,0" Grid.Column="0" HorizontalAlignment="Right">
-            <Label Content="Search: "/>
-            <TextBox Name="CourseSearch" HorizontalAlignment="Left" Height="23" Margin="0,0,50,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" MaxLength="50" TextChanged="CourseSearch_TextChanged"/>
+        <StackPanel  x:Name="SearchHeader" Orientation="Horizontal"  Grid.Row="0" Margin="0,10,10,0" Grid.Column="0" HorizontalAlignment="Right">
+            <TextBox Name="CourseSearch" HorizontalAlignment="Left" Height="23" Margin="0,0,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" MaxLength="50" KeyDown="CourseSearch_KeyDown"/>
+            <Button Name="EnterSearch" VerticalAlignment="Top" HorizontalAlignment="Left" Content="Search" Width="60" Height="23" Click="EnterSearch_Click"/>
+        </StackPanel>
+        <StackPanel Grid.Row="0" HorizontalAlignment="Right">
+            <Label Name="Matches" Content="Number of Matches:" Margin="0,30,155,0" Visibility="Hidden" HorizontalAlignment="Left"/>
         </StackPanel>
     </Grid>
 

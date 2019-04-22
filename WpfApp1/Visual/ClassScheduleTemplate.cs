@@ -23,7 +23,7 @@ namespace ClassroomAssignment.Model
         {
             AvailableColors = new List<short>()
             {
-                IndexedColors.LightTurquoise.Index,
+                IndexedColors.Coral.Index,
                 IndexedColors.LightGreen.Index,
                 IndexedColors.LightBlue.Index,
                 IndexedColors.LightOrange.Index,

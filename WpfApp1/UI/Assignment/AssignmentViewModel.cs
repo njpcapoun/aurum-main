@@ -127,13 +127,17 @@ namespace ClassroomAssignment.UI.Assignment
         /// </summary>
         public void UpdateAvailableSlotsForCurrentRoom()
         {
-            var searchParameters = CurrentCourse.GetSearchParameters();
-
-            List<ScheduleSlot> slots = RoomSearch.ScheduleSlotsAvailable(searchParameters);
-            AvailableSlots.Clear();
-            foreach (var slot in slots.FindAll(x => x.RoomAvailable == CurrentRoom))
+            bool success = int.TryParse(CurrentCourse.RoomCapRequest, out int i);
+            if (success)
             {
-                AvailableSlots.Add(slot);
+                var searchParameters = CurrentCourse.GetSearchParameters();
+
+                List<ScheduleSlot> slots = RoomSearch.ScheduleSlotsAvailable(searchParameters);
+                AvailableSlots.Clear();
+                foreach (var slot in slots.FindAll(x => x.RoomAvailable == CurrentRoom))
+                {
+                    AvailableSlots.Add(slot);
+                }
             }
         }
 

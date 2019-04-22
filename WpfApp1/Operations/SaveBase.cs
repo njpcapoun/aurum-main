@@ -27,14 +27,58 @@ namespace ClassroomAssignment.Operations
         // Save as code. Always brings up the dialog box then saves the chosen file as where the autosave should go
         public void SaveAs()
         {
-            SaveFileDialog saveFileDialog2 = new SaveFileDialog();
-            saveFileDialog2.Filter = "Assignment File | *.agn";
-
-            if (saveFileDialog2.ShowDialog() == DialogResult.OK)
+            if (GetUpToDateCourses() != null)
             {
-                var fileName = saveFileDialog2.FileName;
-                Properties.Settings.Default["SavePath"] = fileName;
-                Properties.Settings.Default.Save();
+                SaveFileDialog saveFileDialog2 = new SaveFileDialog();
+                saveFileDialog2.Filter = "Assignment File | *.agn";
+
+                if (saveFileDialog2.ShowDialog() == DialogResult.OK)
+                {
+                    var fileName = saveFileDialog2.FileName;
+                    Properties.Settings.Default["SavePath"] = fileName;
+                    Properties.Settings.Default.Save();
+
+                    try
+                    {
+                        List<Course> originalCourses = GetOriginalCourses();
+                        AppState appState = new AppState(originalCourses, GetUpToDateCourses());
+
+                        IFormatter formatter = new BinaryFormatter();
+                        Stream stream = File.Open(fileName, FileMode.Create, FileAccess.Write);
+
+                        formatter.Serialize(stream, appState);
+                        stream.Close();
+                    }
+                    catch (SerializationException a)
+                    {
+                        Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
+                    }
+                }
+
+            }
+
+        }
+
+
+        // Same as save as, but checks if theres a path to autosave to
+        public void SaveWork()
+        {
+            if (GetUpToDateCourses() != null) {
+                SaveFileDialog saveFileDialog2 = new SaveFileDialog();
+                saveFileDialog2.Filter = "Assignment File | *.agn";
+                var fileName = "";
+
+                if (Properties.Settings.Default["SavePath"] != null || (string)Properties.Settings.Default["SavePath"] != "default")
+                {
+                    fileName = (string)Properties.Settings.Default["SavePath"];
+                }
+                else if (saveFileDialog2.ShowDialog() == DialogResult.OK)
+                {
+                    fileName = saveFileDialog2.FileName;
+                    Properties.Settings.Default["SavePath"] = fileName;
+                    Properties.Settings.Default.Save();
+                }
+
 
                 try
                 {
@@ -45,62 +89,40 @@ namespace ClassroomAssignment.Operations
                     Stream stream = File.Open(fileName, FileMode.Create, FileAccess.Write);
 
                     formatter.Serialize(stream, appState);
-                    stream.Close();   
+                    stream.Close();
+
                 }
                 catch (SerializationException a)
                 {
                     Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
                 }
             }
-
-        }
-
-
-        // Same as save as, but checks if theres a path to autosave to
-        public void SaveWork()
-        {
-            SaveFileDialog saveFileDialog2 = new SaveFileDialog();
-            saveFileDialog2.Filter = "Assignment File | *.agn";
-            var fileName = "";
-
-            if (Properties.Settings.Default["SavePath"] != null || (string)Properties.Settings.Default["SavePath"] != "default")
-            {
-                fileName = (string)Properties.Settings.Default["SavePath"];
-            }
-            else if (saveFileDialog2.ShowDialog() == DialogResult.OK)
-            {
-                fileName = saveFileDialog2.FileName;
-                Properties.Settings.Default["SavePath"] = fileName;
-                Properties.Settings.Default.Save();
-            }
-
-
-            try
-            {
-                List<Course> originalCourses = GetOriginalCourses();
-                AppState appState = new AppState(originalCourses, GetUpToDateCourses());
-
-                IFormatter formatter = new BinaryFormatter();
-                Stream stream = File.Open(fileName, FileMode.Create, FileAccess.Write);
-
-                formatter.Serialize(stream, appState);
-                stream.Close();
-
-            }
-            catch (SerializationException a)
-            {
-                Console.WriteLine("Failed to deserialize. Reason: " + a.Message);
-            }
         }
 
         private List<Course> GetOriginalCourses()
         {
-            return System.Windows.Application.Current.Resources["originalCourses"] as List<Course>;
+            try
+            {
+                return System.Windows.Application.Current.Resources["originalCourses"] as List<Course>;
+            }
+
+            catch(Exception e)
+            {
+                return null;
+            }
         }
 
         private List<Course> GetUpToDateCourses()
         {
-            return CourseRepository.GetInstance().Courses.OrderBy(x => int.Parse(x.ClassID)).ToList();
+            try
+            {
+                return CourseRepository.GetInstance().Courses.OrderBy(x => int.Parse(x.ClassID)).ToList();
+            }
+
+            catch(Exception e)
+            {
+                return null;
+            }
         }
 
     }

@@ -92,7 +92,7 @@ namespace ClassroomAssignment.Visual
                 Room room = courseGroup.Key;
                 ISheet sheet = _workbook.CloneSheet(_workbook.GetSheetIndex(_scheduleTemplate));
                 var sheetIndex = _workbook.GetSheetIndex(sheet);
-                _workbook.SetSheetName(sheetIndex, room.RoomName);
+                _workbook.SetSheetName(sheetIndex, room.RoomName + " " +room.RoomType);
                 _workbook.SetSheetHidden(sheetIndex, SheetState.Visible);
 
                 ICell cell = sheet.GetRow(RoomNameLocation.Item1).GetCell(RoomNameLocation.Item2);

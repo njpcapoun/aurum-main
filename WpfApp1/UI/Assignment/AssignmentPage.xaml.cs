@@ -58,7 +58,6 @@ namespace ClassroomAssignment.UI.Assignment
         void OnClickSave(object sender, RoutedEventArgs e)
         {
             saveWork.SaveWork();
-            System.Windows.Forms.MessageBox.Show("Saved!");
         }
 
     }

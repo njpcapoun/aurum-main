@@ -96,14 +96,16 @@ namespace ClassroomAssignment.Model.Repo
 
         // Used to add a new room, triggered from "Add Room" button on "Edit Rooms" screen
         // returns false to prompt an error for repeat room name, true for unique
-        public bool AddNewRoom(string roomName, int capacity, string details)
+        public bool AddNewRoom(int index, string roomName, int capacity, string details, string roomType)
         {
             bool isNewRoom = true;
-        
+
             Room newRoom = new Room() {
+                Index = index,
                 RoomName = roomName,
                 Capacity = capacity,
-                Details = details
+                Details = details,
+                RoomType = roomType
             };
 
             foreach (Room checkRoom in Rooms) {
@@ -114,12 +116,18 @@ namespace ClassroomAssignment.Model.Repo
             }
             if(isNewRoom)
             {  // Only add if a unique room name
-                Rooms.Add(new Room() { RoomName = roomName, Capacity = capacity, Details = details });
-                // TODO: sort the rooms by number, will be good for formatting in the dropdowns
+                int newIndex = Rooms.Last().Index + 1;
+                Rooms.Add(new Room() { Index = newIndex, RoomName = roomName, Capacity = capacity, Details = details , RoomType = roomType});
                 Rooms.Sort(delegate (Room x, Room y)
                 {
                     return x.RoomName.CompareTo(y.RoomName);
                 });
+                int z = 0;
+                foreach ( Room room in Rooms)
+                {
+                    room.Index = z;
+                    z++;
+                }
                 return true;
             }
             else
@@ -129,10 +137,9 @@ namespace ClassroomAssignment.Model.Repo
         }
         // Used to remove a room from the "Edit Rooms" screen
         // Returns a bool for a notification on UI
-        // Will need to implement some form of ensuring all courses are unassigned from room
-        public bool RemoveRoom(string roomName, int capacity, string details)
+        public bool RemoveRoom(Room room)
         {
-            return Rooms.Remove(new Room() { RoomName = roomName, Capacity = capacity, Details = details });
+            return Rooms.Remove(room);
         }
 
         public void SaveData()

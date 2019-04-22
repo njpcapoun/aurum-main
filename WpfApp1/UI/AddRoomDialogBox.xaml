@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:ClassroomAssignment.Views"
         mc:Ignorable="d"
-        Title="AddRoomDialogBox" Height="350" Width="400">
+        Title="AddRoomDialogBox" Height="350" Width="420">
     
     <Window.Resources>
         <Style x:Key="LabelStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
@@ -45,19 +45,24 @@
 
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
                     <Label Content="Room Name"  Style="{StaticResource LabelStyle}" />
-                    <TextBox Text="{Binding RoomName, Mode=TwoWay}" Style="{StaticResource ValueStyle}" Width="80" TextAlignment="Left"/>
+                    <TextBox Name="enterRoomName" Text="{Binding RoomName, Mode=TwoWay}" Style="{StaticResource ValueStyle}" Width="80" TextAlignment="Left"/>
                     <Label Name="nameError" Content="Room Name is Required" Visibility="Hidden" Foreground="Red"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
                     <Label Content="Capacity" Style="{StaticResource LabelStyle}"/>
-                    <TextBox Text="{Binding Capacity, Mode=TwoWay}"  Style="{StaticResource ValueStyle}" TextAlignment="Left"/>
+                    <TextBox Name="enterCapacity" Text="{Binding Capacity, Mode=TwoWay}" Style="{StaticResource ValueStyle}" TextAlignment="Left"/>
                     <Label Name="capacityError" Content="Room Capacity is Required" Visibility="Hidden" Foreground="Red"/>
                 </StackPanel>
-
+                
+                <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
+                    <Label Content="Room Type" Style="{StaticResource LabelStyle}"/>
+                    <ComboBox Name="enterType" Width="100" Height="24" Loaded="EnterType_Loaded" SelectionChanged="EnterType_SelectionChanged"/>
+                </StackPanel>
+                    
                 <StackPanel Orientation="Horizontal" Style="{StaticResource PairStyle}">
                     <Label Content="Details" Style="{StaticResource LabelStyle}"/>
-                    <TextBox Text="{Binding Details, Mode=TwoWay}"  Style="{StaticResource ValueStyle}" Width="280" Height="100" TextAlignment="Left"/>
+                    <TextBox Name ="enterDetails" Text="{Binding Details, Mode=TwoWay}"  Style="{StaticResource ValueStyle}" Width="280" Height="100" TextAlignment="Left" VerticalContentAlignment="Top"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="10,0,0,0" Style="{StaticResource PairStyle}">
                     <Button Name="submit" Content="Add Room" Width="75" Click="Submit_Click"/>

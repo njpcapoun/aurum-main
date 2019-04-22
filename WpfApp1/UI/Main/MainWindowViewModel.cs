@@ -74,7 +74,7 @@ namespace ClassroomAssignment.UI.Main
         }
         public ObservableCollection<Room> RoomList { get; set; }
 
-        public IEnumerable<Room> AllRooms { get; set; }
+        public BindingList<Room> AllRooms { get; set; }
         public ObservableCollection<Course> CoursesForCurrentRoom { get; private set; }
         public ObservableCollection<Course> CoursesForCurrentTeacher { get; set; }
 
@@ -84,6 +84,8 @@ namespace ClassroomAssignment.UI.Main
         public event PropertyChangedEventHandler PropertyChanged;
 
         private MainPage Page;
+
+        public List<String> RoomTypes { get; set; }
 
         /// <summary>
         /// initializes main window
@@ -103,7 +105,15 @@ namespace ClassroomAssignment.UI.Main
 
             CourseRepo.ChangeInConflicts += CourseRepo_ChangeInConflicts;
 
-            AllRooms = RoomRepo.Rooms;
+            RoomTypes = new List<string>();
+            RoomTypes.Add(RoomType.Lab);
+            RoomTypes.Add(RoomType.Lecture);
+            RoomTypes.Add(RoomType.Conference);
+            RoomTypes.Add(RoomType.Itin);
+            RoomTypes.Add(RoomType.Cyber);
+            RoomTypes.Add(RoomType.Distance);
+
+            AllRooms = convertToBindingList(RoomRepo.Rooms);
             CurrentRoom = AllRooms.FirstOrDefault();
             EditableRoom = AllRooms.FirstOrDefault();
         }
@@ -115,7 +125,7 @@ namespace ClassroomAssignment.UI.Main
             {
                 Conflicts.Add(conflict);
             }
-            
+           
         }
 
         private void SetCoursesForCurrentRoom()
@@ -131,6 +141,25 @@ namespace ClassroomAssignment.UI.Main
             {
                 RoomList.Add(enumerator.Current);
             }
+            Page.saveChanges.IsEnabled = true;
+        }
+
+        private BindingList<Room> convertToBindingList(List<Room> rooms)
+        {
+            BindingList<Room> bindRooms = new BindingList<Room>();
+            foreach (Room r in rooms)
+            {
+                bindRooms.Add(r);
+            }
+            return bindRooms;
+        }
+
+        public void UpdateRoomList()
+        {
+            AllRooms = convertToBindingList(RoomRepo.Rooms);
+            CurrentRoom = AllRooms.FirstOrDefault();
+            EditableRoom = AllRooms.FirstOrDefault();
+            RoomRepo.SaveData();
         }
     }
     

@@ -92,12 +92,27 @@ namespace ClassroomAssignment.Model
         {
             // make sure not at header or end of file
             List<Course> courseList = new List<Course>();
+			Regex rgx = new Regex(@"(\S*,.*?)\s*\(\d*\)");
+			Match match;
+			string NewInstructor;
 
-            while ((fileHasMoreRecords = reader.Read()) && courseHasMoreRecords(reader))
+			while ((fileHasMoreRecords = reader.Read()) && courseHasMoreRecords(reader))
             {
                 Course course = reader.GetRecord<Course>();
                 course.SetAllDerivedProperties();
-                courseList.Add(course); //add course to course list.
+				NewInstructor = "";
+				match = rgx.Match(course.Instructor);
+				while (match.Success)
+				{
+					NewInstructor += match.Groups[1].Value + "; ";
+					match = match.NextMatch();
+				}
+				if (NewInstructor != "")
+				{
+					course.Instructor = NewInstructor.Substring(0, NewInstructor.Length - 2);
+				}
+
+				courseList.Add(course); //add course to course list.
             }
 
             return courseList;
