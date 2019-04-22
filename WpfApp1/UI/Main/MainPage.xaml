@@ -6,10 +6,13 @@
       xmlns:local="clr-namespace:ClassroomAssignment.UI.Main"
       xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
       xmlns:rs="clr-namespace:ClassroomAssignment.Views.RoomSchedule"
+      xmlns:trs="clr-namespace:ClassroomAssignment.Views.TeacherRoomSchedule"
       xmlns:model="clr-namespace:ClassroomAssignment.Model"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       xmlns:scheduleView="clr-namespace:ClassroomAssignment.Views.RoomSchedule"
+      xmlns:TeacherScheduleView="clr-namespace:ClassroomAssignment.Views.TeacherRoomSchedule"
+
       xmlns:views ="clr-namespace:ClassroomAssignment.Views"
       Title="MainPage"
       KeepAlive="True"
@@ -257,16 +260,20 @@
                                             </ListView>
                                         </StackPanel>
                                     </Grid>
-                                    <Button Name="ExportViewButton" Content="Export Teacher View" Click="Export_Click" Height="24" Width="auto" HorizontalAlignment="Center" Margin="10,10,10,10" Grid.Row="4" VerticalAlignment="Bottom"/>
+                                    <Button Name="ExportViewButton" Content="Export Teacher View" Click="Teacher_Export_Click" Height="24" Width="auto" HorizontalAlignment="Center" Margin="10,10,10,10" Grid.Row="4" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                             </Grid>
                         </ScrollViewer>
                         <Expander IsExpanded="True" ExpandDirection="Right" Grid.Column="2" Expanded="Expander_Expanded" Grid.ColumnSpan="3">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                                <scheduleView:TeacherRoomScheduleControl x:Name="TeacherRoomSchedule"/>
-                                <!--RoomScheduledProperty_t="{Binding CurrentRoom, Mode=OneWay}"
-                                CoursesForTeacher="{Binding CoursesForCurrentTeacher, Mode=OneWay}"
-                                AvailableSlotsT="{Binding AvailableSlots, Mode=OneWay}" MinWidth="800" Loaded="RoomSchedule_Loaded"-->
+                                <!--<trs:TeacherRoomScheduleControl x:Name="RoomSchedule" RoomScheduled="{Binding CurrentRoom, Mode=OneWay}"  
+                                                                  CoursesForRoom="{Binding CoursesForSelectedRoom, Mode=OneWay}" 
+                                                                  AvailableSlots="{Binding AvailableSlots, Mode=OneWay}" MinWidth="800"/>-->
+
+                                <trs:TeacherRoomScheduleControl x:Name="TeacherRoomSchedule" 
+                                                                         RoomScheduled_T ="{Binding CurrentRoom, Mode=OneWay}"
+                                                                         CoursesForTeacher = "{Binding CoursesForCurrentTeacher, Mode=OneWay}"
+                                                                         MinWidth="800" Loaded="RoomSchedule_Loaded"/>
                             </ScrollViewer>
                         </Expander>
 

@@ -20,7 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClassroomAssignment.Views.RoomSchedule
+namespace ClassroomAssignment.Views.TeacherRoomSchedule
 {
     /// <summary>
     /// Interaction logic for TeacherRoomScheduleControl.xaml
@@ -42,7 +42,7 @@ namespace ClassroomAssignment.Views.RoomSchedule
 
         #region Dependency Properties
         // private readonly DependencyProperty _roomScheduledProperty;
-        public static readonly DependencyProperty RoomScheduledProperty_t = DependencyProperty.Register("RoomScheduled", typeof(Room), typeof(TeacherRoomScheduleControl), new PropertyMetadata(new PropertyChangedCallback(OnRoomScheduledChangeT)));
+        public static readonly DependencyProperty RoomScheduledProperty_t = DependencyProperty.Register("RoomScheduled_T", typeof(Room), typeof(TeacherRoomScheduleControl), new PropertyMetadata(new PropertyChangedCallback(OnRoomScheduledChangeT)));
 
         private static void OnRoomScheduledChangeT(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -72,7 +72,7 @@ namespace ClassroomAssignment.Views.RoomSchedule
             }
         }
 
-        public static readonly DependencyProperty CoursesForRoomPropertyT = DependencyProperty.Register("CoursesForRoom", typeof(ObservableCollection<Course>), typeof(TeacherRoomScheduleControl), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure, new PropertyChangedCallback(CoursesForRoomChangedT)));
+        public static readonly DependencyProperty CoursesForRoomPropertyT = DependencyProperty.Register("CoursesForTeacher", typeof(ObservableCollection<Course>), typeof(TeacherRoomScheduleControl), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure, new PropertyChangedCallback(CoursesForRoomChangedT)));
 
         private static void CoursesForRoomChangedT(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

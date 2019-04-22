@@ -156,8 +156,9 @@ namespace ClassroomAssignment.UI.Main
                       ExcelSchedulePrinter printer = new ExcelSchedulePrinter(fileName, workbook);
                     ICourseRepository courseRepository = CourseRepository.GetInstance();
                     //ICourseRepository export_courses = (ICourseRepository)CoursesForCurrentTeacher;
+                    ITeacherScheduleRepository courseSchedule = (TeacherScheduleRepository)CoursesForCurrentTeacher.GetEnumerator();
 
-                    new ScheduleVisualization(courseRepository, null, printer).PrintSchedule();
+                    new ScheduleVisualization(courseRepository, null, printer, "", courseSchedule).PrintSchedule();
                     //new ScheduleVisualization(export_courses, null, printer).PrintSchedule();
                 }
             }
@@ -305,14 +306,7 @@ namespace ClassroomAssignment.UI.Main
 
           private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
           {
-            //TabItem currTab = (TabItem)MainTab.SelectedItem;
-            //if (currTab != null)
-            //{
-            //    if (currTab.Name.Equals("Teacher View"))
-            //    {
-            //        Console.WriteLine("Teacehr View Tab Selected");
-            //    }
-            //}
+
           }
 
 		/* 
@@ -556,6 +550,8 @@ namespace ClassroomAssignment.UI.Main
             }
 
             TeacherlistBox.ItemsSource = CoursesForCurrentTeacher;
+            //ViewModel.CoursesForCurrentTeacher = CoursesForCurrentTeacher;
+
             //ICollection<Course> teacherCourseList = (ICollection<Course>)CoursesForCurrentTeacher;
             //CourseRepository.InitInstance(CoursesForCurrentTeacher);
         }
@@ -563,6 +559,44 @@ namespace ClassroomAssignment.UI.Main
         private void RoomSchedule_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Teacher_Export_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.Conflicts.Count != 0)
+            {
+                string message = "Exporting to Excel while there are conflicts may result in incorrect output. Do you wish to continue with the export?";
+                string caption = "Export to Excel";
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                MessageBoxButton button = MessageBoxButton.YesNo;
+                MessageBoxResult result = System.Windows.MessageBox.Show(message, caption, button, icon);
+
+                if (result == MessageBoxResult.No) return;
+            }
+
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+            saveFileDialog.Filter = "Excel Worksheets|*.xls";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var fileName = saveFileDialog.FileName;
+                var templateFile = System.IO.Path.Combine(Environment.CurrentDirectory, "ClassroomGridTemplate.xls");
+                using (var fileStream = File.OpenRead(templateFile))
+                {
+                    IWorkbook workbook = new HSSFWorkbook(fileStream);
+                    workbook.RemoveSheetAt(workbook.GetSheetIndex("Sheet1"));
+
+                    workbook.MissingCellPolicy = MissingCellPolicy.CREATE_NULL_AS_BLANK;
+                    ExcelSchedulePrinter printer = new ExcelSchedulePrinter(fileName, workbook);
+                    ICourseRepository courseRepository = CourseRepository.GetInstance();
+                    //ITeacherScheduleRepository courseSchedule = TeacherScheduleRepository.GetInstance();
+                    TeacherScheduleRepository.InitInstance(CoursesForCurrentTeacher);
+                    ITeacherScheduleRepository courseSchedule = TeacherScheduleRepository.GetInstance();
+                    //ICourseRepository export_courses = (ICourseRepository)CoursesForCurrentTeacher;
+
+                    new ScheduleVisualization(courseRepository, null, printer, SuggestedTeacherlistBox.SelectedValue.ToString(), courseSchedule).PrintTeacherSchedule();
+                    //new ScheduleVisualization(export_courses, null, printer).PrintSchedule();
+                }
+            }
         }
     }
 }

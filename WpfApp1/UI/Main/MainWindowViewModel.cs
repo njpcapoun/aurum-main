@@ -76,7 +76,7 @@ namespace ClassroomAssignment.UI.Main
 
         public IEnumerable<Room> AllRooms { get; set; }
         public ObservableCollection<Course> CoursesForCurrentRoom { get; private set; }
-        public ObservableCollection<Course> CoursesForCurrentTeacher { get; private set; }
+        public ObservableCollection<Course> CoursesForCurrentTeacher { get; set; }
 
         public CourseRepository CourseRepo;
         public RoomRepository RoomRepo;

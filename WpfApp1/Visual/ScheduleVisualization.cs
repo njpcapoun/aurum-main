@@ -13,17 +13,26 @@ namespace ClassroomAssignment.Visual
         private ICourseRepository CourseRepo;
         private IRoomRepository RoomRepo;
         private ISchedulePrinter Printer;
+        private ITeacherScheduleRepository TeacherSchedule;
+        private string TeacherName;
 
-        public ScheduleVisualization(ICourseRepository courseRepo, IRoomRepository roomRepo, ISchedulePrinter printer)
+        public ScheduleVisualization(ICourseRepository courseRepo, IRoomRepository roomRepo, ISchedulePrinter printer, string teacherName, ITeacherScheduleRepository teacherSchedule)
         {
             CourseRepo = courseRepo;
             RoomRepo = roomRepo;
             Printer = printer;
+            TeacherName = teacherName;
+            TeacherSchedule = teacherSchedule;
         }
 
         public void PrintSchedule()
         {
             Printer.Print(CourseRepo, RoomRepo);
+        }
+
+        public void PrintTeacherSchedule()
+        {
+            Printer.PrintSchedule(TeacherSchedule, RoomRepo, TeacherName);
         }
     }
 }
