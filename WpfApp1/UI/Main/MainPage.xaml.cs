@@ -233,10 +233,22 @@ namespace ClassroomAssignment.UI.Main
         {
 
             Course c = CoursesDataGrid.SelectedItem as Course;
-            ReassignmentPopUp popUp = new ReassignmentPopUp(c);
-            popUp.ShowDialog();
-            ReassignmentPage reassignmentPage = popUp.getRP();
-            NavigationService.Navigate(reassignmentPage);
+            if (c.HasRoomAssignment == true)
+            {
+                ReassignmentPopUp popUp = new ReassignmentPopUp(c);
+                popUp.ShowDialog();
+                ReassignmentPage reassignmentPage = popUp.getRP();
+
+                if (reassignmentPage != null)
+                {
+                    NavigationService.Navigate(reassignmentPage);
+                }
+            }
+
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Can't reassign a course with no room");
+            }
         }
 
         /// <summary>

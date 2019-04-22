@@ -47,7 +47,7 @@ namespace ClassroomAssignment.UI.Reassignment
         {
             C = c;
             InitializeComponent();
-            types = new List<string> {"Lab", "Lecture", "Conference", "ITIN", "CYBER"};
+            types = new List<string> {"Lab", "Lecture", "Conference", "ITIN", "CYBER", "Distance"};
             DataContext = this;
             TypeBox.ItemsSource = types;
         }
