@@ -32,6 +32,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClassroomAssignment.Model.Repo;
 using System.ComponentModel;
+using static ClassroomAssignment.Model.DataConstants;
 
 namespace ClassroomAssignment.UI.Main
 {
@@ -113,6 +114,12 @@ namespace ClassroomAssignment.UI.Main
 		/// <param name="e">State information and event data associated with a routed event.</param>
 		private void AutomaticCrosslisting(object sender, EventArgs e)
 		{
+			MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Crosslist all the courses based on their crosslistings fields?",
+																					"Crosslist by Crosslistings Fields", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+
+			if (messageBoxResult != MessageBoxResult.Yes)
+				return; 
+
 			HashSet<Course> MainCourses = new HashSet<Course>();
 			bool isMainCourse = true;
 			var courses = CoursesDataGrid.ItemsSource;
@@ -154,6 +161,7 @@ namespace ClassroomAssignment.UI.Main
 							sectionNumbers.Contains(y.SectionNumber))
 						{
 							crossListedCourses.Add(y);
+
 							if (MainCourses.Contains(y))
 								isMainCourse = false;
 						}
@@ -173,6 +181,68 @@ namespace ClassroomAssignment.UI.Main
 					}
 				}
 			}
+
+			MessageBoxResult messageBoxResult2 = System.Windows.MessageBox.Show("Crosslisting based on courses' crosslistings fields has been completed.",
+															"Crosslist by Crosslistings Fields Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+		}
+
+		/// <summary>
+		/// Automatically crosslists all the courses based on their room assignments and meeting patterns from the file menu.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
+		private void AutomaticCrosslisting2(object sender, EventArgs e)
+		{
+
+			MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Crosslist all the courses based on their meeting patterns and room assignments?",
+																		"Crosslist by Assignments", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+
+			if (messageBoxResult != MessageBoxResult.Yes)
+				return;
+
+			HashSet<Course> MainCourses = new HashSet<Course>();
+			bool isMainCourse = true;
+			var courses = CoursesDataGrid.ItemsSource;
+			Regex meetingPatternRegex = new Regex(MeetingPatternOptions.TIME_PATTERN);
+
+			foreach (Course course in courses)
+			{
+				isMainCourse = true;
+				List<Course> crossListedCourses = new List<Course>();
+
+				if (course.HasRoomAssignment && meetingPatternRegex.IsMatch(course.MeetingPattern))
+				{
+					foreach (Course y in courses)
+					{
+						if (course == y)
+							continue;
+
+						if (y.RoomAssignment == course.RoomAssignment && y.MeetingPattern == course.MeetingPattern)
+						{
+							crossListedCourses.Add(y);
+
+							if (MainCourses.Contains(y))
+								isMainCourse = false;
+						}
+					}
+
+					if (isMainCourse)
+					{
+						MainCourses.Add(course);
+						foreach (Course crossListed in crossListedCourses)
+						{
+							crossListed.NeedsRoom = false;
+							if (!course.CrossListedCourses.Contains(crossListed))
+							{
+								course.AddCrossListedCourse(crossListed);
+							}
+						}
+					}
+				}
+			}
+
+			MessageBoxResult messageBoxResult2 = System.Windows.MessageBox.Show("Crosslisting by assignments has been completed.",
+															"Crosslist by Assignments Successful", MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 
 		/// <summary>
@@ -245,7 +315,7 @@ namespace ClassroomAssignment.UI.Main
 				string caption = "Export to Excel";
 				MessageBoxImage icon = MessageBoxImage.Warning;
 				MessageBoxButton button = MessageBoxButton.YesNo;
-				MessageBoxResult result = System.Windows.MessageBox.Show(message, caption, button, icon);
+				MessageBoxResult result = System.Windows.MessageBox.Show(message, caption, button, icon, MessageBoxResult.No);
 
 				if (result == MessageBoxResult.No) return;
 			}
@@ -356,7 +426,7 @@ namespace ClassroomAssignment.UI.Main
 		}
 
 		/// <summary>
-		/// Crosslists selected courses from the right click context menu. Courses are crosslisted to the course which has been first selecte.
+		/// Crosslists selected courses from the right click context menu. Courses are crosslisted to the course which has been first selected.
 		/// </summary>
 		/// <param name="sender">A reference to the control/object that raised the event.</param>
 		/// <param name="e">State information and event data associated with a routed event.</param>
@@ -365,23 +435,54 @@ namespace ClassroomAssignment.UI.Main
 			var courses = CoursesDataGrid.SelectedItems;
 
 			var mainCourse = courses[0] as Course;
+
+			String str = "";
+
+			String flaggedStr = "";
+
 			foreach (Course course in courses)
 			{
-				if (course.NeedsRoom)
+				if (course == mainCourse)
+					continue;
+
+				if (course.MeetingPattern != mainCourse.MeetingPattern || course.RoomAssignment != mainCourse.RoomAssignment)
 				{
-					mainCourse = course;
-					break;
+					flaggedStr += "   " + course.CourseName + "-" + course.SectionNumber + "\n";
 				}
+
+				str += "   " + course.CourseName + "-" + course.SectionNumber + "\n";
 			}
 
-			foreach (Course course in courses)
-			{
-				if (course == mainCourse) continue;
+			MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Crosslist the following courses to " + mainCourse.CourseName + "-" + mainCourse.SectionNumber + "?\n" + str, "Crosslisting Courses", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
 
-				course.NeedsRoom = false;
-				if (!mainCourse.CrossListedCourses.Contains(course))
-					mainCourse.AddCrossListedCourse(course);
-				//CrossListedToMain[course] = mainCourse;
+			if (messageBoxResult == MessageBoxResult.Yes)
+			{
+				if (flaggedStr != "")
+				{
+					MessageBoxResult messageBoxResult2 = System.Windows.MessageBox.Show("Following crosslisted courses for " + mainCourse.CourseName + "-" + mainCourse.SectionNumber + " don't conflict. Crosslist anyways?\n" + flaggedStr, "WARNING: Crosslisted Courses Don't Conflict", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No);
+
+					if (messageBoxResult2 != MessageBoxResult.Yes)
+						return;
+				}
+
+				// Crosslist the courses
+				foreach (Course course in courses)
+				{
+					if (course.NeedsRoom)
+					{
+						mainCourse = course;
+						break;
+					}
+				}
+
+				foreach (Course course in courses)
+				{
+					if (course == mainCourse) continue;
+
+					course.NeedsRoom = false;
+					if (!mainCourse.CrossListedCourses.Contains(course))
+						mainCourse.AddCrossListedCourse(course);
+				}
 			}
 		}
 
@@ -419,8 +520,14 @@ namespace ClassroomAssignment.UI.Main
 
 			if (crossListedCourse != null)
 			{
-				mainCourse.RemoveCrossListedCourse(crossListedCourse);
-				crossListedCourse.NeedsRoom = crossListedCourse.QueryNeedsRoom();
+				MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Remove " + crossListedCourse.CourseName + "-" + crossListedCourse.SectionNumber
+																					+ " from " + mainCourse.CourseName + "-" + crossListedCourse.SectionNumber + "?",
+																					"Removing Crosslisted Course", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+				if (messageBoxResult == MessageBoxResult.Yes)
+				{
+					mainCourse.RemoveCrossListedCourse(crossListedCourse);
+					crossListedCourse.NeedsRoom = crossListedCourse.QueryNeedsRoom();
+				}
 			}
 		}
 
@@ -459,10 +566,22 @@ namespace ClassroomAssignment.UI.Main
 		/// <param name="e">State information and event data associated with a routed event.</param>
 		private void Unassign_Click(object sender, RoutedEventArgs e)
 		{
+			String str = "";
+
 			foreach (Course course in CoursesDataGrid.SelectedItems)
 			{
-				course.NeedsRoom = true;
-				course.RoomAssignment = null;
+				str += "   " + course.CourseName + "-" + course.SectionNumber + "\t" + course.RoomAssignment + "\n";
+			}
+
+
+			MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Unassign the following courses from their room assignments?\n" + str,
+																					"Unassigning Courses", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No);
+			if (messageBoxResult == MessageBoxResult.Yes) {
+				foreach (Course course in CoursesDataGrid.SelectedItems)
+				{
+					course.NeedsRoom = true;
+					course.RoomAssignment = null;
+				}
 			}
 		}
 
@@ -505,23 +624,24 @@ namespace ClassroomAssignment.UI.Main
 
 			if (hasRooms == true)
 			{
-				MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("The selected room must have no assignments before removing ", "ERROR: Room Still has Assignments", System.Windows.MessageBoxButton.OK);
+				MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(ViewModel.CurrentRoom + " must have no assignments before removing.", "ERROR: Room still has assignments", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
 				// Unsure if need to handle the OK click
 			}
 			else
 			{
-				MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Removing the Selected Room. Please Confirm ", "Confirm Room Removal", System.Windows.MessageBoxButton.OKCancel);
-				if (messageBoxResult == MessageBoxResult.OK)
+				MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to remove " + ViewModel.CurrentRoom + "?", "Confirm Room Removal", System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No);
+				if (messageBoxResult == MessageBoxResult.Yes)
 				{
+					string removedRoom = ViewModel.EditableRoom.RoomName;
 					status = ViewModel.RoomRepo.RemoveRoom(ViewModel.EditableRoom);
 					if (status == true)
 					{
 						ViewModel.UpdateRoomList();
-						messageBoxResult = System.Windows.MessageBox.Show("Successful removal of selected room ", "Removal Succeeded", System.Windows.MessageBoxButton.OK);
+						messageBoxResult = System.Windows.MessageBox.Show(removedRoom + " has successfully been removed.", "Removal Successful", System.Windows.MessageBoxButton.OK, MessageBoxImage.Information);
 					}
 					else
 					{
-						messageBoxResult = System.Windows.MessageBox.Show("An error occurred in the removal, please find the problem and try again ", "Removal Unsucessful", System.Windows.MessageBoxButton.OK);
+						messageBoxResult = System.Windows.MessageBox.Show("An error occurred in removing " + removedRoom + ". Please find the problem and try again.", "Removal Unsucessful", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
 					}
 				}
 			}
@@ -529,7 +649,7 @@ namespace ClassroomAssignment.UI.Main
 		}
 
 		/// <summary>
-		/// Searchs for all the matches for the text entered in the search bar. 
+		/// Searches for all the matches for the text entered in the search bar. 
 		/// </summary>
 		/// <param name="obj">The text entered in the search bas as a DependencyObjct</param>
 		public void FindItem(DependencyObject obj)
@@ -627,7 +747,7 @@ namespace ClassroomAssignment.UI.Main
 					course.RoomAssignment = editedRoom;
 				}
 				ViewModel.UpdateRoomList();
-				MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Successfully edited the data of selected room ", "Edit Succeeded", System.Windows.MessageBoxButton.OK);
+				MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Successfully edited the data of " + editedRoom + ".", "Edit Successful", System.Windows.MessageBoxButton.OK, MessageBoxImage.Information);
 				capacityError.Visibility = Visibility.Hidden;
 			}
 		}
