@@ -16,7 +16,7 @@ using ClassroomAssignment.Repo;
 namespace ClassroomAssignment.Visual
 {
     /// <summary>
-    /// Helps with exported visualization 
+    /// Helps with exported visualization for an Excel workbook.
     /// </summary>
     class ExcelSchedulePrinter : ISchedulePrinter
     {
@@ -41,6 +41,11 @@ namespace ClassroomAssignment.Visual
 
         private ClassScheduleTemplate Template = new ClassScheduleTemplate();
 
+		/// <summary>
+		/// Constructor for ExcelSchedulePrinter. Initialize the parameters.
+		/// </summary>
+		/// <param name="outputFile">The name and location of the output file.</param>
+		/// <param name="workbook">A Microsoft Excel workbook.</param>
         public ExcelSchedulePrinter(string outputFile, IWorkbook workbook)
         {
             _outputFile = outputFile;
@@ -48,9 +53,11 @@ namespace ClassroomAssignment.Visual
             _scheduleTemplate = _workbook.GetSheet(ClassScheduleTemplate.SCHEDULE_TEMPLATE_NAME);
         }
 
+		/// <summary>
+		/// Constructor for ExcelSchedulePrinter. Initialize the times and days of the week for the schedules. 
+		/// </summary>
         static ExcelSchedulePrinter()
         {
-
             // initialize TimeMap, maps times to row location
             TimeMap.Add(StartTime, startTimeLocationRow);
             var currTime = StartTime;
@@ -111,6 +118,10 @@ namespace ClassroomAssignment.Visual
             _workbook.WriteToFile(_outputFile);
         }
 
+		/// <summary>
+		/// Prints legend of the depertments by side of the schedule for a room.
+		/// </summary>
+		/// <param name="sheet">A Microsoft Excel sheet.</param>
         private void printLegend(ISheet sheet)
         {
             CellReference cellReference = new CellReference("J5");
@@ -148,6 +159,11 @@ namespace ClassroomAssignment.Visual
             return roomCourseMap;
         }
 
+		/// <summary>
+		/// Prints the courses in the schedules.
+		/// </summary>
+		/// <param name="sheet">A Microsoft Exceel sheet</param>
+		/// <param name="courses">The list of courses.</param>
         private void PrintCourses(ISheet sheet, List<Course> courses)
         {
             int otherStartRow = 5;
@@ -198,9 +214,13 @@ namespace ClassroomAssignment.Visual
                     otherEndRow += 6;
                 }
             }
-
         }
 
+		/// <summary>
+		/// Text format for a cell containing a course.
+		/// </summary>
+		/// <param name="course">A course object.</param>
+		/// <returns></returns>
         private string getCourseLabel(Course course)
         {
             return course.CourseName 
@@ -214,6 +234,11 @@ namespace ClassroomAssignment.Visual
                 + course.RoomAssignment;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="time">A time interval</param>
+		/// <returns></returns>
         private int GetRowForTime(TimeSpan time)
         {
             int minutes = time.Minutes;
@@ -228,6 +253,12 @@ namespace ClassroomAssignment.Visual
             }
         }
 
+		/// <summary>
+		/// Write the schedule of an instructor to an Excel sheet.
+		/// </summary>
+		/// <param name="teacherCourseSchedule"></param>
+		/// <param name="roomRepo">The collection of rooms.</param>
+		/// <param name="teacherName">The name of an instructor</param>
         public void PrintSchedule(ITeacherScheduleRepository teacherCourseSchedule, IRoomRepository roomRepo, string teacherName)
         {
             List<Course> courses = teacherCourseSchedule.Courses.ToList();

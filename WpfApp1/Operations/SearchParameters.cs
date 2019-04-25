@@ -19,11 +19,11 @@ namespace ClassroomAssignment.Operations
         /// <summary>
         /// Calculate duration for the class.
         /// </summary>
-        /// <param name="meetingDays"></param>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
-        /// <param name="capacity"></param>
-        /// <param name="duration"></param>
+        /// <param name="meetingDays">Days of meeting for a course.</param>
+        /// <param name="startTime">The start time of a course.</param>
+        /// <param name="endTime">The end time of a course.</param>
+        /// <param name="capacity">The capacity of a course.</param>
+        /// <param name="duration">The time length of a course.</param>
         public SearchParameters(IEnumerable<DayOfWeek> meetingDays, TimeSpan startTime, TimeSpan endTime, int capacity = int.MaxValue, TimeSpan duration = new TimeSpan())
         {
             MeetingDays = meetingDays;

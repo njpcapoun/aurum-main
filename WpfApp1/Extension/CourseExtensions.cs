@@ -8,14 +8,17 @@ using System.Threading.Tasks;
 
 namespace ClassroomAssignment.Extension
 {
+	/// <summary>
+	/// Extension methods for course object.
+	/// </summary>
     public static class CourseExtensions
     {
-        /// <summary>
-        /// Extension method that creates a SearchParameters object for the <paramref name="course"/>
-        /// </summary>
-        /// <param name="course"></param>
-        /// <returns></returns>
-        public static SearchParameters GetSearchParameters(this Course course)
+		/// <summary>
+		/// Extension method that creates a SearchParameters object for the <paramref name="course"/> used for the available rooms search.
+		/// </summary>
+		/// <param name="course">A course object</param>
+		/// <returns>searchParameters</returns>
+		public static SearchParameters GetSearchParameters(this Course course)
         {
             var searchParameters = new SearchParameters();
             searchParameters.MeetingDays = course.MeetingDays;

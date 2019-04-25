@@ -10,6 +10,9 @@ using Newtonsoft.Json;
 
 namespace ClassroomAssignment.Model.Repo
 {
+	/// <summary>
+	/// Collection of the rooms.
+	/// </summary>
     [Serializable]
     public class RoomRepository : IRoomRepository
     {
@@ -21,23 +24,22 @@ namespace ClassroomAssignment.Model.Repo
         public List<Room> Rooms { get; private set; }
 
         /// <summary>
-        /// Add allRooms to Rooms list. 
+        /// Constructor for RoomRepository. Add allRooms to Rooms list. 
         /// </summary>
         public RoomRepository()
         {
             Rooms = AllRooms(); //adding all rooms to room list.
         }
-        /*  
-         *  <summary>
-         *   Exception Handler for that room repo already initilized .
-         *  </summary> 
-         */
 
+		/// <summary>
+		/// Initialize the room repository. Handle exception if room repo already initilized .
+		/// </summary>
         public static void InitInstance()
         {
             if (instance != null) throw new InvalidOperationException("Room Repo already initialized");
             instance = new RoomRepository();
         }
+
         /// <summary>
         /// Exception handler for Room repo not yet initialized.
         /// </summary>
@@ -46,8 +48,9 @@ namespace ClassroomAssignment.Model.Repo
         {
             return instance ?? throw new InvalidOperationException("Room Repo not yet intialized");
         }
+
         /// <summary>
-        /// Its add Rooms to room list with their number, capacity, and details.
+        /// Add Rooms to room list with their number, capacity, and details.
         /// And initilize these information into Rooms list.
         /// </summary>
         /// <returns>rooms</returns>
@@ -72,31 +75,40 @@ namespace ClassroomAssignment.Model.Repo
 
             return rooms;
         }
-        /// <summary>
-        /// Get room name, it is kinda room number.
-        /// <example>PKI 153 is roomName.</example>
-        /// </summary>
-        /// <param name="roomName"></param>
-        /// <returns>Rooms with their name</returns>
-        public Room GetRoomWithName(string roomName)
+
+		/// <summary>
+		/// Get room name, it is kinda room number.
+		/// <example>PKI 153 is roomName.</example>
+		/// </summary>
+		/// <param name="roomName">The name of the room.</param>
+		/// <returns>Rooms.Find(x => x.RoomName == roomName);</returns>
+		public Room GetRoomWithName(string roomName)
         {
             return Rooms.Find(x => x.RoomName == roomName);
         }
-        /// <summary>
-        /// It replaces roomName to acronym format, if it is not.
-        /// <example>Peter Kiewit Institude to PKI</example>
-        /// </summary>
-        /// <param name="roomName"></param>
-        /// <returns>RoomName replace</returns>
-        public string GetNormalizedRoomName(string roomName)
+
+		/// <summary>
+		/// It replaces roomName to acronym format, if it is not.
+		/// <example>Peter Kiewit Institude to PKI</example>
+		/// </summary>
+		/// <param name="roomName">The name of the room.</param>
+		/// <returns>roomName.Replace("Peter Kiewit Institute", "PKI")</returns>
+		public string GetNormalizedRoomName(string roomName)
         {
             // TODO: Placeholder implementation
             return roomName.Replace("Peter Kiewit Institute", "PKI");
         }
 
-        // Used to add a new room, triggered from "Add Room" button on "Edit Rooms" screen
-        // returns false to prompt an error for repeat room name, true for unique
-        public bool AddNewRoom(int index, string roomName, int capacity, string details, string roomType)
+		/// <summary>
+		/// Used to add a new room, triggered from "Add Room" button on "Edit Rooms" screen
+		/// </summary>
+		/// <param name="index">ID of the room</param>
+		/// <param name="roomName">Name of the room</param>
+		/// <param name="capacity">Capacity of the room</param>
+		/// <param name="details">Details of the room</param>
+		/// <param name="roomType">Type of room (lab, conference, distance, lecture, ITIN, CYBR).</param>
+		/// <returns>False to prompt error for repeat room name; True for unique.</returns>
+		public bool AddNewRoom(int index, string roomName, int capacity, string details, string roomType)
         {
             bool isNewRoom = true;
 
@@ -135,13 +147,20 @@ namespace ClassroomAssignment.Model.Repo
                 return false;
             }
         }
-        // Used to remove a room from the "Edit Rooms" screen
-        // Returns a bool for a notification on UI
-        public bool RemoveRoom(Room room)
+
+		/// <summary>
+		/// Used to remove a room from the "Edit Rooms" screen.
+		/// </summary>
+		/// <param name="room">A Room object</param>
+		/// <returns>A bool for a notification on UI.</returns>
+		public bool RemoveRoom(Room room)
         {
             return Rooms.Remove(room);
         }
 
+		/// <summary>
+		/// Save data to RoomData.json file.
+		/// </summary>
         public void SaveData()
         {
             var output = JsonConvert.SerializeObject(Rooms);

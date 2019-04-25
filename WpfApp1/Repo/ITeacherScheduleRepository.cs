@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ClassroomAssignment.Repo
 {
     /// <summary>
-    /// Getter for Courses list.
+    /// Getter for teacher schedules.
     /// </summary>
     public interface ITeacherScheduleRepository
     {
