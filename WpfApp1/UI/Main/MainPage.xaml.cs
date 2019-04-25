@@ -128,7 +128,10 @@ namespace ClassroomAssignment.UI.Main
             bool isMainCourse = true;
             var courses = CoursesDataGrid.ItemsSource;
 
-            foreach (Course course in courses)
+			if (messageBoxResult != MessageBoxResult.Yes)
+				return;
+
+			foreach (Course course in courses)
             {
                 isMainCourse = true;
                 List<Course> crossListedCourses = new List<Course>();
