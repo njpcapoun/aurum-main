@@ -20,6 +20,10 @@ namespace ClassroomAssignment.Operations
     {
         public List<Course> ConflictingCourses { get; }
 
+		/// <summary>
+		/// Constructor for Conflict. Set the list of conflicting courses.
+		/// </summary>
+		/// <param name="conflictingCourses"></param>
         public Conflict(List<Course> conflictingCourses)
         {
             ConflictingCourses = conflictingCourses;
@@ -27,7 +31,7 @@ namespace ClassroomAssignment.Operations
         /// <summary>
         /// Print description of the conflict courses
         /// </summary>
-        /// <return> string value</return>
+        /// <return>A string of the description of the conflicting courses.</return>
         public string Description
         {
             get
