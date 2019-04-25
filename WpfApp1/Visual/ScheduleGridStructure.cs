@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ClassroomAssignment.Visual
 {
+	/// <summary>
+	/// Sets layout of the schedule grid.
+	/// </summary>
     class ScheduleGridLayout
     {
         private readonly TimeSpan _firstTimeSlot;
@@ -26,6 +29,14 @@ namespace ClassroomAssignment.Visual
         private Dictionary<TimeSpan, int> timeToRowMap = new Dictionary<TimeSpan, int>();
         private Dictionary<DayOfWeek, int> dayToColumnMap = new Dictionary<DayOfWeek, int>();
 
+		/// <summary>
+		/// Constructor for ScheduleGridLayout. Set passed parameters and initialize time rows and day columns.
+		/// </summary>
+		/// <param name="firstTimeSlot">The first time slot in the schedule.</param>
+		/// <param name="lastTimeSlot">The last time slot in the schedule.</param>
+		/// <param name="firstDayOfSchedule">The first day of the schedule.</param>
+		/// <param name="lastDayOfSchedule">The last day of the schedule.</param>
+		/// <param name="timeUnitInMinutes">The times in minutes.</param>
         public ScheduleGridLayout(TimeSpan firstTimeSlot, TimeSpan lastTimeSlot, DayOfWeek firstDayOfSchedule, DayOfWeek lastDayOfSchedule, int timeUnitInMinutes)
         {
             _firstTimeSlot = firstTimeSlot;
@@ -38,6 +49,9 @@ namespace ClassroomAssignment.Visual
             InitDayToColumnMap();
         }
 
+		/// <summary>
+		/// Initialize the list of times in the rows.
+		/// </summary>
         private void InitTimeToRowMap()
         {
             var column = 2;
@@ -47,6 +61,9 @@ namespace ClassroomAssignment.Visual
             }
         }
 
+		/// <summary>
+		/// Initialize the days of weeks in the columns.
+		/// </summary>
         private void InitDayToColumnMap()
         {
             var currentTime = FirstTimeSlot;
@@ -59,24 +76,24 @@ namespace ClassroomAssignment.Visual
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="duration"></param>
-        /// <returns></returns>
-        public int SpanForDurationInMinutes(int duration)
+		/// <summary>
+		/// Set the TimeSpan duration in minutes.
+		/// </summary>
+		/// <param name="duration"></param>
+		/// <returns>span >= 1 ? span : 1</returns>
+		public int SpanForDurationInMinutes(int duration)
         {
             var span = duration / (int) TimeUnitInMinutes.TotalMinutes;
 
             return span >= 1 ? span : 1;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public int GetRowForTime(TimeSpan time)
+		/// <summary>
+		/// Set all the times for the rows.
+		/// </summary>
+		/// <param name="time">A time interval</param>
+		/// <returns>timeToRowMap[timeKey] or -1</returns>
+		public int GetRowForTime(TimeSpan time)
         {
             if (timeToRowMap.ContainsKey(time)) return timeToRowMap[time];
 
@@ -90,12 +107,21 @@ namespace ClassroomAssignment.Visual
             return -1;
         }
 
-        public int GetColumnForDay(DayOfWeek day)
+		/// <summary>
+		/// Sets all the days of the weeks for the columns.
+		/// </summary>
+		/// <param name="day">Day of the week.</param>
+		/// <returns>dayToColumnMap[day] or -1</returns>
+		public int GetColumnForDay(DayOfWeek day)
         {
             if (dayToColumnMap.ContainsKey(day)) return dayToColumnMap[day];
             else return -1;
         }
-
+		
+		/// <summary>
+		/// Increment the time slots in the schedule.
+		/// </summary>
+		/// <returns>current</returns>
         public IEnumerable<TimeSpan> TimeSlotsInSchedule()
         {
             var current = FirstTimeSlot;
@@ -106,6 +132,10 @@ namespace ClassroomAssignment.Visual
             }
         }
 
+		/// <summary>
+		/// Increment the days of the week in the schedule.
+		/// </summary>
+		/// <returns></returns>
         public IEnumerable<DayOfWeek> DaysOfWeekInGrid()
         {
             for (DayOfWeek day = FirstDayOfSchedule; day <= LastDayOfSchedule; day++)

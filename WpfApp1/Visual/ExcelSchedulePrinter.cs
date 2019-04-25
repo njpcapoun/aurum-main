@@ -16,7 +16,7 @@ using ClassroomAssignment.Repo;
 namespace ClassroomAssignment.Visual
 {
     /// <summary>
-    /// Helps with exported visualization for an Excel workbook.
+    /// Printer and setup for the room or teacher schedules in an Excel workbook.
     /// </summary>
     class ExcelSchedulePrinter : ISchedulePrinter
     {
@@ -81,10 +81,10 @@ namespace ClassroomAssignment.Visual
         }
         
         /// <summary>
-        /// Writes course schedules for each room in the excel file
+        /// Writes course schedules for each room in the excel file.
         /// </summary>
-        /// <param name="courseRepo"></param>
-        /// <param name="roomRepo"></param>
+        /// <param name="courseRepo">The collection of courses.</param>
+        /// <param name="roomRepo">The collection of rooms.</param>
         public void Print(ICourseRepository courseRepo, IRoomRepository roomRepo)
         {
             List<Course> courses = courseRepo.Courses.ToList();
@@ -220,7 +220,7 @@ namespace ClassroomAssignment.Visual
 		/// Text format for a cell containing a course.
 		/// </summary>
 		/// <param name="course">A course object.</param>
-		/// <returns></returns>
+		/// <returns>The text format of a course</returns>
         private string getCourseLabel(Course course)
         {
             return course.CourseName 
@@ -235,11 +235,11 @@ namespace ClassroomAssignment.Visual
         }
 
 		/// <summary>
-		/// 
+		/// Set the times for the schedule.
 		/// </summary>
 		/// <param name="time">A time interval</param>
-		/// <returns></returns>
-        private int GetRowForTime(TimeSpan time)
+		/// <returns>TimeMap[time] or  TimeMap[new TimeSpan(time.Hours, minutes, 0)]</returns>
+		private int GetRowForTime(TimeSpan time)
         {
             int minutes = time.Minutes;
             if (minutes % 30 == 0)
@@ -256,7 +256,7 @@ namespace ClassroomAssignment.Visual
 		/// <summary>
 		/// Write the schedule of an instructor to an Excel sheet.
 		/// </summary>
-		/// <param name="teacherCourseSchedule"></param>
+		/// <param name="teacherCourseSchedule">Schedule of a teacher's courses.</param>
 		/// <param name="roomRepo">The collection of rooms.</param>
 		/// <param name="teacherName">The name of an instructor</param>
         public void PrintSchedule(ITeacherScheduleRepository teacherCourseSchedule, IRoomRepository roomRepo, string teacherName)
