@@ -16,7 +16,7 @@ using System.Windows.Input;
 namespace ClassroomAssignment.UI.Assignment
 {
     /// <summary>
-    /// 
+    /// View model of the assignment page.
     /// </summary>
     public class AssignmentViewModel : INotifyPropertyChanged
     {
@@ -34,6 +34,10 @@ namespace ClassroomAssignment.UI.Assignment
         public List<Room> AllRooms { get; } = RoomRepository.GetInstance().Rooms;
 
         private Course _currentCourse;
+
+		/// <summary>
+		/// Getter and setter for when a course's value(s) have beeen changed.
+		/// </summary>
         public Course CurrentCourse
         {
             get => _currentCourse;
@@ -53,6 +57,10 @@ namespace ClassroomAssignment.UI.Assignment
        
 
         private Room _currentRoom;
+
+		/// <summary>
+		/// Getter and setter for a room. Update courses and available slots for room.
+		/// </summary>
         public Room CurrentRoom
         {
             get => _currentRoom;
@@ -71,7 +79,11 @@ namespace ClassroomAssignment.UI.Assignment
         }
 
        
-
+		/// <summary>
+		/// Handle changes for course when its value(s) is changed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void _currentCourse_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             OnCurrentCourseChanged();
@@ -105,6 +117,9 @@ namespace ClassroomAssignment.UI.Assignment
             AddConflictingCourses();
         }
 
+		/// <summary>
+		/// Add available rooms for the available room search.
+		/// </summary>
         private void AddAvailableRooms()
         {
             AvailableRooms.Clear();
@@ -122,7 +137,7 @@ namespace ClassroomAssignment.UI.Assignment
         }
 
         /// <summary>
-        /// searches for available rooms and updates 
+        /// Searches for available rooms and updates 
         /// list of schedule slots
         /// </summary>
         public void UpdateAvailableSlotsForCurrentRoom()
@@ -142,8 +157,8 @@ namespace ClassroomAssignment.UI.Assignment
         }
 
         /// <summary>
-        /// if there are any changes to current room 
-        /// schedule then the changes are updated
+        /// If there are any changes to current room 
+        /// schedule then the changes are updated.
         /// </summary>
         public void UpdateCoursesForCurrentRoom()
         {
@@ -163,7 +178,7 @@ namespace ClassroomAssignment.UI.Assignment
         
 
        /// <summary>
-       /// remove uneeded rooms 
+       /// Remove unneeded rooms.
        /// </summary>
         public void RemoveStaleAvailableRooms()
         {
@@ -176,9 +191,8 @@ namespace ClassroomAssignment.UI.Assignment
       
 
         /// <summary>
-        /// When conflict is detected then
-        /// conflicting courses are added to the current
-        /// assignment view 
+        /// When conflict is detected,
+        /// conflicting courses are added to the current assignment view.
         /// </summary>
         public void AddConflictingCourses()
         {

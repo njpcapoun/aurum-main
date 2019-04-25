@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ClassroomAssignment.Operations
 {
     /// <summary>
-    /// THis file conflict detector. Check if there is room conflict at the time also day.
+    /// The file conflict detector. Check if there is room conflict at the time also day.
     /// </summary>
     public class AssignmentConflictDetector
     {

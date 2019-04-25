@@ -30,6 +30,9 @@ namespace ClassroomAssignment.UI.Ambiguity
 
         public List<Room> RoomOptions { get; }
 
+		/// <summary>
+		/// Constructor for AmbiguityResolverPage. Get instances of the room and course repositories.
+		/// </summary>
         public AmbiguityResolverPage()
         {
             InitializeComponent();
@@ -45,7 +48,12 @@ namespace ClassroomAssignment.UI.Ambiguity
 
         }
 
-        private void ContinueButton_Click(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// Navigate to the main page after resolving ambigiuous assignments.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
+		private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (var course in _ambiguousCourses)
             {
@@ -55,7 +63,12 @@ namespace ClassroomAssignment.UI.Ambiguity
             NavigationService.Navigate(new Uri(@"UI/Main/MainPage.xaml", UriKind.Relative));
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		/// <summary>
+		/// Handle the room selection of a course. Null room assignment if None is selected. The selected room otherwise.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a SelectionChanged event.</param>
+		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var course = (sender as ComboBox).DataContext as Course;
             var selectedRoom = (sender as ComboBox).SelectedItem as Room;
