@@ -28,13 +28,20 @@ namespace ClassroomAssignment.UI.Create
 	/// </summary>
 	public partial class CreateProjectPage : Page
 	{
+		/// <summary>
+		/// Constructor for CreateProjectPage. Initualize the rooms.
+		/// </summary>
 		public CreateProjectPage()
 		{
 			InitializeComponent();
 			RoomRepository.InitInstance();
 		}
 
-
+		/// <summary>
+		/// Create a new project on click. Read all the courses from the csv files.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">>State information and event data associated with a routed event.</param>
 		private void NewProjectButton_Click(object sender, RoutedEventArgs e)
 		{
 			string[] docLocations = GetSheetPaths();
@@ -106,11 +113,19 @@ namespace ClassroomAssignment.UI.Create
 			NextPage(courses);
 		}
 
+		/// <summary>
+		/// Print the list of files that have not been read due to errors.
+		/// </summary>
+		/// <param name="filenames">The list of file that caused the error</param>
 		private void OnNewProjectCreationError(string filenames)
 		{
 			ProjectCreationErrorTextBlock.Text = "The following files could not be opened because they were improperly formatted.\n\t\t" + filenames;
 		}
 
+		/// <summary>
+		/// Get the paths of the files read.
+		/// </summary>
+		/// <returns>The string array of paths of the csv files.</returns>
 		private string[] GetSheetPaths()
 		{
 			// string to store the default path
@@ -149,6 +164,11 @@ namespace ClassroomAssignment.UI.Create
 			return docLocations;
 		}
 
+		/// <summary>
+		/// Open up an existing agn file on click.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">>State information and event data associated with a routed event.</param>
 		private void ExistingProjectButton_Click(object sender, RoutedEventArgs e)
 		{
 			var filePath = GetFilePath();
@@ -167,11 +187,18 @@ namespace ClassroomAssignment.UI.Create
 			}
 		}
 
+		/// <summary>
+		/// Prints the error when a file read is not a csv file.
+		/// </summary>
 		private void OnExistingProjectError()
 		{
 			ProjectCreationErrorTextBlock.Text = "Selected file was not valid.";
 		}
 
+		/// <summary>
+		/// Navigate to the ambiguity page if there are ambiguous assignments. The main page otherwise.
+		/// </summary>
+		/// <param name="courses">The list of courses.</param>
 		private void NextPage(List<Course> courses)
 		{
 			if (courses.FindAll(m => m.HasAmbiguousAssignment).Count > 0)
@@ -184,6 +211,11 @@ namespace ClassroomAssignment.UI.Create
 			}
 		}
 
+		/// <summary>
+		/// Get the state of the app.
+		/// </summary>
+		/// <param name="filePath">The path of the existing agn/assignment file.</param>
+		/// <returns>The app state.</returns>
 		private AppState GetAppState(string filePath)
 		{
 			AppState appState = null;
@@ -203,6 +235,10 @@ namespace ClassroomAssignment.UI.Create
 			return appState;
 		}
 
+		/// <summary>
+		/// Get the file path of the agn/assignment file.
+		/// </summary>
+		/// <returns>The string of the agn/assignment file's directory. Null otherwise.</returns>
 		private string GetFilePath()
 		{
 			// string to store the default path

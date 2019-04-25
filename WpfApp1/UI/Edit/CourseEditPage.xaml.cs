@@ -29,6 +29,9 @@ namespace ClassroomAssignment.UI.Edit
         private Course originalCourse;
 
         private Course _copyCourse;
+		/// <summary>
+		/// Getter and setter for copy of the course bieng editted.
+		/// </summary>
         public Course CopyCourse
         {
             get => _copyCourse;
@@ -43,6 +46,10 @@ namespace ClassroomAssignment.UI.Edit
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+		/// <summary>
+		/// Constructor for CourseEditPage. Initialize the course that is being editted.
+		/// </summary>
+		/// <param name="course">The course being editted.</param>
         public CourseEditPage(Course course)
         {
             InitializeComponent();
@@ -52,7 +59,12 @@ namespace ClassroomAssignment.UI.Edit
             DataContext = CopyCourse;
         }
 
-        private void CopyCourse_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		/// <summary>
+		/// Get the properties that have been changed of the course being editted.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">>State information and event data associated with a routed event.</param>
+		private void CopyCourse_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             Type type = originalCourse.GetType();
             PropertyInfo propertyInfo = type.GetProperty(e.PropertyName);
@@ -62,7 +74,12 @@ namespace ClassroomAssignment.UI.Edit
             }
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// Save the changes made to the editted course when save button is clicked.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">>State information and event data associated with a routed event.</param>
+		private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             bool hasError = false;
             if (!CourseDetail.ValidMeetingPattern)
@@ -91,7 +108,12 @@ namespace ClassroomAssignment.UI.Edit
             NavigationService.GoBack();
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// Go back to the main page if the cancel button has been clicked.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">>State information and event data associated with a routed event.</param>
+		private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
