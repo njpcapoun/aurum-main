@@ -10,16 +10,27 @@ using static ClassroomAssignment.Model.CourseQueryRules;
 
 namespace ClassroomAssignment.Model
 {
+	/// <summary>
+	/// A course represented as an object model.
+	/// </summary>
     [Serializable]
     public class Course : INotifyPropertyChanged
     {
+		/// <summary>
+		/// Constructor for Course. Sets its crosslistings.
+		/// </summary>
         public Course()
         {
             _crossListedCourses = new ObservableCollection<Course>();
             _crossListedCourses.CollectionChanged += _crossListedCourses_CollectionChanged;
         }
 
-        private void _crossListedCourses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		/// <summary>
+		/// Handle changes of a course's crosslistings.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a CollectionChanged event.</param>
+		private void _crossListedCourses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CrossListedCourses)));
         }
@@ -27,6 +38,9 @@ namespace ClassroomAssignment.Model
         [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
+		/// <summary>
+		/// The different states for a course (conflicting, ambigiuous assignment, unassigned, assigned, no assignment required).
+		/// </summary>
         public enum CourseState
         {
             [Description("Conflicting")]
@@ -169,6 +183,10 @@ namespace ClassroomAssignment.Model
 
         private Room _roomAssignment;
         public string _currentTeacher;
+
+		/// <summary>
+		/// Getter and setter for course's room assignment.
+		/// </summary>
         public Room RoomAssignment
         {
             get => _roomAssignment;
@@ -184,6 +202,9 @@ namespace ClassroomAssignment.Model
             }
         }
 
+		/// <summary>
+		/// Getter and setter for course's instructor.
+		/// </summary>
         public string CurrentTeacherInfo
         {
             get => Instructor;
@@ -205,12 +226,20 @@ namespace ClassroomAssignment.Model
         public TimeSpan? EndTime { get; set; }
         public CourseState State { get; set; }
 
+		/// <summary>
+		/// Adds a crosslisted course to the main course.
+		/// </summary>
+		/// <param name="course">A course object.</param>
         public void AddCrossListedCourse(Course course)
         {
             _crossListedCourses.Add(course);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CrossListedCourses)));
         }
 
+		/// <summary>
+		/// Removes a crosslisted course from its main course.
+		/// </summary>
+		/// <param name="course">A course object</param>
         public void RemoveCrossListedCourse(Course course)
         {
             _crossListedCourses.Remove(course);
@@ -218,6 +247,10 @@ namespace ClassroomAssignment.Model
         }
 
         private ObservableCollection<Course> _crossListedCourses;
+
+		/// <summary>
+		/// Getter and setter for a course's crosslistings.
+		/// </summary>
         public List<Course> CrossListedCourses
         {
             get => _crossListedCourses.ToList();
@@ -226,6 +259,9 @@ namespace ClassroomAssignment.Model
 
         public int ClassID_AsInt => int.Parse(ClassID);
 
+		/// <summary>
+		/// Sets the properties associated with assignments and meetings.
+		/// </summary>
         public void SetAllDerivedProperties()
         {
             var roomName = this.QueryRoomAssignment().FirstOrDefault();
@@ -236,12 +272,20 @@ namespace ClassroomAssignment.Model
             EndTime = this.QueryEndTime();
         }
 
-        public Course ShallowCopy()
+		/// <summary>
+		/// Creates shallows copy of a course.
+		/// </summary>
+		/// <returns>(Course)this.MemberwiseClone()</returns>
+		public Course ShallowCopy()
         {
             return (Course)this.MemberwiseClone();
         }
 
-        public override string ToString()
+		/// <summary>
+		/// String representing the course object.
+		/// </summary>
+		/// <returns>A string that represents the course object.</returns>
+		public override string ToString()
         {
             var stringBuilder = new StringBuilder()
                     .Append(CourseName)
@@ -261,6 +305,11 @@ namespace ClassroomAssignment.Model
             return stringBuilder.ToString();
         }
 
+		/// <summary>
+		/// Equals method for a course.
+		/// </summary>
+		/// <param name="obj">A course object.</param>
+		/// <returns>True of all parameters match for passed course; False otherwise</returns>
         public override bool Equals(object obj)
         {
             var course = obj as Course;
@@ -305,17 +354,26 @@ namespace ClassroomAssignment.Model
                    EqualityComparer<Room>.Default.Equals(RoomAssignment, course.RoomAssignment);
         }
 
+		/// <summary>
+		/// Checks of the two courses are equal to each other.
+		/// </summary>
+		/// <param name="course1">The first course object.</param>
+		/// <param name="course2">The second course object.</param>
+		/// <returns>True of the two passed courses are equal. False otherwise</returns>
         public static bool operator ==(Course course1, Course course2)
         {
             return EqualityComparer<Course>.Default.Equals(course1, course2);
         }
 
-        public static bool operator !=(Course course1, Course course2)
+		/// <summary>
+		/// Checks of the two courses passed are not equal to each other.
+		/// </summary>
+		/// <param name="course1">The first course object.</param>
+		/// <param name="course2">The second course object.</param>
+		/// <returns>True of the two passed courses are not equal. False otherwise</returns>
+		public static bool operator !=(Course course1, Course course2)
         {
             return !(course1 == course2);
-
-
-
         }
     }
 }

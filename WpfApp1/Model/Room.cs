@@ -10,7 +10,9 @@ using static ClassroomAssignment.Model.DataConstants;
 
 namespace ClassroomAssignment.Model
 {
-
+	/// <summary>
+	/// The type of room (Lab, Lecture, Conference, ITIN, CYBER, Distance).
+	/// </summary>
     public class RoomType
     {
         public const string Lab = "Lab";
@@ -21,6 +23,9 @@ namespace ClassroomAssignment.Model
         public const string Distance = "Distance";
     }
 
+	/// <summary>
+	/// A classroom represented as an object model.
+	/// </summary>
     [Serializable]
     public class Room
     {
@@ -33,6 +38,11 @@ namespace ClassroomAssignment.Model
         public string Details { get; set; }
         public string RoomType { get; set; }
 
+		/// <summary>
+		/// Equals method for a room.
+		/// </summary>
+		/// <param name="obj">A room object.</param>
+		/// <returns>True if all parameters match for passed room. False otherwise.</returns>
         public override bool Equals(object obj)
         {
             // I want to make this just check room name if possible
@@ -45,6 +55,10 @@ namespace ClassroomAssignment.Model
             return result;
         }
 
+		/// <summary>
+		/// Getter for room's hashcode.
+		/// </summary>
+		/// <returns>hashCode</returns>
         public override int GetHashCode()
         {
             var hashCode = 1430268434;
@@ -53,17 +67,33 @@ namespace ClassroomAssignment.Model
             return hashCode;
         }
 
-        public override string ToString()
+		/// <summary>
+		/// String representing the room object.
+		/// </summary>
+		/// <returns>A string that represents the room object.</returns>
+		public override string ToString()
         {
             return RoomName; // RoomNumber.
         }
 
-        public static bool operator ==(Room room1, Room room2)
+		/// <summary>
+		/// Checks of the two rooms are equal to each other.
+		/// </summary>
+		/// <param name="course1">The first room object.</param>
+		/// <param name="course2">The second room object.</param>
+		/// <returns>True of the two passed rooms are equal. False otherwise</returns>
+		public static bool operator ==(Room room1, Room room2)
         {
             return EqualityComparer<Room>.Default.Equals(room1, room2);
         }
 
-        public static bool operator !=(Room room1, Room room2)
+		/// <summary>
+		/// Checks of the two rooms are not equal to each other.
+		/// </summary>
+		/// <param name="course1">The first room object.</param>
+		/// <param name="course2">The second room object.</param>
+		/// <returns>True of the two passed rooms are not equal. False otherwise</returns>
+		public static bool operator !=(Room room1, Room room2)
         {
             return !(room1 == room2);
         }

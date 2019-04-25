@@ -14,6 +14,9 @@ namespace ClassroomAssignment.Model
     /// </summary>
     public sealed class CourseClassMap : ClassMap<Course>
     {
+		/// <summary>
+		/// Constructor for CourseClassMap. Increments the indices of the courses.
+		/// </summary>
         public CourseClassMap()
         {
             int i = 1;
