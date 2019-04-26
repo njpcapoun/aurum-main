@@ -10,15 +10,15 @@ using System.Windows.Media;
 namespace ClassroomAssignment.Views.TeacherRoomSchedule
 {
     /// <summary>
-    /// Sets visualization size for room schedule
+    /// Sets the size and color for availble slot label
     /// </summary>
     public class AvailableSlotLabel : TextBlock
     {
         /// <summary>
-        /// Sets size and margin for available slots label
+        /// Constructor for AvailableSlotLabel. Sets up attributes for the available slot labels.
         /// </summary>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
+        /// <param name="startTime">The start time for the available slot.</param>
+        /// <param name="endTime">The end time for the available slot.</param>
         public AvailableSlotLabel(TimeSpan startTime, TimeSpan endTime)
         {
             var start = new DateTime().Add(startTime);
@@ -27,12 +27,13 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             Text = string.Format("{0}{1}{2:t}-{3:t}", "Available", Environment.NewLine, start, end);
             TextAlignment = TextAlignment.Center;
             Padding = new Thickness(5);
-            
-            
 
             SetBackground();
         }
 
+        /// <summary>
+        /// Set the background for the available schedule slot.
+        /// </summary>
         private void SetBackground()
         {
             var color = Brushes.LightGreen.Color;

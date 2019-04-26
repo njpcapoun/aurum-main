@@ -23,7 +23,7 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
         /// <summary>
         /// sets margins and size for course label
         /// </summary>
-        /// <param name="course"></param>
+        /// <param name="course">A course object.</param>
         public CourseLabel(Course course)
         {
             _boundCourse = course;
