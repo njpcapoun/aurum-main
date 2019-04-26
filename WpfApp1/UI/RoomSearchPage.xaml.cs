@@ -23,13 +23,21 @@ namespace ClassroomAssignment.UI
     {
         SearchViewModel Model = new SearchViewModel();
 
+		/// <summary>
+		/// Constructor for RoomSearchPage.
+		/// </summary>
         public RoomSearchPage()
         {
             InitializeComponent();
             DataContext = Model;
         }
 
-        private void SearchButton_Click(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// Search for available room when search button is clicked.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
+		private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
             if(SearchControl.ParametersValid)
             {

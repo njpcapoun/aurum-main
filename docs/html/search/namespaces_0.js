@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['ambiguity',['Ambiguity',['../namespace_classroom_assignment_1_1_u_i_1_1_ambiguity.html',1,'ClassroomAssignment::UI']]],
+  ['assignment',['Assignment',['../namespace_classroom_assignment_1_1_u_i_1_1_assignment.html',1,'ClassroomAssignment::UI']]],
+  ['changes',['Changes',['../namespace_classroom_assignment_1_1_u_i_1_1_changes.html',1,'ClassroomAssignment::UI']]],
+  ['classroomassignment',['ClassroomAssignment',['../namespace_classroom_assignment.html',1,'']]],
+  ['create',['Create',['../namespace_classroom_assignment_1_1_u_i_1_1_create.html',1,'ClassroomAssignment::UI']]],
+  ['edit',['Edit',['../namespace_classroom_assignment_1_1_u_i_1_1_edit.html',1,'ClassroomAssignment::UI']]],
+  ['extension',['Extension',['../namespace_classroom_assignment_1_1_extension.html',1,'ClassroomAssignment']]],
+  ['main',['Main',['../namespace_classroom_assignment_1_1_u_i_1_1_main.html',1,'ClassroomAssignment::UI']]],
+  ['model',['Model',['../namespace_classroom_assignment_1_1_model.html',1,'ClassroomAssignment']]],
+  ['notification',['Notification',['../namespace_classroom_assignment_1_1_notification.html',1,'ClassroomAssignment']]],
+  ['operations',['Operations',['../namespace_classroom_assignment_1_1_operations.html',1,'ClassroomAssignment']]],
+  ['properties',['Properties',['../namespace_classroom_assignment_1_1_properties.html',1,'ClassroomAssignment']]],
+  ['reassignment',['Reassignment',['../namespace_classroom_assignment_1_1_u_i_1_1_reassignment.html',1,'ClassroomAssignment::UI']]],
+  ['repo',['Repo',['../namespace_classroom_assignment_1_1_model_1_1_repo.html',1,'ClassroomAssignment.Model.Repo'],['../namespace_classroom_assignment_1_1_repo.html',1,'ClassroomAssignment.Repo']]],
+  ['roomschedule',['RoomSchedule',['../namespace_classroom_assignment_1_1_views_1_1_room_schedule.html',1,'ClassroomAssignment::Views']]],
+  ['roomsearch',['RoomSearch',['../namespace_classroom_assignment_1_1_views_1_1_room_search.html',1,'ClassroomAssignment::Views']]],
+  ['teacherroomschedule',['TeacherRoomSchedule',['../namespace_classroom_assignment_1_1_views_1_1_teacher_room_schedule.html',1,'ClassroomAssignment::Views']]],
+  ['ui',['UI',['../namespace_classroom_assignment_1_1_u_i.html',1,'ClassroomAssignment']]],
+  ['utils',['Utils',['../namespace_classroom_assignment_1_1_model_1_1_utils.html',1,'ClassroomAssignment.Model.Utils'],['../namespace_classroom_assignment_1_1_utils.html',1,'ClassroomAssignment.Utils']]],
+  ['viewmodel',['ViewModel',['../namespace_classroom_assignment_1_1_view_model.html',1,'ClassroomAssignment']]],
+  ['views',['Views',['../namespace_classroom_assignment_1_1_views.html',1,'ClassroomAssignment']]],
+  ['visual',['Visual',['../namespace_classroom_assignment_1_1_visual.html',1,'ClassroomAssignment']]]
+];

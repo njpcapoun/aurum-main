@@ -10,25 +10,26 @@ using System.Threading.Tasks;
 namespace ClassroomAssignment.Operations
 {
     /// <summary>
-    /// THis file conflict detector. Check if there is room conflict at the time also day.
+    /// The file conflict detector. Check if there are room conflicts based on the time and day.
     /// </summary>
     public class AssignmentConflictDetectorSchedule
     {
         //private ICourseRepository courseRepository;
         private ITeacherScheduleRepository CourseSchedule;
-        /// <summary>
+        
+		/// <summary>
         /// Initilize courseRepo to courseRepository.
         /// </summary>
-        /// <param name="courseRepo"></param>
+        /// <param name="courseRepo">The collection of courses</param>
         public AssignmentConflictDetectorSchedule(ITeacherScheduleRepository courseSchedule)
         {
             CourseSchedule = courseSchedule;
         }
         /// <summary>
-        /// This return all time conlict courses. 
-        /// Check class assign time and see if any other course use same room at that time.
+        /// Return all time conflict courses. 
+        /// Check class assignment time and see if any other courses use the same room at that time.
         /// </summary>
-        /// <returns>conflicts</returns>
+        /// <returns>The list of conflicts</returns>
         public List<Conflict> AllConflicts()
         {
             var courseGroupByRoom = from course in CourseSchedule.Courses
@@ -66,7 +67,13 @@ namespace ClassroomAssignment.Operations
             return conflicts;
         }
 
-        private bool ConflictBetweenCourses(Course courseA, Course courseB)
+		/// <summary>
+		/// Check if the two courses in the parameters have conflicts.
+		/// </summary>
+		/// <param name="courseA">The first course object.</param>
+		/// <param name="courseB">The second course object</param>
+		/// <returns>True if conflict exists. False otherwise.</returns>
+		private bool ConflictBetweenCourses(Course courseA, Course courseB)
         {
             bool candidate = courseA.MeetingDays?.Any(x => courseB.MeetingDays?.Contains(x) == true) == true;
             if (!candidate) return false;
@@ -82,8 +89,8 @@ namespace ClassroomAssignment.Operations
         /// <summary>
         /// Finds conflicts involving the <paramref name="courses"/> and the rest of the courses in the CourseRepo
         /// </summary>
-        /// <param name="courses"></param>
-        /// <returns>allConflicts</returns>
+        /// <param name="courses">The list of courses</param>
+        /// <returns>List of all the conflicts</returns>
         public List<Conflict> ConflictsInvolvingCourses(List<Course> courses)
         {
             List<Conflict> allConflicts = AllConflicts();
@@ -94,8 +101,8 @@ namespace ClassroomAssignment.Operations
         /// <summary>
         /// Return conflicts solely among the <paramref name="courses"/>
         /// </summary>
-        /// <param name="courses"></param>
-        /// <returns>new conflict list</returns>
+        /// <param name="courses">The list of courses.</param>
+        /// <returns>The new conflict list</returns>
         public List<Conflict> ConflictsAmongCourses(List<Course> courses)
         {
             return new List<Conflict>();

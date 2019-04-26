@@ -31,6 +31,9 @@ namespace ClassroomAssignment.Views
         public bool ValidMeetingPattern { get; private set; } = true;
         public bool ValidRoomCapRequest { get; private set; } = true;
 
+        /// <summary>
+        /// Getter and setter for the course details being displayed.
+        /// </summary>
         public Course CourseShown
         {
             get
@@ -44,7 +47,9 @@ namespace ClassroomAssignment.Views
             }
         }
 
-
+        /// <summary>
+        /// Constructor for CourseDetailLocked. Set the valid times for the start and end time options.
+        /// </summary>
         public CourseDetailLocked()
         {
             InitializeComponent();
@@ -54,6 +59,10 @@ namespace ClassroomAssignment.Views
             EndTimeOptions.ItemsSource = ValidTimes;
         }
 
+        /// <summary>
+        /// Set up the list of times for the start and end times.
+        /// </summary>
+        /// <returns>The list of valid times the course can be assigned.</returns>
         private List<string> GetValidTimes()
         {
             var validTimes = new List<string>();
@@ -69,6 +78,11 @@ namespace ClassroomAssignment.Views
             return validTimes;
         }
 
+        /// <summary>
+        /// The check boxes for the days of the week the course is on.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a routed event.</param>
         private void DayCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             var meetingPattern = string.Format("{0} {1}-{2}", GetMeetingDays(), StartTimeOptions.SelectedItem, EndTimeOptions.SelectedItem);
@@ -77,6 +91,9 @@ namespace ClassroomAssignment.Views
             ValidateMeetingPattern();
         }
 
+        /// <summary>
+        /// Validate the meeting times and days for the course.
+        /// </summary>
         private void ValidateMeetingPattern()
         {
             if (string.IsNullOrEmpty(GetMeetingDays()) || StartTimeOptions.SelectedItem == null || EndTimeOptions.SelectedItem == null)
@@ -88,7 +105,10 @@ namespace ClassroomAssignment.Views
             ValidMeetingPattern = DateTime.Parse(StartTimeOptions.SelectedItem as String) < DateTime.Parse(EndTimeOptions.SelectedItem as String);
         }
 
-
+        /// <summary>
+        /// Get the meeting days for the course.
+        /// </summary>
+        /// <returns>String of the meetings days for a course.</returns>
         private string GetMeetingDays()
         {
             List<string> meetingDays = new List<string>();
@@ -103,6 +123,11 @@ namespace ClassroomAssignment.Views
             return stringBuilder.ToString();
         }
 
+        /// <summary>
+        /// Handle the event when the time option combo boxes have changed.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a routed event.</param>
         private void TimeOptions_Selected(object sender, RoutedEventArgs e)
         {
             var meetingPattern = string.Format("{0} {1}-{2}", GetMeetingDays(), StartTimeOptions.SelectedItem, EndTimeOptions.SelectedItem);
@@ -111,6 +136,11 @@ namespace ClassroomAssignment.Views
             ValidateMeetingPattern();
         }
 
+        /// <summary>
+        /// Handle the event when the room capacity request text box has changed.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a TextChanged event.</param>
         private void RmCapRequestTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             int i = 0;

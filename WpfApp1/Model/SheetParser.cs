@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 namespace ClassroomAssignment.Model
 {
     /// <summary>
-    /// This file sheet parser, and get input file and parse that information
-    /// <example>Its read excel file and read each row and parse.</example>
+    /// The file sheet parser. Reads each row of input csv files and parses their information
     /// </summary>
     public sealed class SheetParser
     {
@@ -29,9 +28,9 @@ namespace ClassroomAssignment.Model
         /// Get room repositoy and create course list, 
         /// and add these courses in courses list.
         /// </summary>
-        /// <param name="filePaths"></param>
-        /// <param name="roomRepo"></param>
-        /// <returns> courses </returns>
+        /// <param name="filePaths">THe file paths of the csv files.</param>
+        /// <param name="roomRepo">The collection of rooms.</param>
+        /// <returns>The list of courses from a csv file</returns>
         public static List<Course> Parse(string filePath, IRoomRepository roomRepo)
         {
             var fileCourseList = new List<Course>();
@@ -52,7 +51,7 @@ namespace ClassroomAssignment.Model
         /// parse the file, and get information
         /// <remark>skip the headers</remark>
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="file">The name of the csv file.</param>
         /// <returns>courseForFile</returns>
         static List<Course> parseFile(string file)
         {
@@ -88,6 +87,11 @@ namespace ClassroomAssignment.Model
             return coursesForFile;
         }
 
+		/// <summary>
+		/// Sets the parameterss of the courses and adds them to the courses list.
+		/// </summary>
+		/// <param name="reader">The CsvReader.</param>
+		/// <returns>courseList</returns>
         private static List<Course> parseRecordsForCourse(CsvHelper.CsvReader reader)
         {
             // make sure not at header or end of file
@@ -118,6 +122,11 @@ namespace ClassroomAssignment.Model
             return courseList;
         }
 
+		/// <summary>
+		/// Checks if there are more courses need to be read from the files.
+		/// </summary>
+		/// <param name="reader">The CsvReader</param>
+		/// <returns>True if there are more courses left. False otherwise</returns>
         static bool courseHasMoreRecords(CsvHelper.CsvReader reader)
         {
             string courseHeader = reader.GetField(0);
@@ -128,7 +137,7 @@ namespace ClassroomAssignment.Model
         /// <summary>
         /// Skip the headers from input file
         /// </summary>
-        /// <param name="reader"></param>
+        /// <param name="reader">The CsvReader</param>
         static void skipHeaders(CsvHelper.CsvReader reader)
         { 
             ///<value> LastRowOfHeader is 3</value>

@@ -13,12 +13,12 @@ namespace ClassroomAssignment.Extension
     /// </summary>
     public static class EnumExtensions
     {
-        /// <summary>
-        /// Get the description for the value and enumerate it
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns> null </returns>
-        public static string GetDescription(this Enum value)
+		/// <summary>
+		/// Get the description for the value and enumerate it
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns>attr.Description if enum name and FieldInfo isn't null. null otherwise.</returns>
+		public static string GetDescription(this Enum value)
         {
             Type type = value.GetType();
             string name = Enum.GetName(type, value);

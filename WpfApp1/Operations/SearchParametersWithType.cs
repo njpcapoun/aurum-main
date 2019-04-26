@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ClassroomAssignment.Operations
 {
     /// <summary>
-    /// This file search parameters, calculate duration for courses.
+    /// The file search parameters including room type, calculate and set the time durations for the courses.
     /// </summary>
     public struct SearchParametersWithType
     {
@@ -17,15 +17,17 @@ namespace ClassroomAssignment.Operations
         public TimeSpan Duration;
         public int Capacity;
         public string Type;
-        /// <summary>
-        /// Calculate duration for the class.
-        /// </summary>
-        /// <param name="meetingDays"></param>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
-        /// <param name="capacity"></param>
-        /// <param name="duration"></param>
-        public SearchParametersWithType(IEnumerable<DayOfWeek> meetingDays, string roomtype, TimeSpan startTime, TimeSpan endTime, int capacity = int.MaxValue, TimeSpan duration = new TimeSpan())
+
+		/// <summary>
+		/// Constructor for SearchParametersWithType. Calculate and set the time duration of a course.
+		/// </summary>
+		/// <param name="meetingDays">Days of meeting for a course.</param>
+		/// <param name="roomtype">The type of room.</param>
+		/// <param name="startTime">The start time of a course.</param>
+		/// <param name="endTime">The end time of a course.</param>
+		/// <param name="capacity">The capacity of a course.</param>
+		/// <param name="duration">The time length of a course.</param>
+		public SearchParametersWithType(IEnumerable<DayOfWeek> meetingDays, string roomtype, TimeSpan startTime, TimeSpan endTime, int capacity = int.MaxValue, TimeSpan duration = new TimeSpan())
         {
             MeetingDays = meetingDays;
             StartTime = startTime;
@@ -36,7 +38,5 @@ namespace ClassroomAssignment.Operations
             if (duration.TotalMinutes == 0) Duration = endTime - startTime;
             else Duration = duration;
         }
-
-
     }
 }

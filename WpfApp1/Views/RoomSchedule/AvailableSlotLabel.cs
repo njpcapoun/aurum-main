@@ -17,8 +17,8 @@ namespace ClassroomAssignment.Views.RoomSchedule
         /// <summary>
         /// Sets size and margin for available slots label
         /// </summary>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
+        /// <param name="startTime">The start time for a course to be assigned.</param>
+        /// <param name="endTime">The end time for a course to be assigned.</param>
         public AvailableSlotLabel(TimeSpan startTime, TimeSpan endTime)
         {
             var start = new DateTime().Add(startTime);
@@ -33,6 +33,9 @@ namespace ClassroomAssignment.Views.RoomSchedule
             SetBackground();
         }
 
+        /// <summary>
+        /// Set the background color for the course to be assigned.
+        /// </summary>
         private void SetBackground()
         {
             var color = Brushes.LightGreen.Color;

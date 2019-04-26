@@ -20,6 +20,9 @@ using static ClassroomAssignment.Model.Course;
 
 namespace ClassroomAssignment.Repo
 {
+	/// <summary>
+	/// Collection of courses.
+	/// </summary>
     [Serializable]
     public class CourseRepository : ICourseRepository
     {
@@ -31,6 +34,10 @@ namespace ClassroomAssignment.Repo
 
         public event EventHandler<ChangeInConflictsEventArgs> ChangeInConflicts;
 
+		/// <summary>
+		/// Get instance of courses.
+		/// </summary>
+		/// <returns>_instance</returns>
         public static CourseRepository GetInstance()
         {
             return _instance;
@@ -40,7 +47,7 @@ namespace ClassroomAssignment.Repo
         /// Handle course list exception if it is empty, 
         /// throw NullException.
         /// </summary>
-        /// <param name="courses"></param>
+        /// <param name="courses">The collection of courses.</param>
         public static void InitInstance(ICollection<Course> courses)
         {
             if (courses == null) throw new ArgumentNullException();
@@ -49,6 +56,10 @@ namespace ClassroomAssignment.Repo
             _instance.roomConflictDetector = new AssignmentConflictDetector(_instance);
         }
 
+		/// <summary>
+		/// Constructor of CourseRepository. Handle change in properties for courses.
+		/// </summary>
+		/// <param name="courses">The collection of courses.</param>
         private CourseRepository(IEnumerable<Course> courses)
         {
             Courses = courses;
@@ -61,16 +72,23 @@ namespace ClassroomAssignment.Repo
             HandleChangeInCourseStates();
         }
 
-        
 
-        private void Course_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		/// <summary>
+		/// Handle changes for a course, whether it be conflicts or change in its state.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a PropertyChanged event.</param>
+		private void Course_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "State") return;
             HandleChangeInConflicts();
             HandleChangeInCourseStates();
         }
 
-        private void HandleChangeInConflicts()
+		/// <summary>
+		/// Handle change in conflicts when a conflict occurs or no longer exists.
+		/// </summary>
+		private void HandleChangeInConflicts()
         {
             var conflicts = GetConflicts();
             var eventArgs = new ChangeInConflictsEventArgs();
@@ -79,7 +97,10 @@ namespace ClassroomAssignment.Repo
             ChangeInConflicts?.Invoke(this, eventArgs);
         }
 
-        private void HandleChangeInCourseStates()
+		/// <summary>
+		/// Handle the change of a course's when it has conflicts, been assigned, been unassigned, or doesn't need a room.
+		/// </summary>
+		private void HandleChangeInCourseStates()
         {
             var conflicts = GetConflicts();
             var coursesWithConflicts = new HashSet<Course>();
@@ -117,8 +138,10 @@ namespace ClassroomAssignment.Repo
             return new AssignmentConflictDetector(this).ConflictsInvolvingCourses(courses);
         }
 
-
-        public class ChangeInConflictsEventArgs : EventArgs
+		/// <summary>
+		/// Get and set changes in the conflicts.
+		/// </summary>
+		public class ChangeInConflictsEventArgs : EventArgs
         {
             public IEnumerable<Conflict> Conflicts { get; set; }
         }

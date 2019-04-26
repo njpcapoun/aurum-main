@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ClassroomAssignment.Operations
 {
     /// <summary>
-    /// THis file conflict detector. Check if there is room conflict at the time also day.
+    /// The file conflict detector. Check if there is room conflict at the time also day.
     /// </summary>
     public class AssignmentConflictDetector
     {
@@ -66,6 +66,12 @@ namespace ClassroomAssignment.Operations
             return conflicts;
         }
 
+		/// <summary>
+		/// Check if the two courses in the parameters have conflicts.
+		/// </summary>
+		/// <param name="courseA">The first course object.</param>
+		/// <param name="courseB">The second course object</param>
+		/// <returns>True if conflict exists. False otherwise.</returns>
         private bool ConflictBetweenCourses(Course courseA, Course courseB)
         {
             bool candidate = courseA.MeetingDays?.Any(x => courseB.MeetingDays?.Contains(x) == true) == true;
@@ -82,7 +88,7 @@ namespace ClassroomAssignment.Operations
         /// <summary>
         /// Finds conflicts involving the <paramref name="courses"/> and the rest of the courses in the CourseRepo
         /// </summary>
-        /// <param name="courses"></param>
+        /// <param name="courses">The list of courses.</param>
         /// <returns>allConflicts</returns>
         public List<Conflict> ConflictsInvolvingCourses(List<Course> courses)
         {
@@ -94,7 +100,7 @@ namespace ClassroomAssignment.Operations
         /// <summary>
         /// Return conflicts solely among the <paramref name="courses"/>
         /// </summary>
-        /// <param name="courses"></param>
+        /// <param name="courses">The list of courses.</param>
         /// <returns>new conflict list</returns>
         public List<Conflict> ConflictsAmongCourses(List<Course> courses)
         {

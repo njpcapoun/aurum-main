@@ -32,6 +32,10 @@ namespace ClassroomAssignment.UI.Assignment
 
         SaveBase saveWork = new SaveBase();
 
+		/// <summary>
+		/// Constructor for AssignmentPage. Initialize the view model and room schedules.
+		/// </summary>
+		/// <param name="courses"></param>
         public AssignmentPage(List<Course> courses)
         {
 
@@ -48,14 +52,24 @@ namespace ClassroomAssignment.UI.Assignment
             
         }
 
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// Collapses and expands the schedule grid view.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
+		private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
             var window = Window.GetWindow(this);
             if (window == null) return;
             window.SizeToContent = SizeToContent.Width;
         }
 
-        void OnClickSave(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// Save work onto file.
+		/// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
+		void OnClickSave(object sender, RoutedEventArgs e)
         {
             saveWork.SaveWork();
         }

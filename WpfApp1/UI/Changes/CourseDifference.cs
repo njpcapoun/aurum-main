@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ClassroomAssignment.UI.Changes
 {
+	/// <summary>
+	/// Model class of the course difference.
+	/// </summary>
     public class CourseDifference
     {
         public string DifferenceType { get; set; }

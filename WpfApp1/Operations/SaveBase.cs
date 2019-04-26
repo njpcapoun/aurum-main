@@ -22,9 +22,14 @@ using System.Windows.Shapes;
 
 namespace ClassroomAssignment.Operations
 {
+	/// <summary>
+	/// The class containing the save functionality
+	/// </summary>
     class SaveBase
     {
-        // Save as code. Always brings up the dialog box then saves the chosen file as where the autosave should go
+		/// <summary>
+		/// Save as code. Always brings up the dialog box then saves the chosen file as where the autosave should go
+		/// </summary>
         public void SaveAs()
         {
             if (GetUpToDateCourses() != null)
@@ -59,8 +64,9 @@ namespace ClassroomAssignment.Operations
 
         }
 
-
-        // Same as save as, but checks if theres a path to autosave to
+		/// <summary>
+		/// Same as save as, but checks if theres a path to autosave to
+		/// </summary>
         public void SaveWork()
         {
             if (GetUpToDateCourses() != null) {
@@ -99,6 +105,10 @@ namespace ClassroomAssignment.Operations
             }
         }
 
+		/// <summary>
+		/// Get the list of the original courses.
+		/// </summary>
+		/// <returns>The list of the originl courses if no exceptions occur. Null if so.</returns>
         private List<Course> GetOriginalCourses()
         {
             try
@@ -112,7 +122,11 @@ namespace ClassroomAssignment.Operations
             }
         }
 
-        private List<Course> GetUpToDateCourses()
+		/// <summary>
+		/// Get the list of the updated courses.
+		/// </summary>
+		/// <returns>The list of the updated courses if no exceptions occur. Null if so.</returns>
+		private List<Course> GetUpToDateCourses()
         {
             try
             {

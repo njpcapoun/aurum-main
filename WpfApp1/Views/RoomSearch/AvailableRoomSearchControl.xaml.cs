@@ -28,11 +28,17 @@ namespace ClassroomAssignment.Views.RoomSearch
         private TimeSpan EndTime;
         private List<DayOfWeek> MeetingDays;
 
+        /// <summary>
+        /// Constructor for AvailbleRoomSearchControl. Initialize the components.
+        /// </summary>
         public AvailableRoomSearchControl()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Getter for checking if the search parameters are valid.
+        /// </summary>
         public bool ParametersValid
         {
             get
@@ -41,7 +47,9 @@ namespace ClassroomAssignment.Views.RoomSearch
             }
         }
 
-
+        /// <summary>
+        /// Getter for the search parameters for an available room.
+        /// </summary>
         public SearchParameters SearchParameters
         {
             get
@@ -57,8 +65,10 @@ namespace ClassroomAssignment.Views.RoomSearch
             }
         }
 
-
-
+        /// <summary>
+        /// Validate the search parameters.
+        /// </summary>
+        /// <returns>True if all the search parameters are valid. False otherwise.</returns>
         private bool ValidateInput()
         {
             return MeetingDaysValid()
@@ -68,6 +78,10 @@ namespace ClassroomAssignment.Views.RoomSearch
                 && EndTimeValid();
         }
 
+        /// <summary>
+        /// Validate and add the available meeting days for a course to be assigned.
+        /// </summary>
+        /// <returns>The list of meetings days if it is not equal to zero.</returns>
         private bool MeetingDaysValid()
         {
             List<DayOfWeek> meetingDays = new List<DayOfWeek>();
@@ -82,6 +96,11 @@ namespace ClassroomAssignment.Views.RoomSearch
 
             return MeetingDays.Count != 0;
         }
+
+        /// <summary>
+        /// Validate the time duration of a course to be assigned.
+        /// </summary>
+        /// <returns>True if it's valid. False otherwise.</returns>
         private bool DurationValid()
         {
             var duration = DurationTextBox.Text;
@@ -96,6 +115,10 @@ namespace ClassroomAssignment.Views.RoomSearch
             else return false;
         }
 
+        /// <summary>
+        /// Validate the capacity of a course to be assigned
+        /// </summary>
+        /// <returns>True if it's valid. False otherwise.</returns>
         private bool CapacityValid()
         {
             int capacity = -1;
@@ -107,6 +130,10 @@ namespace ClassroomAssignment.Views.RoomSearch
             else return false;
         }
 
+        /// <summary>
+        /// Validate the start time of a course to be assigned.
+        /// </summary>
+        /// <returns>True if it's valid. False otherwise.</returns>
         private bool StartTimeValid()
         {
             var startTime = StartTimeTextBox.Text;
@@ -121,6 +148,10 @@ namespace ClassroomAssignment.Views.RoomSearch
             else return false;
         }
 
+        /// <summary>
+        /// Validate the end time of a course to be assigned.
+        /// </summary>
+        /// <returns>True if it's valid. False otherwise.</returns>
         private bool EndTimeValid()
         {
             var endTime = EndTimeTextBox.Text;

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace ClassroomAssignment.UI.Reassignment
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LinkedReassignments : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

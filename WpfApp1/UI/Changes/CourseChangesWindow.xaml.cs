@@ -26,6 +26,9 @@ namespace ClassroomAssignment.UI.Changes
     /// </summary>
     public partial class CourseChangesWindow : Window
     {
+		/// <summary>
+		/// Constructor for CourseChangesWindow. Initialize the original and updated courses and course differences.
+		/// </summary>
         public CourseChangesWindow()
         {
             InitializeComponent();
@@ -35,7 +38,11 @@ namespace ClassroomAssignment.UI.Changes
             DataContext = courseDifferences;
         }
 
-        private List<Course> GetOriginalCourses()
+		/// <summary>
+		/// Get the original courses before the changes.
+		/// </summary>
+		/// <returns>The list of original courses.</returns>
+		private List<Course> GetOriginalCourses()
         {
             string fileName = "original.bin";
             IFormatter formatter = new BinaryFormatter();
@@ -48,12 +55,22 @@ namespace ClassroomAssignment.UI.Changes
             return originalCourses;
         }
 
+		/// <summary>
+		/// Get the updated courses after changes were made to them during the session.
+		/// </summary>
+		/// <returns>THe list of updated courses.</returns>
         private List<Course> GetUpToDateCourses()
         {
             return CourseRepository.GetInstance().Courses.OrderBy(x => int.Parse(x.ClassID)).ToList();
         }
 
-        private List<CourseDifference> GetDifferences(List<Course> originalCourses, List<Course> newCourses)
+		/// <summary>
+		/// Get the differences between the original and updated courses.
+		/// </summary>
+		/// <param name="originalCourses">The original courses before changes were made to them.</param>
+		/// <param name="newCourses">The updated courses which have had changes made during the session.</param>
+		/// <returns>The differences between the original and new courses.</returns>
+		private List<CourseDifference> GetDifferences(List<Course> originalCourses, List<Course> newCourses)
         {
             List<CourseDifference> differences = new List<CourseDifference>();
             for (int i = 0; i < originalCourses.Count; i++)
@@ -80,7 +97,13 @@ namespace ClassroomAssignment.UI.Changes
             return differences;
         }
 
-        private bool CoursesAreSame(Course a, Course b)
+		/// <summary>
+		/// Checks of the two courses have the same room assignments.
+		/// </summary>
+		/// <param name="a">The first course to be compared.</param>
+		/// <param name="b">The second course to be compared.</param>
+		/// <returns>True if the two courses have the same room assignemtns. False otherwise.</returns>
+		private bool CoursesAreSame(Course a, Course b)
         {
             if (a.RoomAssignment == null || b.RoomAssignment == null) return a.RoomAssignment == b.RoomAssignment;
             else return a.RoomAssignment.Equals(b.RoomAssignment);

@@ -79,7 +79,7 @@ namespace ClassroomAssignment.UI.Main
         /// Loads the main page when navigated to.
         /// </summary>
         /// <param name="sender">A reference to the control/object that raised the event.</param>
-        /// <param name="e">>State information and event data associated with a routed event.</param>
+        /// <param name="e">State information and event data associated with a routed event.</param>
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             while (NavigationService.RemoveBackEntry() != null) ;
@@ -89,7 +89,7 @@ namespace ClassroomAssignment.UI.Main
         /// Save work as a different .agn file from the file menu item.
         /// </summary>
         /// <param name="sender">A reference to the control/object that raised the event.</param>
-        /// <param name="e">>State information and event data.</param>
+        /// <param name="e">State information and event data.</param>
         private void SaveAs(object sender, EventArgs e)
         {
             saveWork.SaveAs();
@@ -99,7 +99,7 @@ namespace ClassroomAssignment.UI.Main
         /// Save all work to most recently opened or created assignment/.agn file from the file menu item.
         /// </summary>
         /// <param name="sender">A reference to the control/object that raised the event.</param>
-        /// <param name="e">>State information and event data.</param>
+        /// <param name="e">State information and event data.</param>
         private void Menu_Save(object sender, EventArgs e)
         {
             saveWork.SaveWork();
@@ -192,7 +192,7 @@ namespace ClassroomAssignment.UI.Main
 												"Crosslist by Crosslistings Fields Successful", MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 
-				/// <summary>
+		/// <summary>
 		/// Automatically crosslists all the courses based on their room assignments and meeting patterns from the file menu.
 		/// </summary>
 		/// <param name="sender">A reference to the control/object that raised the event.</param>
@@ -804,6 +804,11 @@ namespace ClassroomAssignment.UI.Main
             window.SizeToContent = SizeToContent.Width;
         }
 
+        /// <summary>
+        /// Search for the list of teachers when typing in text box.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a routed event.</param>
         private void Teacher_Search_Click(object sender, RoutedEventArgs e)
         {
             string[] multi = { "" };
@@ -899,6 +904,11 @@ namespace ClassroomAssignment.UI.Main
             }
         }
 
+        /// <summary>
+        /// Select schedule of teacher to print.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a SelectionChanged event.</param>
         private void Teacher_ListBox_Selected(object sender, SelectionChangedEventArgs e)
         {
             ObservableCollection<Course> Courses = new ObservableCollection<Course>(ViewModel.CourseRepo.Courses);
@@ -953,6 +963,11 @@ namespace ClassroomAssignment.UI.Main
 
         }
 
+        /// <summary>
+        /// Create an Excel workbook of a teacher's schedule.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a routed event.</param>
         private void Teacher_Export_Click(object sender, RoutedEventArgs e)
         {
             if (ViewModel.Conflicts.Count != 0)

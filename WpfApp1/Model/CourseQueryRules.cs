@@ -10,8 +10,16 @@ using static ClassroomAssignment.Model.DataConstants;
 
 namespace ClassroomAssignment.Model
 {
+	/// <summary>
+	/// Query expressions for the courses.
+	/// </summary>
     public static class CourseQueryRules
     {
+		/// <summary>
+		/// Determines if a course needs a room.
+		/// </summary>
+		/// <param name="course">A course object.</param>
+		/// <returns>needsRoom is set to false if the passed course doesn't not need a room assignment. True otherwise.</returns>
         public static bool QueryNeedsRoom(this Course course)
         {
             bool needsRoom = true;
@@ -31,11 +39,21 @@ namespace ClassroomAssignment.Model
             return needsRoom;
         }
 
+		/// <summary>
+		/// Determines if a course has an ambigous assignment.
+		/// </summary>
+		/// <param name="course">A course object.</param>
+		/// <returns>HasMultipleRoomAssignments(course)</returns>
         public static bool QueryHasAmbiguousAssignment(this Course course)
         {
             return HasMultipleRoomAssignments(course);
         }
 
+		/// <summary>
+		/// Check if a course has multiple assignments.
+		/// </summary>
+		/// <param name="course">A course object.</param>
+		/// <returns>True if course has multiple assignments. False otherwise.</returns>
         private static bool HasMultipleRoomAssignments(this Course course)
         {
             bool multipleAssignments = false;
@@ -62,7 +80,11 @@ namespace ClassroomAssignment.Model
             return multipleAssignments;
         }
 
-
+		/// <summary>
+		/// Determines the meeting days of a course.
+		/// </summary>
+		/// <param name="course">A course object.</param>
+		/// <returns>List of meeting days.</returns>
         public static List<DayOfWeek> QueryMeetingDays(this Course course)
         {
             Regex regex = new Regex(DataConstants.MeetingPatternOptions.TIME_PATTERN);
@@ -78,7 +100,12 @@ namespace ClassroomAssignment.Model
             return MeetingDays;
         }
 
-        public static TimeSpan? QueryStartTime(this Course course)
+		/// <summary>
+		/// Determine the start time of a course.
+		/// </summary>
+		/// <param name="course">A course object.</param>
+		/// <returns>dateTime.TimeOfDay if the regex match is successful. Null otherwise.</returns>
+		public static TimeSpan? QueryStartTime(this Course course)
         {
             Regex regex = new Regex(MeetingPatternOptions.TIME_PATTERN);
             Match match = regex.Match(course.MeetingPattern);
@@ -97,7 +124,12 @@ namespace ClassroomAssignment.Model
             return null;            
         }
 
-        public static TimeSpan? QueryEndTime(this Course course)
+		/// <summary>
+		/// Determine the end time of a course.
+		/// </summary>
+		/// <param name="course">A course object.</param>
+		/// <returns>dateTime.TimeOfDay if the regex match is successful. Null otherwise.</returns>
+		public static TimeSpan? QueryEndTime(this Course course)
         {
             Regex regex = new Regex(MeetingPatternOptions.TIME_PATTERN);
             Match match = regex.Match(course.MeetingPattern);
@@ -119,7 +151,7 @@ namespace ClassroomAssignment.Model
         /// <summary>
         /// Returns rooms assignments.
         /// </summary>
-        /// <param name="course"></param>
+        /// <param name="course">A course object.</param>
         /// <returns>List of rooms assignments. Multiple rooms if course has ambiguous assignment or
         ///  an empty list if course has none.</returns>
         public static List<string> QueryRoomAssignment(this Course course)

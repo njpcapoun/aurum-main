@@ -9,8 +9,7 @@ using System.Collections.Specialized;
 namespace ClassroomAssignment.Model
 {
     /// <summary>
-    /// Sets template for exported schedule 
-    /// visualization
+    /// Sets template and visualization for the exported schedules.
     /// </summary>
     public class ClassScheduleTemplate
     {
@@ -19,6 +18,9 @@ namespace ClassroomAssignment.Model
         private int CurrentColorIndex = 0;
         private Dictionary<string, short> SubjectCodeToColor = new Dictionary<string, short>();
 
+		/// <summary>
+		/// Constructor for ClassScheduleTemplate. Set the list of colors for the subject codes.
+		/// </summary>
         public ClassScheduleTemplate()
         {
             AvailableColors = new List<short>()
@@ -37,10 +39,10 @@ namespace ClassroomAssignment.Model
        
 
         /// <summary>
-        /// Sets the style of cells for the workbook
+        /// Sets the style of cells for the workbook.
         /// </summary>
-        /// <param name="workbook"></param>
-        /// <param name="foregroundColor"></param>
+        /// <param name="workbook">An Excel workbook.</param>
+        /// <param name="foregroundColor">The foreground color based on subject code.</param>
         /// <returns>ICellStyle</returns>
         public ICellStyle GetCellStyle(IWorkbook workbook, string subjectCode)
         {
@@ -60,6 +62,11 @@ namespace ClassroomAssignment.Model
             return style;
         }
 
+		/// <summary>
+		/// Getter for department color.
+		/// </summary>
+		/// <param name="subjectCode">Subject code of a course.</param>
+		/// <returns></returns>
         private short GetColorForSubjectCode(string subjectCode)
         {
             if (SubjectCodeToColor.ContainsKey(subjectCode))
@@ -78,9 +85,11 @@ namespace ClassroomAssignment.Model
                 return AvailableColors.Last();
             }
         }
-
         
-
+		/// <summary>
+		/// Getter for subject code color.
+		/// </summary>
+		/// <returns></returns>
         public Dictionary<string, short> GetSubjectColorMap()
         {
             return SubjectCodeToColor;

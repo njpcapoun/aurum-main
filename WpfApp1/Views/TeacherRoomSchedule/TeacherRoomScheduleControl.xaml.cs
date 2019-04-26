@@ -44,6 +44,11 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
         // private readonly DependencyProperty _roomScheduledProperty;
         public static readonly DependencyProperty RoomScheduledProperty_t = DependencyProperty.Register("RoomScheduled_T", typeof(Room), typeof(TeacherRoomScheduleControl), new PropertyMetadata(new PropertyChangedCallback(OnRoomScheduledChangeT)));
 
+        /// <summary>
+        /// Set up the text format of a teacher's room's information.
+        /// </summary>
+        /// <param name="d">Represents an object that participates in the dependency property system.</param>
+        /// <param name="e">Provides data for various property changed events.</param>
         private static void OnRoomScheduledChangeT(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as TeacherRoomScheduleControl;
@@ -53,6 +58,9 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             //control.TeacherNameTextBlock.Text = string.Format("Teacher: test" + control.RoomScheduled_T.Details);
         }
 
+        /// <summary>
+        /// Getter and setter for the teacher's scheduled rooms.
+        /// </summary>
         [Bindable(true)]
         public Room RoomScheduled_T
         {
@@ -63,6 +71,10 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
 
         public string selectedTeacher;
         private ObservableCollection<Course> _coursesForTeacher;
+
+        /// <summary>
+        /// Getter and setter for the teacher's courses.
+        /// </summary>
         public ObservableCollection<Course> CoursesForTeacher
         {
             get => (ObservableCollection<Course>)GetValue(CoursesForRoomPropertyT);
@@ -74,6 +86,11 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
 
         public static readonly DependencyProperty CoursesForRoomPropertyT = DependencyProperty.Register("CoursesForTeacher", typeof(ObservableCollection<Course>), typeof(TeacherRoomScheduleControl), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.AffectsMeasure, new PropertyChangedCallback(CoursesForRoomChangedT)));
 
+        /// <summary>
+        /// Handle the event when the teacher's courses for a room have changed.
+        /// </summary>
+        /// <param name="d">Represents an object that participates in the dependency property system.</param>
+        /// <param name="e">Provides data for various dependency property changed events.</param>
         private static void CoursesForRoomChangedT(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as TeacherRoomScheduleControl;
@@ -85,6 +102,11 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             if (e.NewValue != null) (e.NewValue as ObservableCollection<Course>).CollectionChanged += control.CoursesForRoom_CollectionChanged_T;
         }
 
+        /// <summary>
+        /// Occurs when the teacher's courses for a room have changed.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a NotifyCollectionChanged event.</param>
         private void CoursesForRoom_CollectionChanged_T(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
@@ -102,6 +124,10 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
         public static readonly DependencyProperty AvailableSlotsPropertyT = DependencyProperty.Register(nameof(AvailableSlotsT), typeof(ObservableCollection<ScheduleSlot>), typeof(TeacherRoomScheduleControl), new PropertyMetadata(OnAvailableSlotChangeT));
 
         private ObservableCollection<ScheduleSlot> _availableSlotsT;
+
+        /// <summary>
+        /// Getter and setter for the available slots
+        /// </summary>
         public ObservableCollection<ScheduleSlot> AvailableSlotsT
         {
             get => _availableSlotsT;
@@ -110,6 +136,12 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
                 _availableSlotsT = value;
             }
         }
+
+        /// <summary>
+        /// Occurs when the available slots for a room assigned to a teacher have changed.
+        /// </summary>
+        /// <param name="d">Represents an object that participates in the dependency property system.</param>
+        /// <param name="e">Provides data for various dependency property changed events.</param>
         private static void OnAvailableSlotChangeT(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var roomScheduleControl = (TeacherRoomScheduleControl)d;
@@ -117,7 +149,11 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             roomScheduleControl.AvailableSlotsT.CollectionChanged += roomScheduleControl.AvailableSlots_CollectionChangedT;
         }
 
-       
+        /// <summary>
+        /// Occurs when the collection of availble slots have changed
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a NotifyCollectionChanged event.</param>
         private void AvailableSlots_CollectionChangedT(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -132,6 +168,9 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
 
         #endregion
 
+        /// <summary>
+        /// Constructor for TeacherRoomScheduleControl. Set the colors for the room schedule.
+        /// </summary>
         static TeacherRoomScheduleControl()
         {
             var colors_t = new List<SolidColorBrush>()
@@ -157,6 +196,9 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
 
         }
 
+        /// <summary>
+        /// Constructor for RoomScheduleControl. Set the course time slots for the teacher room schedule.
+        /// </summary>
         public TeacherRoomScheduleControl()
         {
             InitializeComponent();
@@ -174,12 +216,18 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
 
         #region Setup
 
+        /// <summary>
+        /// Set up the schedule grid for the teacher view.
+        /// </summary>
         private void SetupScheduleGridT()
         {
             SetupStructureT();
             PopulateHeadersT();
         }
 
+        /// <summary>
+        /// Set up the structure of the schedule grid for the teacher view.
+        /// </summary>
         private void SetupStructureT()
         {
             AddTimeColumnT();
@@ -192,12 +240,18 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             AddBordersT();
         }
 
+        /// <summary>
+        /// Fill in the headers for the time rows and days of the week columns for the schedule grid.
+        /// </summary>
         private void PopulateHeadersT()
         {
             SetupTimeRowHeadersT();
             SetupDayOfWeekColumnHeadersT();
         }
 
+        /// <summary>
+        /// Add in the time rows to the schedule grid.
+        /// </summary>
         private void AddTimeRowsT()
         {
             foreach (var slot in gridLayout_t.TimeSlotsInSchedule())
@@ -206,11 +260,17 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             }
         }
 
+        /// <summary>
+        /// Add in the days of the weeks to the rows of the schedule grid.
+        /// </summary>
         private void AddDayOfWeekRowT()
         {
             ScheduleGrid_T.RowDefinitions.Add(new RowDefinition());
         }
 
+        /// <summary>
+        /// Add the days of the weeks for the columns of the schedule grid.
+        /// </summary>
         private void AddDayOfWeekColumnsT()
         {
             var column = ScheduleGrid_T.ColumnDefinitions.Count;
@@ -222,11 +282,17 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             }
         }
 
+        /// <summary>
+        /// Add the times to the columns of the schedule grid.
+        /// </summary>
         private void AddTimeColumnT()
         {
             ScheduleGrid_T.ColumnDefinitions.Add(new ColumnDefinition());
         }
 
+        /// <summary>
+        /// Add an empty column to the schedule grid.
+        /// </summary>
         private void AddEmptyColumnT()
         {
             var columnDef = new ColumnDefinition();
@@ -234,7 +300,9 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             ScheduleGrid_T.ColumnDefinitions.Add(columnDef);
         }
 
-
+        /// <summary>
+        /// Set up the headers for the time rows.
+        /// </summary>
         private void SetupTimeRowHeadersT()
         {
             foreach (var slot in gridLayout_t.TimeSlotsInSchedule())
@@ -246,6 +314,9 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             }
         }
 
+        /// <summary>
+        /// Set up the headers for the days of the week columns.
+        /// </summary>
         private void SetupDayOfWeekColumnHeadersT()
         {
             const int firstRow = 0;
@@ -258,6 +329,11 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             }
         }
 
+        /// <summary>
+        /// Get the text block for the day of the week.
+        /// </summary>
+        /// <param name="day">A day of the week</param>
+        /// <returns>A textblock containing the day of htw eek</returns>
         private TextBlock GetTextBlockForDayT(DayOfWeek day)
         {
             var textBlock = new TextBlock();
@@ -267,6 +343,11 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             return textBlock;
         }
 
+        /// <summary>
+        /// Get the text block for the time.
+        /// </summary>
+        /// <param name="time">A time interval</param>
+        /// <returns>A textblock containing the time</returns>
         private TextBlock GetTextBlockForTimeT(TimeSpan time)
         {
             var textblock = new TextBlock();
@@ -276,13 +357,18 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             return textblock;
         }
 
-
+        /// <summary>
+        /// Add the borders to the schedule grid.
+        /// </summary>
         private void AddBordersT()
         {
             AddDayOfWeekColumnBordersT();
             AddHrlyRowBordersT();
         }
 
+        /// <summary>
+        /// Add column borders to the days of the week.
+        /// </summary>
         private void AddDayOfWeekColumnBordersT()
         {
 
@@ -305,6 +391,9 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             }
         }
 
+        /// <summary>
+        /// Add row borders for the hourly rows.
+        /// </summary>
         private void AddHrlyRowBordersT()
         {
             var thickness = new Thickness(0, 1, 0, 0);
@@ -328,7 +417,10 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
 
 
         #region Private Methods
-
+        /// <summary>
+        /// Setup the courses for a room on the schedule grid.
+        /// </summary>
+        /// <param name="courses">The enumerator containing the courses.</param>
         private void SetCoursesForRoomT(IEnumerable<Course> courses)
         {
             if (courses == null) return;
@@ -348,6 +440,9 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             }
         }
 
+        /// <summary>
+        /// Remove the stale available items from the schedule grid.
+        /// </summary>
         private void RemoveStaleAvailableItemsT()
         {
             List<TextBlock> staleAvailableItems = new List<TextBlock>();
@@ -361,6 +456,9 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             foreach (var staleItem in staleAvailableItems) ScheduleGrid_T.Children.Remove(staleItem);
         }
 
+        /// <summary>
+        /// Show the available schedule slots where the course can be assigned.
+        /// </summary>
         private void ShowAvailableSlotsT()
         {
             if (AvailableSlotsT == null) return;
@@ -385,7 +483,10 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
         #endregion
 
         #region Private Helper Methods
-
+        /// Set the background colors for the courses based on subject code.
+        /// </summary>
+        /// <param name="course">A course object.</param>
+        /// <returns>The background color assigned to the course's subject code.</returns>
         private SolidColorBrush GetBackgroundColorForCourseT(Course course)
         {
             if (colorMap_t.ContainsKey(course.SubjectCode))
@@ -404,6 +505,9 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             }
         }
 
+        /// <summary>
+        /// Remove the stale course labels from the schedule grid.
+        /// </summary>
         private void RemoveStaleCourseLabelsT()
         {
             var staleLabels = new List<CourseLabel>();
@@ -422,6 +526,12 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             }
         }
 
+        /// <summary>
+        /// Get the labels of a course.
+        /// </summary>
+        /// <param name="day">The day of the week.</param>
+        /// <param name="course">A course object.</param>
+        /// <returns>The label of a course.</returns>
         private CourseLabel GetCourseLabelT(DayOfWeek day, Course course)
         {
             var courseLabel = new CourseLabel(course);
@@ -433,6 +543,11 @@ namespace ClassroomAssignment.Views.TeacherRoomSchedule
             return courseLabel;
         }
 
+        /// <summary>
+        /// Set up the row span length for a course based on its time length.
+        /// </summary>
+        /// <param name="course">A course object</param>
+        /// <returns>The time span of a course.</returns>
         private int RowSpanForCourseT(Course course)
         {
             TimeSpan courseLength = course.EndTime.Value - course.StartTime.Value;

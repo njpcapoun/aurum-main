@@ -43,6 +43,11 @@ namespace ClassroomAssignment.UI.Reassignment
         Course C;
         ReassignmentPage reassignmentPage;
         public List<string> types;
+
+        /// <summary>
+        /// Constructor for the reassignment pop up. Initialize the components.
+        /// </summary>
+        /// <param name="c">The course to be reassigned.</param>
         public ReassignmentPopUp(Course c)
         {
             C = c;
@@ -52,6 +57,11 @@ namespace ClassroomAssignment.UI.Reassignment
             TypeBox.ItemsSource = types;
         }
 
+        /// <summary>
+        /// Submit capacity and room type information to the reassignment page.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a routed event.</param>
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
             string capacity = roomCap.Text;
@@ -67,11 +77,20 @@ namespace ClassroomAssignment.UI.Reassignment
             }
         }
 
+        /// <summary>
+        /// Get to the reassignment page
+        /// </summary>
+        /// <returns>The reassignment page</returns>
         public ReassignmentPage getRP()
         {
             return reassignmentPage; 
         }
 
+        /// <summary>
+        /// Close the popup and cancel everything when cancel button is clicked.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a routed event.</param>
         public void Cancel_Click(object sender, RoutedEventArgs e)
         {
             reassignmentPage = null;

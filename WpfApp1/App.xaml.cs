@@ -19,7 +19,10 @@ namespace ClassroomAssignment
     /// </summary>
     public partial class App : System.Windows.Application
     {
-
+        /// <summary>
+        /// Auto-save work on exit.
+        /// </summary>
+        /// <param name="e">Contains the arguments for the Exit event.</param>
         protected override void OnExit(ExitEventArgs e)
         {
             SaveBase saveWork = new SaveBase();
@@ -27,6 +30,10 @@ namespace ClassroomAssignment
             base.OnExit(e);
         }
 
+        /// <summary>
+        /// Load the app.
+        /// </summary>
+        /// <param name="e">Contains the arguments for the Startup event.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
 

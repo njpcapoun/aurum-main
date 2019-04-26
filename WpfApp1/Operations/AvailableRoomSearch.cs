@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace ClassroomAssignment.Operations
 {
     /// <summary>
-    /// See if there is any available room for one specific time.
+    /// See if there is any available rooms based on course's time duration.
     /// </summary>
     public class AvailableRoomSearch
     {
@@ -20,10 +20,10 @@ namespace ClassroomAssignment.Operations
         private ICourseRepository courseRepository;
 
         /// <summary>
-        /// initilize roomRepo and courseRepo and throw new exceptions to handle it.
+        /// Initilize roomRepo and courseRepo and throw new exceptions to handle it.
         /// </summary>
-        /// <param name="roomRepo"></param>
-        /// <param name="courseRepo"></param>
+        /// <param name="roomRepo">The collection of rooms</param>
+        /// <param name="courseRepo">The collection of courses</param>
         public AvailableRoomSearch(IRoomRepository roomRepo, ICourseRepository courseRepo)
         {
             roomRepository = roomRepo ?? throw new ArgumentNullException();
@@ -34,10 +34,10 @@ namespace ClassroomAssignment.Operations
         /// Find course meeting days, startTime, endTime, capacity.
         /// create searchParameters list, and initilize these values.
         /// </summary>
-        /// <param name="meetingDays"></param>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
-        /// <param name="minCapacity"></param>
+        /// <param name="meetingDays">Meetings days of a course</param>
+        /// <param name="startTime">The start time of a course</param>
+        /// <param name="endTime">The end time of a course.</param>
+        /// <param name="minCapacity">The minimum capacity for a course.</param>
         /// <returns>ScheduleSlotsAvailable</returns>
         public IEnumerable<Room> AvailableRooms(List<DayOfWeek> meetingDays, TimeSpan startTime, TimeSpan endTime, int minCapacity)
         {
@@ -51,8 +51,16 @@ namespace ClassroomAssignment.Operations
             return ScheduleSlotsAvailable(searchParameters).ConvertAll(x => x.RoomAvailable).Distinct();
         }
 
-        // Overloaded method of available rooms to set SearchParametersWithType
-        public IEnumerable<Room> AvailableRooms(List<DayOfWeek> meetingDays, TimeSpan startTime, TimeSpan endTime, int minCapacity, string type)
+		/// <summary>
+		/// Overloaded method of available rooms to set SearchParametersWithType
+		/// </summary>
+		/// <param name="meetingDays">Meetings days of a course</param>
+		/// <param name="startTime">The start time of a course</param>
+		/// <param name="endTime">The end time of a course.</param>
+		/// <param name="minCapacity">The minimum capacity for a course.</param>
+		/// <param name="type">The type of room</param>
+		/// <returns></returns>
+		public IEnumerable<Room> AvailableRooms(List<DayOfWeek> meetingDays, TimeSpan startTime, TimeSpan endTime, int minCapacity, string type)
         {
             SearchParametersWithType searchParameters = new SearchParametersWithType();
             searchParameters.MeetingDays = meetingDays;
@@ -64,13 +72,13 @@ namespace ClassroomAssignment.Operations
 
             return ScheduleSlotsAvailable(searchParameters).ConvertAll(x => x.RoomAvailable).Distinct();
         }
-        
-        /// <summary>
-        /// ScheduleSlotsAvailable method, check any room available at course duraction.
-        /// </summary>
-        /// <param name="searchParameters"></param>
-        /// <returns>AvailableSlots</returns>
-        public List<ScheduleSlot> ScheduleSlotsAvailable(SearchParameters searchParameters)
+
+		/// <summary>
+		/// ScheduleSlotsAvailable method, check any room available at course duraction.
+		/// </summary>
+		/// <param name="searchParameters">The parameters for the available room search.</param>
+		/// <returns>The available schedule slots</returns>
+		public List<ScheduleSlot> ScheduleSlotsAvailable(SearchParameters searchParameters)
         {
 
 
@@ -147,8 +155,12 @@ namespace ClassroomAssignment.Operations
             return availableSlots;
         }
 
-        //Overloaded method of ScheduleSlotsAvailable to search for rooms with regards to type
-        public List<ScheduleSlot> ScheduleSlotsAvailable(SearchParametersWithType searchParameters)
+		/// <summary>
+		/// Overloaded method of ScheduleSlotsAvailable to search for rooms with regards to type
+		/// </summary>
+		/// <param name="searchParameters">The parameters for the available room search.</param>
+		/// <returns>The available schedule slots</returns>
+		public List<ScheduleSlot> ScheduleSlotsAvailable(SearchParametersWithType searchParameters)
         {
 
 
@@ -225,6 +237,13 @@ namespace ClassroomAssignment.Operations
             return availableSlots;
         }
 
+		/// <summary>
+		/// Checks if courses conflict based on time.
+		/// </summary>
+		/// <param name="courseGroup">The group of courses with potential conflicts.</param>
+		/// <param name="startTime">Start time of the courses.</param>
+		/// <param name="endTime">End time of the courses.</param>
+		/// <returns>True if conflicts exist. False otherwise.</returns>
         private bool CoursesConflictWithTime(IGrouping<string, Course> courseGroup, TimeSpan startTime, TimeSpan endTime)
         {
             bool hasConflict = true;

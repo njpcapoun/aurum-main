@@ -10,7 +10,7 @@ using System.Windows;
 namespace ClassroomAssignment.Extension
 {
 	/// <summary>
-	/// Additional functions for the workbook interface.
+	/// Extension methods for the workbook interface.
 	/// </summary>
     static class WorkbookExtension
     {
