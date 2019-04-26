@@ -63,7 +63,7 @@ namespace ClassroomAssignment.UI.Edit
 		/// Get the properties that have been changed of the course being editted.
 		/// </summary>
 		/// <param name="sender">A reference to the control/object that raised the event.</param>
-		/// <param name="e">>State information and event data associated with a routed event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
 		private void CopyCourse_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             Type type = originalCourse.GetType();
@@ -78,7 +78,7 @@ namespace ClassroomAssignment.UI.Edit
 		/// Save the changes made to the editted course when save button is clicked.
 		/// </summary>
 		/// <param name="sender">A reference to the control/object that raised the event.</param>
-		/// <param name="e">>State information and event data associated with a routed event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
 		private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             bool hasError = false;
@@ -112,7 +112,7 @@ namespace ClassroomAssignment.UI.Edit
 		/// Go back to the main page if the cancel button has been clicked.
 		/// </summary>
 		/// <param name="sender">A reference to the control/object that raised the event.</param>
-		/// <param name="e">>State information and event data associated with a routed event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
 		private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();

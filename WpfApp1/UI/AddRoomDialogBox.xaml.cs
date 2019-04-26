@@ -34,6 +34,11 @@ namespace ClassroomAssignment.UI
         public string Details = "";
         public string type = RoomType.Lab;
         
+        /// <summary>
+        /// Constructor for AddRoomDialogBox. Initialize the rooms.
+        /// </summary>
+        /// <param name="roomRepository">The collection of rooms.</param>
+        /// <param name="ViewModel">View Model of the Main Page</param>
         public AddRoomDialogBox(RoomRepository roomRepository, MainWindowViewModel ViewModel)
         {
             CopyRoom = new Room();
@@ -45,7 +50,12 @@ namespace ClassroomAssignment.UI
         public Room CopyRoom { get; set; }
 
         private List<PropertyInfo> propertiesChanged = new List<PropertyInfo>();
-       
+
+        /// <summary>
+        /// Get information for a room's whose properties have been changed.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a PropertyChanged event.</param>
         private void CopyRoom_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             Type type = CopyRoom.GetType();
@@ -56,6 +66,11 @@ namespace ClassroomAssignment.UI
             }
         }
 
+        /// <summary>
+        /// Submit the edits for a room when submit button is clicked.
+        /// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
             int temp;
@@ -95,6 +110,11 @@ namespace ClassroomAssignment.UI
             }
         }
 
+        /// <summary>
+        /// Initialize the combo box of room types.
+        /// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
         private void EnterType_Loaded(object sender, RoutedEventArgs e)
         {
             List<string> RoomTypes = new List<string>();
@@ -109,6 +129,11 @@ namespace ClassroomAssignment.UI
             combo.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Change the room type when it the selection has been changed for the room type combo box.
+        /// </summary>
+		/// <param name="sender">A reference to the control/object that raised the event.</param>
+		/// <param name="e">State information and event data associated with a SelectionChanged event.</param>
         private void EnterType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedItem = sender as ComboBox;

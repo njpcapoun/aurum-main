@@ -41,7 +41,7 @@ namespace ClassroomAssignment.UI.Create
 		/// Create a new project on click. Read all the courses from the csv files.
 		/// </summary>
 		/// <param name="sender">A reference to the control/object that raised the event.</param>
-		/// <param name="e">>State information and event data associated with a routed event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
 		private void NewProjectButton_Click(object sender, RoutedEventArgs e)
 		{
 			string[] docLocations = GetSheetPaths();
@@ -168,7 +168,7 @@ namespace ClassroomAssignment.UI.Create
 		/// Open up an existing agn file on click.
 		/// </summary>
 		/// <param name="sender">A reference to the control/object that raised the event.</param>
-		/// <param name="e">>State information and event data associated with a routed event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
 		private void ExistingProjectButton_Click(object sender, RoutedEventArgs e)
 		{
 			var filePath = GetFilePath();

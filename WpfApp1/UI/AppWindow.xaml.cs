@@ -20,6 +20,9 @@ namespace ClassroomAssignment.UI
     /// </summary>
     public partial class AppWindow : NavigationWindow
     {
+        /// <summary>
+        /// Constructor for AppWindow. Initialize the window used throughout the application.
+        /// </summary>
         public AppWindow()
         {
             InitializeComponent();

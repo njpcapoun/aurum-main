@@ -22,7 +22,7 @@ using ClassroomAssignment.Model.Repo;
 namespace ClassroomAssignment.UI.Reassignment
 {
     /// <summary>
-    /// Interaction logic for Window1.xaml
+    /// Interaction logic for Reassignment Page
     /// </summary>
     public partial class ReassignmentPage : Page
     {
@@ -33,6 +33,12 @@ namespace ClassroomAssignment.UI.Reassignment
         public string Capacity;
         public IRoomRepository RoomRepo = RoomRepository.GetInstance();
 
+        /// <summary>
+        /// Constructor for ReassignmentPage
+        /// </summary>
+        /// <param name="c">The course</param>
+        /// <param name="capacity">The new capacity to search for for a course.</param>
+        /// <param name="type">The room type to search for.</param>
         public ReassignmentPage(Course c, string capacity, string type)
         {
             saveWork = new SaveBase();
@@ -72,6 +78,12 @@ namespace ClassroomAssignment.UI.Reassignment
         }
 
         // Still working on this
+        /// <summary>
+        /// Recursively reassign a room for the course.
+        /// </summary>
+        /// <param name="node">A node represented the linked reassignments.</param>
+        /// <param name="c">The course to be reassigned.</param>
+        /// <returns>Null if it takes over three shuffles. The available room(s) otherwise.</returns>
         public LinkedReassignments recursiveReassign(LinkedReassignments node, Course c)
         {
             int steps = node.steps + 1;
@@ -166,6 +178,11 @@ namespace ClassroomAssignment.UI.Reassignment
             }
         }
 
+        /// <summary>
+        /// Commit the reassigned room to the course.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a routed event.</param>
         void CommitReassign(Object sender, RoutedEventArgs e)
         {
             string[] coursestoassign;
@@ -212,6 +229,11 @@ namespace ClassroomAssignment.UI.Reassignment
             saveWork.SaveWork();
         }
 
+        /// <summary>
+        /// Change the display of the reassignment paths for a SelectionChanged event.
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">>State information and event data associated with a SelectionChanged event.</param>
         private void ReassignPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string display = "";

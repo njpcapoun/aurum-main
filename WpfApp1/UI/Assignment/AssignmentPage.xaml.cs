@@ -56,7 +56,7 @@ namespace ClassroomAssignment.UI.Assignment
 		/// Collapses and expands the schedule grid view.
 		/// </summary>
 		/// <param name="sender">A reference to the control/object that raised the event.</param>
-		/// <param name="e">>State information and event data associated with a routed event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
 		private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
             var window = Window.GetWindow(this);
@@ -68,7 +68,7 @@ namespace ClassroomAssignment.UI.Assignment
 		/// Save work onto file.
 		/// </summary>
 		/// <param name="sender">A reference to the control/object that raised the event.</param>
-		/// <param name="e">>State information and event data associated with a routed event.</param>
+		/// <param name="e">State information and event data associated with a routed event.</param>
 		void OnClickSave(object sender, RoutedEventArgs e)
         {
             saveWork.SaveWork();

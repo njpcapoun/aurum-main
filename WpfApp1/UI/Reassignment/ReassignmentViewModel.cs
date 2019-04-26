@@ -17,7 +17,9 @@ using System.Windows.Input;
 
 namespace ClassroomAssignment.UI.Reassignment 
 {
-    
+    /// <summary>
+    /// View model for the Reassignment page
+    /// </summary>
     public class ReassignmentViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -26,6 +28,10 @@ namespace ClassroomAssignment.UI.Reassignment
         private RoomRepository RoomRepo;
         // Info tab
         private Room _currentRoom;
+
+        /// <summary>
+        /// Getter and setter for the current room.
+        /// </summary>
         public Room CurrentRoom
         {
             get => _currentRoom;
@@ -39,6 +45,10 @@ namespace ClassroomAssignment.UI.Reassignment
         public BindingList<Room> AllRooms { get; set; }
         public ObservableCollection<Course> CoursesForCurrentRoom { get; private set; }
 
+        /// <summary>
+        /// Constructor for ReassignmentViewModel. Get instances of the course and room repos.
+        /// </summary>
+        /// <param name="node">A node for the linked reassignments</param>
         public ReassignmentViewModel(LinkedReassignments node)
         {
             CourseRepo = CourseRepository.GetInstance();
@@ -56,11 +66,19 @@ namespace ClassroomAssignment.UI.Reassignment
             CurrentRoom = AllRooms.FirstOrDefault();
         }
 
+        /// <summary>
+        /// Set the courses for the current room.
+        /// </summary>
         private void SetCoursesForCurrentRoom()
         {
             CoursesForCurrentRoom = new ObservableCollection<Course>(CourseRepo.Courses.Where(x => x.NeedsRoom && x.RoomAssignment?.Equals(CurrentRoom) == true));
         }
 
+        /// <summary>
+        /// Convert the list of rooms to a binding list for data binding.
+        /// </summary>
+        /// <param name="rooms">The list of rooms.</param>
+        /// <returns>The binding list of rooms.</returns>
         private BindingList<Room> convertToBindingList(List<Room> rooms)
         {
             BindingList<Room> bindRooms = new BindingList<Room>();

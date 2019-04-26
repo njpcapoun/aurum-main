@@ -65,15 +65,15 @@ namespace ClassroomAssignment.UI.Changes
             return NoChangeBrush;
         }
 
-		/// <summary>
-		/// Undo the red border highlight.
-		/// </summary>
-		/// <param name="values">The course values for the datagrid.</param>
-		/// <param name="targetType">The type of the binding target property.</param>
-		/// <param name="parameter">The converter parameter to use.</param>
-		/// <param name="culture">The culture to use in the converter.</param>
-		/// <returns></returns>
-		public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        /// <summary>
+        /// Undo the red border highlight.
+        /// </summary>
+        /// <param name="values">The course values for the datagrid.</param>
+        /// <param name="targetType">The type of the binding target property.</param>
+        /// <param name="parameter">The converter parameter to use.</param>
+        /// <param name="culture">The culture to use in the converter.</param>
+        /// <returns>NotImplementedException</returns>
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

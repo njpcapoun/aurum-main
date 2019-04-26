@@ -24,13 +24,17 @@ using System.Text.RegularExpressions;
 namespace ClassroomAssignment.UI.Main
 {
     /// <summary>
-    /// Main Window
+    /// View model for the main page.
     /// </summary>
     [Serializable]
     public class MainWindowViewModel: INotifyPropertyChanged
     {
         // Assign tab
         private ObservableCollection<Course> _courses;
+
+        /// <summary>
+        /// Getter and setter for the list of courses.
+        /// </summary>
         public ObservableCollection<Course> Courses
         {
             get { return _courses; }
@@ -45,6 +49,10 @@ namespace ClassroomAssignment.UI.Main
         // Info tab
         private Room _currentRoom;
         public string _currentTeacher;
+
+        /// <summary>
+        /// Getter and setter for the current teacher.
+        /// </summary>
         public string CurrentTeacher
         {
             get => _currentTeacher;
@@ -53,6 +61,10 @@ namespace ClassroomAssignment.UI.Main
                 _currentTeacher = value;
             }
         }
+
+        /// <summary>
+        /// Getter and setter for the current room.
+        /// </summary>
         public Room CurrentRoom
         {
             get => _currentRoom;
@@ -63,6 +75,10 @@ namespace ClassroomAssignment.UI.Main
             }
         }
         private Room _editableRoom;
+
+        /// <summary>
+        /// Getter and setter for the editable room.
+        /// </summary>
         public Room EditableRoom
         {
             get => _editableRoom;
@@ -88,7 +104,7 @@ namespace ClassroomAssignment.UI.Main
         public List<String> RoomTypes { get; set; }
 
         /// <summary>
-        /// initializes main window
+        /// Constructor for MainWindowViewModel. Initializes the main page along with courses and rooms.
         /// </summary>
         public MainWindowViewModel(MainPage page)
         {
@@ -118,6 +134,11 @@ namespace ClassroomAssignment.UI.Main
             EditableRoom = AllRooms.FirstOrDefault();
         }
 
+        /// <summary>
+        /// Handle any changes to the conflicts lists
+        /// </summary>
+        /// <param name="sender">A reference to the control/object that raised the event.</param>
+        /// <param name="e">State information and event data associated with a ChangeInConflicts event.</param>
         private void CourseRepo_ChangeInConflicts(object sender, CourseRepository.ChangeInConflictsEventArgs e)
         {
             Conflicts.Clear();
@@ -128,11 +149,17 @@ namespace ClassroomAssignment.UI.Main
            
         }
 
+        /// <summary>
+        /// Set the courses for the current room.
+        /// </summary>
         private void SetCoursesForCurrentRoom()
         {
             CoursesForCurrentRoom = new ObservableCollection<Course>(CourseRepo.Courses.Where(x => x.NeedsRoom && x.RoomAssignment?.Equals(CurrentRoom) == true));
         }
 
+        /// <summary>
+        /// Set data for the editable room.
+        /// </summary>
         private void SetDataForEditableRoom()
         {
             RoomList = new ObservableCollection<Room>();
@@ -144,6 +171,11 @@ namespace ClassroomAssignment.UI.Main
             Page.saveChanges.IsEnabled = true;
         }
 
+        /// <summary>
+        /// Convert the list of rooms to a binding list for data binding.
+        /// </summary>
+        /// <param name="rooms">The list of rooms</param>
+        /// <returns>The binding list of rooms.</returns>
         private BindingList<Room> convertToBindingList(List<Room> rooms)
         {
             BindingList<Room> bindRooms = new BindingList<Room>();
@@ -154,6 +186,9 @@ namespace ClassroomAssignment.UI.Main
             return bindRooms;
         }
 
+        /// <summary>
+        /// Update the rooms when they are edited.
+        /// </summary>
         public void UpdateRoomList()
         {
             AllRooms = convertToBindingList(RoomRepo.Rooms);
