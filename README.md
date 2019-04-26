@@ -1,7 +1,7 @@
 # aurum-main
 IS&amp;T Classroom Assignment Enhancement - Main Repo
 
-This repository will eventually hold the central contents for our group's capstone project. We are currently in early stages of development so the exact purpose of this repo is unknown at this time.
+This is the main Github repository for our ClassroomAssignment Project for the Capstone Project at UNO, CSCI-4970. We are Team Aurum and continued development on this project from a previous group. Primarily worked during the Spring semester of 2019.
 
 ## Group Members
 Noah Capoun
@@ -13,10 +13,13 @@ Chris Martin
 Mattie Hansen
 
 
-## Basic Repository Instructions:
-This is more for when we have an actual codebase, but is a good strategy to using github.
+## Project Description:
+The App acts as a Course Scheduling helper app. It takes input CSV files from the Course Leaf Scheduling System, and translates the data into a form that is easier to understand and manage. Major Functions of the app include: Course Assignment, Course Editing, Automatic Crosslisting of Sections, Editable Room data, Section reassignment, room recommendations, various weekly schedule views specific to a Room or Teacher, and an export function to display the schedules of assigned courses in an Excel file. 
 
-To add changes, first create a branch off of the master branch. This will be your working branch until ready to commit and push the changes. It allows the master branch to act as a good backup in case we ever need to use a previous version. When ready to push changes to the master branch, create a pull-request which will then check the changed files with existing one's on the master branch and look for problems. If all is good, the pull request can be put through and combine the working branch with the master branch. 
+## Project Setup/Installation
+TODO: Fill this in with installer link or soemthing
+
+If setting up for editing the code, download the files in the repository. The project must be built in Visual Studio. Then, before trying to run it, in the folder WpfApp1/bin/Debug the file RoomData.json must be placed there. The only input that remains is having the right CLSS input files and then the app can run.
 
 ## Project Links
 Trello Board: https://trello.com/b/I3Posett/csci-4970-capstone-project
@@ -24,3 +27,5 @@ Trello Board: https://trello.com/b/I3Posett/csci-4970-capstone-project
 Slack Channel: https://csci-4970-capstone.slack.com/messages/CF8FG9MNY/
 
 Google Drive Folder:https://drive.google.com/drive/u/2/folders/16rPFVS-1NqhwCFwPrC59qP7PcthWZmWi
+
+Doxygen Documentation Pages: https://njpcapoun.github.io/aurum-main/html/
