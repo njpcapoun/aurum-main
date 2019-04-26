@@ -17,7 +17,7 @@ namespace ClassroomAssignment.Utils
         /// time from parsed data, also checks to see if
         /// military time is used and converts it to standard time
         /// </summary>
-        /// <param name="timeStr"></param>
+        /// <param name="timeStr">The time string to be convertted to the TimeSpan format.</param>
         /// <returns>TimeSpan</returns>
         public static TimeSpan StringToTimeSpan(string timeStr)
         {
@@ -48,6 +48,12 @@ namespace ClassroomAssignment.Utils
             return new TimeSpan(hr, min, 0);
         }
 
+        /// <summary>
+        /// Convert military hours to standardized time.
+        /// </summary>
+        /// <param name="timeStr">The time string to be convertted</param>
+        /// <param name="pm">Boolean for if it is PM time</param>
+        /// <returns></returns>
         private static int militaryHr(string timeStr, bool pm)
         {
             if (timeStr.Equals("12"))

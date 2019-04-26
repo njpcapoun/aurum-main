@@ -14,10 +14,8 @@ namespace ClassroomAssignment.Model.Utils
     {
         private static Dictionary<string, DayOfWeek> DayNameMatcher = new Dictionary<string, DayOfWeek>();
 
-
         /// <summary>
-        /// Adds abbreviations for
-        /// each day of the week
+        /// Constructor for DateUtil. Adds abbreviations for each day of the week
         /// </summary>
         static DateUtil()
         {
@@ -28,17 +26,13 @@ namespace ClassroomAssignment.Model.Utils
             DayNameMatcher.Add("Th", DayOfWeek.Thursday);
             DayNameMatcher.Add("F", DayOfWeek.Friday);
             DayNameMatcher.Add("Sa", DayOfWeek.Saturday);
-
-           
         }
 
-
         /// <summary>
-        /// Matches day of the week to corresponding abbreviation
-        /// and shortens it to abbreviation  
+        /// Matches day of the week to corresponding abbreviation and shortens it to its abbreviation  
         /// </summary>
-        /// <param name="dayAbbreviation"></param>
-        /// <returns>string</returns>
+        /// <param name="dayAbbreviation">The day of the week to be abbreviated</param>
+        /// <returns>The abbreviated day of the week. Null if an exception occurs.</returns>
         public static string ShortToLongDayName(string dayAbbreviation)
         {
             try
@@ -52,13 +46,11 @@ namespace ClassroomAssignment.Model.Utils
             }
         }
 
-  
-
         /// <summary>
-        /// returns match of day to abbreviation 
+        /// Returns match of the day of the week to its abbreviation 
         /// </summary>
-        /// <param name="dayAbbreviation"></param>
-        /// <returns>DayOfWeek</returns>
+        /// <param name="dayAbbreviation">Abbreviation for the day of the week.</param>
+        /// <returns>DayNameMatcher[dayAbbreviation]</returns>
         public static DayOfWeek AbbreviationToDayOfWeek(string dayAbbreviation)
         {
             return DayNameMatcher[dayAbbreviation];
