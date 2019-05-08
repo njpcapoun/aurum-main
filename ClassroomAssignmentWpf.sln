@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassroomAssignment", "WpfA
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ClassroomAssignmentSetup", "ClassroomAssignmentSetup\ClassroomAssignmentSetup.vdproj", "{BA634058-DE92-43E2-8A15-5CB5934EB36B}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ClassroomAssignmentApp", "ClassroomAssignmentApp\ClassroomAssignmentApp.vdproj", "{2C128823-40F3-4607-BDB9-A15801527D5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,7 +19,6 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2B2F7602-96ED-4C77-8DF3-640053813F2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B2F7602-96ED-4C77-8DF3-640053813F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B2F7602-96ED-4C77-8DF3-640053813F2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{29F2B28E-B471-49BA-8FE5-70C0A865C95E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{29F2B28E-B471-49BA-8FE5-70C0A865C95E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29F2B28E-B471-49BA-8FE5-70C0A865C95E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -26,6 +27,8 @@ Global
 		{BA634058-DE92-43E2-8A15-5CB5934EB36B}.Debug|Any CPU.Build.0 = Debug
 		{BA634058-DE92-43E2-8A15-5CB5934EB36B}.Release|Any CPU.ActiveCfg = Release
 		{BA634058-DE92-43E2-8A15-5CB5934EB36B}.Release|Any CPU.Build.0 = Release
+		{2C128823-40F3-4607-BDB9-A15801527D5C}.Debug|Any CPU.ActiveCfg = Debug
+		{2C128823-40F3-4607-BDB9-A15801527D5C}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
